@@ -1,0 +1,78 @@
+:root {
+  --pri: #fff;
+  --sec: rgba(255, 255, 255, 0.75);
+  --tri: #34caf8;
+
+  /* glass values — thin/transparent so background shows through */
+  --glass: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.14),
+    rgba(255, 255, 255, 0.04)
+  );
+  --border: rgba(255, 255, 255, 0.35);
+  --highlight: rgba(255, 255, 255, 0.4);
+}
+
+@font-face {
+  font-family: 'ProfaExpanded';
+  src: url("./ProfaTrial-BlackExpanded.ttf");
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+}
+
+main {
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  overflow-x: hidden;
+
+  background-image: url("./wp9650042-windows-11-dark-wallpapers.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+/* Decorative blurred shapes behind the glass panels — without
+   something textured/colorful behind it, backdrop-filter: blur()
+   has nothing to distort, so the cards look flat instead of glassy. */
+main::before,
+main::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(2px);
+  z-index: 0;
+}
+
+/* main::before {
+  top: -10%;
+  left: 5%;
+  width: 45vw;
+  height: 45vw;
+  background: radial-gradient(circle, #6a8dff 0%, transparent 70%);
+}
+
+main::after {
+  bottom: -15%;
+  right: 0%;
+  width: 55vw;
+  height: 55vw;
+  background: radial-gradient(circle, #7d5cff 0%, transparent 70%);
+} */
+
+nav.glass,
+section.allElems {
+  position: relative;
+  z-index: 1;
+}

@@ -1,0 +1,182 @@
+/* RESET FEEL */
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  color: #fff;
+  background: #0b0b0f;
+}
+
+/* CENTER EVERYTHING LIKE TODO */
+.planner-fullpage {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* MAIN CARD (MATCH TODO STYLE) */
+.planner-container {
+  width: 90%;
+  max-width: 700px;
+  padding: 30px;
+
+  border-radius: 18px;
+
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(20px);
+
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+}
+
+/* HEADER */
+.planner-header {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.planner-header h1 {
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.back {
+  position: absolute;
+  right: 40px;
+  top: 40px;
+  text-decoration: none;
+  color: #aaa;
+  font-size: 14px;
+}
+
+/* REMOVE HARD BOXES */
+.planner-box {
+  margin-top: 18px;
+  padding: 15px;
+
+  border-radius: 12px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+/* TITLES */
+.planner-box h3 {
+  font-size: 14px;
+  color: #ccc;
+  margin-bottom: 8px;
+}
+
+/* INPUTS (MATCH TODO STYLE) */
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 10px 12px;
+  margin-top: 8px;
+
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.1);
+
+  background: rgba(0,0,0,0.5);
+  color: #fff;
+
+  outline: none;
+  font-size: 14px;
+}
+
+/* SCHEDULE */
+.time-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.time-row span {
+  width: 60px;
+  font-size: 12px;
+  color: #aaa;
+}
+
+/* TASK ROW (LIKE TODO INPUT BAR) */
+.task-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.task-row input {
+  flex: 1;
+}
+
+/* BUTTON STYLE (MATCH TODO) */
+button {
+  padding: 10px 16px;
+  border-radius: 10px;
+
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+
+  color: #fff;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+button:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+/* SAVE BUTTON */
+.save-btn {
+  width: 100%;
+  margin-top: 20px;
+}
+
+/* REMOVE WHITE INPUT BUG */
+input,
+textarea,
+select {
+  background: rgba(0,0,0,0.6) !important;
+}
+
+/* LAYOUT */
+.planner-layout {
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+}
+
+/* RIGHT PANEL */
+.saved-panel {
+  width: 350px;
+  padding: 20px;
+
+  border-radius: 16px;
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(20px);
+
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* TITLE */
+.saved-panel h2 {
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+/* CARD */
+.saved-card {
+  padding: 15px;
+  margin-bottom: 15px;
+
+  border-radius: 12px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+/* TEXT */
+.saved-card p {
+  font-size: 13px;
+  margin: 4px 0;
+  color: #ccc;
+}

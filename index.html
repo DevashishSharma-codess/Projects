@@ -1,0 +1,754 @@
+<<<<<<< HEAD
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Kalam:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Marck+Script&display=swap" rel="stylesheet">
+    <link rel="preload" href="assets/CoffeeTea.lottie" as="fetch" crossorigin>
+    <script src="https://cdn.jsdelivr.net/npm/@dotlottie/player-component@2.7.12/dist/dotlottie-player.js"></script>
+</head>
+
+<body>
+    <!-- PRELOADER -->
+    <div id="pageLoader" class="page-loader">
+        <div class="loader-content" id="loaderContent">
+            <dotlottie-player id="lottiePlayer" src="assets/CoffeeTea.lottie" background="transparent" speed="1"
+                style="width: 220px; height: 220px;" loop autoplay></dotlottie-player>
+            <span class="loader-text">Brewing your experience...</span>
+        </div>
+    </div>
+
+    <!-- HEADER / NAV -->
+    <header>
+        <div class="nav-wrap">
+            <div class="logo">
+                Maple &amp; Bean
+            </div>
+            <nav>
+                <ul id="navList">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#menu">Menu</a></li>
+                    <li><a href="#gallery">Gallery</a></li>
+                    <li><a href="#testimonials">Words</a></li>
+                    <li><a href="#faq">Faq</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+            <button class="menu-toggle" id="menuToggle">&#9776;</button>
+        </div>
+    </header>
+
+    <!-- HERO -->
+
+    <section class="hero hero-video-bg" id="home">
+        <div class="hero-bg-video">
+            <video autoplay loop muted playsinline>
+                <source src="assets/bg.mp4" type="video/mp4">
+            </video>
+            <div class="hero-overlay"></div>
+        </div>
+        <div class="hero-content">
+            <span class="eyebrow">Small batch &middot; roasted weekly</span>
+            <h1>Coffee that feels like home.</h1>
+            <p>Warm pastries, slow mornings, and coffee roasted just down the street. Come sit with us for a while.</p>
+            <div class="hero-buttons">
+                <a href="#menu" class="btn btn-hero-primary">
+                    <span>Explore Menu</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </a>
+                <a href="#contact" class="btn btn-hero-secondary">
+                    <span>Visit Our Shop</span>
+                </a>
+            </div>
+        </div>
+        <a href="#menu" class="hero-scroll-down" aria-label="Scroll down">
+            <span class="scroll-icon"></span>
+        </a>
+    </section>
+
+
+    <!-- MENU -->
+    <section id="menu">
+        <div class="section-head">
+            <span class="eyebrow">What we're pouring</span>
+            <h2>Our Menu</h2>
+        </div>
+
+        <div class="tabs" id="tabs">
+            <button class="tab-btn active" data-cat="coffee">Coffee</button>
+            <button class="tab-btn" data-cat="pastries">Pastries</button>
+            <button class="tab-btn" data-cat="extras">Extras</button>
+        </div>
+
+        <div class="menu-grid" id="menuGrid">
+            <!-- COFFEE (6 ITEMS) -->
+            <div class="menu-item guest-check" data-cat="coffee">
+                <div class="check-header">
+                    <span class="check-label">GUEST CHECK</span>
+                    <span class="check-no">№ 101</span>
+                </div>
+                <div class="menu-item-top">
+                    <div class="item-title-wrap">
+                        <span class="check-box"></span>
+                        <h3>House Espresso</h3>
+                    </div>
+                    <span class="dots-filler"></span>
+                    <span class="price">$3.50</span>
+                </div>
+                <div class="menu-desc">Double shot, rich crema, roasted in-house every Monday.</div>
+                <div class="check-footer">
+                    <span class="stamp-text">THANK YOU • MAPLE &amp; BEAN</span>
+                </div>
+            </div>
+
+            <div class="menu-item guest-check" data-cat="coffee">
+                <div class="check-header">
+                    <span class="check-label">GUEST CHECK</span>
+                    <span class="check-no">№ 102</span>
+                </div>
+                <div class="menu-item-top">
+                    <div class="item-title-wrap">
+                        <span class="check-box"></span>
+                        <h3>Maple Latte</h3>
+                    </div>
+                    <span class="dots-filler"></span>
+                    <span class="price">$4.75</span>
+                </div>
+                <div class="menu-desc">Espresso, steamed milk, and a touch of real maple syrup.</div>
+                <div class="check-footer">
+                    <span class="stamp-text">THANK YOU • MAPLE &amp; BEAN</span>
+                </div>
+            </div>
+
+            <div class="menu-item guest-check" data-cat="coffee">
+                <div class="check-header">
+                    <span class="check-label">GUEST CHECK</span>
+                    <span class="check-no">№ 103</span>
+                </div>
+                <div class="menu-item-top">
+                    <div class="item-title-wrap">
+                        <span class="check-box"></span>
+                        <h3>Pour Over</h3>
+                    </div>
+                    <span class="dots-filler"></span>
+                    <span class="price">$4.25</span>
+                </div>
+                <div class="menu-desc">Single-origin beans, brewed fresh to order, cup by cup.</div>
+                <div class="check-footer">
+                    <span class="stamp-text">THANK YOU • MAPLE &amp; BEAN</span>
+                </div>
+            </div>
+
+            <div class="menu-item guest-check" data-cat="coffee">
+                <div class="check-header">
+                    <span class="check-label">GUEST CHECK</span>
+                    <span class="check-no">№ 104</span>
+                </div>
+                <div class="menu-item-top">
+                    <div class="item-title-wrap">
+                        <span class="check-box"></span>
+                        <h3>Cold Brew</h3>
+                    </div>
+                    <span class="dots-filler"></span>
+                    <span class="price">$4.00</span>
+                </div>
+                <div class="menu-desc">Steeped for 18 hours for a smooth, low-acid finish.</div>
+                <div class="check-footer">
+                    <span class="stamp-text">THANK YOU • MAPLE &amp; BEAN</span>
+                </div>
+            </div>
+
+            <div class="menu-item guest-check" data-cat="coffee">
+                <div class="check-header">
+                    <span class="check-label">GUEST CHECK</span>
+                    <span class="check-no">№ 105</span>
+                </div>
+                <div class="menu-item-top">
+                    <div class="item-title-wrap">
+                        <span class="check-box"></span>
+                        <h3>Honey Lavender Cappuccino</h3>
+                    </div>
+                    <span class="dots-filler"></span>
+                    <span class="price">$5.00</span>
+                </div>
+                <div class="menu-desc">Espresso, velvety foam, infused with local honey &amp; lavender.</div>
+                <div class="check-footer">
+                    <span class="stamp-text">THANK YOU • MAPLE &amp; BEAN</span>
+                </div>
+            </div>
+
+            <div class="menu-item guest-check" data-cat="coffee">
+                <div class="check-header">
+                    <span class="check-label">GUEST CHECK</span>
+                    <span class="check-no">№ 106</span>
+                </div>
+                <div class="menu-item-top">
+                    <div class="item-title-wrap">
+                        <span class="check-box"></span>
+                        <h3>Caramel Cortado</h3>
+                    </div>
+                    <span class="dots-filler"></span>
+                    <span class="price">$4.50</span>
+                </div>
+                <div class="menu-desc">Equal parts espresso and warm milk with house caramel drizzle.</div>
+                <div class="check-footer">
+                    <span class="stamp-text">THANK YOU • MAPLE &amp; BEAN</span>
+                </div>
+            </div>
+
+            <!-- PASTRIES (6 ITEMS) -->
+            <div class="menu-item guest-check" data-cat="pastries">
+                <div class="check-header">
+                    <span class="check-label">GUEST CHECK</span>
+                    <span class="check-no">№ 201</span>
+                </div>
+                <div class="menu-item-top">
+                    <div class="item-title-wrap">
+                        <span class="check-box"></span>
+                        <h3>Butter Croissant</h3>
+                    </div>
+                    <span class="dots-filler"></span>
+                    <span class="price">$3.75</span>
+                </div>
+                <div class="menu-desc">Flaky, golden-brown layers made fresh every morning.</div>
+                <div class="check-footer">
+                    <span class="stamp-text">THANK YOU • MAPLE &amp; BEAN</span>
+                </div>
+            </div>
+
+            <div class="menu-item guest-check" data-cat="pastries">
+                <div class="check-header">
+                    <span class="check-label">GUEST CHECK</span>
+                    <span class="check-no">№ 202</span>
+                </div>
+                <div class="menu-item-top">
+                    <div class="item-title-wrap">
+                        <span class="check-box"></span>
+                        <h3>Cinnamon Roll</h3>
+                    </div>
+                    <span class="dots-filler"></span>
+                    <span class="price">$4.50</span>
+                </div>
+                <div class="menu-desc">Warm, soft dough swirled with cinnamon and topped with maple glaze.</div>
+                <div class="check-footer">
+                    <span class="stamp-text">THANK YOU • MAPLE &amp; BEAN</span>
+                </div>
+            </div>
+
+            <div class="menu-item guest-check" data-cat="pastries">
+                <div class="check-header">
+                    <span class="check-label">GUEST CHECK</span>
+                    <span class="check-no">№ 203</span>
+                </div>
+                <div class="menu-item-top">
+                    <div class="item-title-wrap">
+                        <span class="check-box"></span>
+                        <h3>Blueberry Scone</h3>
+                    </div>
+                    <span class="dots-filler"></span>
+                    <span class="price">$3.50</span>
+                </div>
+                <div class="menu-desc">Baked daily with wild blueberries and a light lemon glaze drizzle.</div>
+                <div class="check-footer">
+                    <span class="stamp-text">THANK YOU • MAPLE &amp; BEAN</span>
+                </div>
+            </div>
+
+            <div class="menu-item guest-check" data-cat="pastries">
+                <div class="check-header">
+                    <span class="check-label">GUEST CHECK</span>
+                    <span class="check-no">№ 204</span>
+                </div>
+                <div class="menu-item-top">
+                    <div class="item-title-wrap">
+                        <span class="check-box"></span>
+                        <h3>Almond Danish</h3>
+                    </div>
+                    <span class="dots-filler"></span>
+                    <span class="price">$4.25</span>
+                </div>
+                <div class="menu-desc">Crispy puff pastry filled with rich almond cream and toasted slices.</div>
+                <div class="check-footer">
+                    <span class="stamp-text">THANK YOU • MAPLE &amp; BEAN</span>
+                </div>
+            </div>
+
+            <div class="menu-item guest-check" data-cat="pastries">
+                <div class="check-header">
+                    <span class="check-label">GUEST CHECK</span>
+                    <span class="check-no">№ 205</span>
+                </div>
+                <div class="menu-item-top">
+                    <div class="item-title-wrap">
+                        <span class="check-box"></span>
+                        <h3>Pistachio Custard Tart</h3>
+                    </div>
+                    <span class="dots-filler"></span>
+                    <span class="price">$4.75</span>
+                </div>
+                <div class="menu-desc">Crushed pistachio crust filled with smooth vanilla bean custard.</div>
+                <div class="check-footer">
+                    <span class="stamp-text">THANK YOU • MAPLE &amp; BEAN</span>
+                </div>
+            </div>
+
+            <div class="menu-item guest-check" data-cat="pastries">
+                <div class="check-header">
+                    <span class="check-label">GUEST CHECK</span>
+                    <span class="check-no">№ 206</span>
+                </div>
+                <div class="menu-item-top">
+                    <div class="item-title-wrap">
+                        <span class="check-box"></span>
+                        <h3>Chocolate Almond Croissant</h3>
+                    </div>
+                    <span class="dots-filler"></span>
+                    <span class="price">$4.50</span>
+                </div>
+                <div class="menu-desc">Double-baked croissant stuffed with dark chocolate &amp; almond paste.</div>
+                <div class="check-footer">
+                    <span class="stamp-text">THANK YOU • MAPLE &amp; BEAN</span>
+                </div>
+            </div>
+
+            <!-- EXTRAS (6 ITEMS) -->
+            <div class="menu-item guest-check" data-cat="extras">
+                <div class="check-header">
+                    <span class="check-label">GUEST CHECK</span>
+                    <span class="check-no">№ 301</span>
+                </div>
+                <div class="menu-item-top">
+                    <div class="item-title-wrap">
+                        <span class="check-box"></span>
+                        <h3>Oat / Almond Milk</h3>
+                    </div>
+                    <span class="dots-filler"></span>
+                    <span class="price">$0.75</span>
+                </div>
+                <div class="menu-desc">Creamy plant-based milk alternative for any coffee beverage.</div>
+                <div class="check-footer">
+                    <span class="stamp-text">THANK YOU • MAPLE &amp; BEAN</span>
+                </div>
+            </div>
+
+            <div class="menu-item guest-check" data-cat="extras">
+                <div class="check-header">
+                    <span class="check-label">GUEST CHECK</span>
+                    <span class="check-no">№ 302</span>
+                </div>
+                <div class="menu-item-top">
+                    <div class="item-title-wrap">
+                        <span class="check-box"></span>
+                        <h3>Extra Espresso Shot</h3>
+                    </div>
+                    <span class="dots-filler"></span>
+                    <span class="price">$1.50</span>
+                </div>
+                <div class="menu-desc">Add an extra double espresso shot to boost your morning brew.</div>
+                <div class="check-footer">
+                    <span class="stamp-text">THANK YOU • MAPLE &amp; BEAN</span>
+                </div>
+            </div>
+
+            <div class="menu-item guest-check" data-cat="extras">
+                <div class="check-header">
+                    <span class="check-label">GUEST CHECK</span>
+                    <span class="check-no">№ 303</span>
+                </div>
+                <div class="menu-item-top">
+                    <div class="item-title-wrap">
+                        <span class="check-box"></span>
+                        <h3>House Vanilla Syrup</h3>
+                    </div>
+                    <span class="dots-filler"></span>
+                    <span class="price">$0.50</span>
+                </div>
+                <div class="menu-desc">Crafted in-house using organic Bourbon vanilla beans.</div>
+                <div class="check-footer">
+                    <span class="stamp-text">THANK YOU • MAPLE &amp; BEAN</span>
+                </div>
+            </div>
+
+            <div class="menu-item guest-check" data-cat="extras">
+                <div class="check-header">
+                    <span class="check-label">GUEST CHECK</span>
+                    <span class="check-no">№ 304</span>
+                </div>
+                <div class="menu-item-top">
+                    <div class="item-title-wrap">
+                        <span class="check-box"></span>
+                        <h3>Iced Matcha Latte</h3>
+                    </div>
+                    <span class="dots-filler"></span>
+                    <span class="price">$5.25</span>
+                </div>
+                <div class="menu-desc">Ceremonial grade Japanese matcha whisked fresh with oat milk.</div>
+                <div class="check-footer">
+                    <span class="stamp-text">THANK YOU • MAPLE &amp; BEAN</span>
+                </div>
+            </div>
+
+            <div class="menu-item guest-check" data-cat="extras">
+                <div class="check-header">
+                    <span class="check-label">GUEST CHECK</span>
+                    <span class="check-no">№ 305</span>
+                </div>
+                <div class="menu-item-top">
+                    <div class="item-title-wrap">
+                        <span class="check-box"></span>
+                        <h3>Cardamom Cold Foam</h3>
+                    </div>
+                    <span class="dots-filler"></span>
+                    <span class="price">$1.00</span>
+                </div>
+                <div class="menu-desc">Aerated sweet cream lightly spiced with freshly ground cardamom.</div>
+                <div class="check-footer">
+                    <span class="stamp-text">THANK YOU • MAPLE &amp; BEAN</span>
+                </div>
+            </div>
+
+            <div class="menu-item guest-check" data-cat="extras">
+                <div class="check-header">
+                    <span class="check-label">GUEST CHECK</span>
+                    <span class="check-no">№ 306</span>
+                </div>
+                <div class="menu-item-top">
+                    <div class="item-title-wrap">
+                        <span class="check-box"></span>
+                        <h3>Artisanal Chai Concentrate</h3>
+                    </div>
+                    <span class="dots-filler"></span>
+                    <span class="price">$4.75</span>
+                </div>
+                <div class="menu-desc">Slow-simmered black tea infused with whole organic spices.</div>
+                <div class="check-footer">
+                    <span class="stamp-text">THANK YOU • MAPLE &amp; BEAN</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CAROUSEL -->
+
+    <section>
+        <div class="carousel" id="carousel">
+            <div class="carousel-track" id="carouselTrack">
+                <img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=1200&q=80"
+                    alt="Cozy cafe corner with coffee and book">
+                <img src="https://images.unsplash.com/photo-1521017432531-fbd92d768814?w=1200&q=80"
+                    alt="Warm ambient cafe interior">
+                <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=1200&q=80"
+                    alt="Aesthetic latte art pouring">
+                <img src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=1200&q=80"
+                    alt="Artisanal roasted coffee beans">
+                <img src="https://images.unsplash.com/photo-1509785307050-d4066910ec1e?w=1200&q=80"
+                    alt="Freshly baked croissants and coffee">
+                <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1200&q=80"
+                    alt="Rustic pastry display and espresso counter">
+            </div>
+            <button class="carousel-btn prev" id="prevBtn">&#10094;</button>
+            <button class="carousel-btn next" id="nextBtn">&#10095;</button>
+            <div class="carousel-dots" id="dots"></div>
+        </div>
+    </section>
+
+
+
+    <!-- GALLERY -->
+
+    <section id="gallery">
+        <div class="section-head">
+            <span class="eyebrow">A peek inside</span>
+            <h2>Gallery</h2>
+        </div>
+        <div class="gallery-grid" id="galleryGrid">
+            <div class="gcol tall-col polaroid-left">
+                <div class="polaroid">
+                    <div class="gimg-wrap">
+                        <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=600&q=80"
+                            alt="Coffee shop counter">
+                    </div>
+                    <span class="polaroid-caption">est. mornings</span>
+                </div>
+            </div>
+
+            <div class="gcol mid-col">
+                <div class="grow-row">
+                    <div class="gimg-wrap"><img
+                            src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=600&q=80"
+                            alt="Espresso pour"></div>
+                    <div class="gimg-wrap"><img
+                            src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&q=80"
+                            alt="Croissants"></div>
+                </div>
+                <div class="grow-row">
+                    <div class="gimg-wrap"><img
+                            src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=600&q=80"
+                            alt="Coffee cup top view"></div>
+                    <div class="gimg-wrap"><img
+                            src="https://images.unsplash.com/photo-1498804103079-a6351b050096?w=600&q=80"
+                            alt="Cafe seating"></div>
+                </div>
+            </div>
+
+            <div class="gcol tall-col polaroid-right">
+                <div class="polaroid">
+                    <div class="gimg-wrap">
+                        <img src="https://images.unsplash.com/photo-1517705008128-361805f42e86?w=600&q=80"
+                            alt="Barista at work">
+                    </div>
+                    <span class="polaroid-caption">the daily craft</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LIGHTBOX (hidden until JS opens it) -->
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" id="lightboxClose">&times;</button>
+        <img id="lightboxImg" src="" alt="Enlarged photo">
+    </div>
+
+    <!--------- Testimonials --------->
+
+    <section id="testimonials">
+        <div class="section-head">
+            <span class="eyebrow">Kind words</span>
+            <h2>From our regulars</h2>
+        </div>
+
+        <div class="thread-wrap">
+            <svg class="thread-line" viewBox="0 0 1000 40" preserveAspectRatio="none">
+                <path d="M0,20 Q62,2 125,20 T250,20 T375,20 T500,20 T625,20 T750,20 T875,20 T1000,20" fill="none"
+                    stroke="#B08968" stroke-width="2.5" stroke-linecap="round" />
+            </svg>
+
+            <div class="testimonial-wall">
+
+                <div class="cup-card tilt-1">
+                    <span class="clip"></span>
+                    <div class="cup">
+                        <div class="cup-lid"></div>
+                        <div class="cup-body">
+                            <div class="cup-avatar">
+                                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&q=80"
+                                    alt="Priya">
+                            </div>
+                            <span class="cup-name">Priya</span>
+                            <div class="cup-line"></div>
+                        </div>
+                        <div class="cup-base"></div>
+                    </div>
+                    <p class="cup-quote">"The maple latte is basically my whole personality now."</p>
+                </div>
+
+                <div class="cup-card tilt-2">
+                    <span class="clip"></span>
+                    <div class="cup">
+                        <div class="cup-lid"></div>
+                        <div class="cup-body">
+                            <div class="cup-avatar">
+                                <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=80"
+                                    alt="Dan">
+                            </div>
+                            <span class="cup-name">Dan</span>
+                            <div class="cup-line"></div>
+                        </div>
+                        <div class="cup-base"></div>
+                    </div>
+                    <p class="cup-quote">"Every table feels like the one you grew up doing homework at."</p>
+                </div>
+
+                <div class="cup-card tilt-3">
+                    <span class="clip"></span>
+                    <div class="cup">
+                        <div class="cup-lid"></div>
+                        <div class="cup-body">
+                            <div class="cup-avatar">
+                                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&q=80"
+                                    alt="Amara">
+                            </div>
+                            <span class="cup-name">Amara</span>
+                            <div class="cup-line"></div>
+                        </div>
+                        <div class="cup-base"></div>
+                    </div>
+                    <p class="cup-quote">"Came for the coffee, stayed for the croissants."</p>
+                </div>
+
+                <div class="cup-card tilt-4">
+                    <span class="clip"></span>
+                    <div class="cup">
+                        <div class="cup-lid"></div>
+                        <div class="cup-body">
+                            <div class="cup-avatar">
+                                <img src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=200&q=80"
+                                    alt="Marco">
+                            </div>
+                            <span class="cup-name">Marco</span>
+                            <div class="cup-line"></div>
+                        </div>
+                        <div class="cup-base"></div>
+                    </div>
+                    <p class="cup-quote">"My laptop has a standing 9am reservation here."</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- faq  -->
+
+    <section id="faq">
+        <div class="section-head">
+            <span class="eyebrow">Good to know</span>
+            <h2>Frequently Asked Questions</h2>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-q">Do you take reservations?<span class="icon">+</span></button>
+            <div class="faq-a">
+                <p>We're mostly walk-in, but for groups of 6 or more, send us a message through the contact form and
+                    we'll set a table aside.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-q">Is there parking nearby?<span class="icon">+</span></button>
+            <div class="faq-a">
+                <p>Yes, there's free street parking along the block and a small public lot just around the corner.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-q">Do you offer dairy-free milk options?<span class="icon">+</span></button>
+            <div class="faq-a">
+                <p>Absolutely — oat, almond, and soy milk are all available at no extra charge.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-q">Can I order pastries in advance for an event?<span class="icon">+</span></button>
+            <div class="faq-a">
+                <p>Yes! Reach out at least 48 hours ahead through the contact form and we'll put together a box for you.
+                </p>
+            </div>
+        </div>
+
+    </section>
+
+
+
+    <!---------------------- contact----------------------------->
+
+
+    <section id="contact">
+        <div class="section-head">
+            <span class="eyebrow">Say hello</span>
+            <h2>Visit or Contact Us</h2>
+        </div>
+
+        <div class="contact-wrap">
+            <form id="contactForm" novalidate>
+                <!-- Honeypot Field (Hidden from human users, targets automated bots) -->
+                <div class="honeypot-field" aria-hidden="true">
+                    <label for="website">Website (Leave blank)</label>
+                    <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+                </div>
+
+                <div>
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name">
+                    <div class="error" id="nameError"></div>
+                </div>
+
+                <div>
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email">
+                    <div class="error" id="emailError"></div>
+                </div>
+
+                <div>
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message"></textarea>
+                    <div class="error" id="messageError"></div>
+                </div>
+
+                <button type="submit" class="btn">Send Message</button>
+                <div class="form-status" id="formStatus"></div>
+            </form>
+
+            <div class="map">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3721.1277912242585!2d72.75733507600073!3d21.1473120836948!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be04d8d96d2b733%3A0x1a5232e28e4094e4!2sEnactOn%20Technologies%20Private%20Limited!5e0!3m2!1sen!2sin!4v1785482886526!5m2!1sen!2sin"
+                    width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                    referrerpolicy="strict-origin-when-cross-origin"></iframe>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- FOOTER -->
+    <footer>
+        &copy; 2026 Maple &amp; Bean Coffee Co. All rights reserved.
+    </footer>
+
+    <script src="src/script.js"></script>
+</body>
+
+</html>
+=======
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+  href="https://cdn.jsdelivr.net/npm/remixicon@4.9.0/fonts/remixicon.css"
+  rel="stylesheet"
+/>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main>
+      <section class="view1">
+        <div class="top">
+          <img
+            src="./63d2cb2934d35c4b4c5b51da_studio-hero-p-1600.webp"
+            alt=""
+          />
+        </div>
+        <div class="bottom">
+          <p class="studio">STUDIO <i class="ri-arrow-down-circle-fill"></i></p>
+          <div class="text">
+            <h1>How We Help Fahion Brands STAND OUT</h1>
+            <p>
+              We help fashion brands and retailers to create a sustainable and
+              profitable business by providing them with the tools and resources
+              they need to succeed in the digital age. Our team of experts has
+              years of experience in the fashion industry .
+            </p>
+            <button>OUR STORY</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
+>>>>>>> 06939476e22db0d12c9b597537f73672c7a1f44a

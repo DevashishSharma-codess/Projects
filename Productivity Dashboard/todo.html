@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo</title>
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="glass.css">
+  <link rel="stylesheet" href="main.css">
+  <link rel="stylesheet" href="Fullpage.css">
+  <link rel="stylesheet" href="todo.css">
+</head>
+
+<body>
+  <main>
+
+    <!-- NAV -->
+    <nav class="glass"></nav>
+
+    <!-- FULL PAGE -->
+    <section class="fullPage todo-fullpage">
+
+      <h1>Todo List</h1>
+      <a href="index.html" class="back">← Back</a>
+
+      <!-- TODO CONTAINER -->
+      <div class="todo-container glass">
+
+        <!-- INPUT AREA -->
+        <div class="todo-input">
+          <input id="todo-input" type="text" placeholder="Add a new task...">
+          <button id="add-btn">Add</button>
+        </div>
+
+        <!-- TASK LIST (JS will fill this) -->
+        <div class="todo-list" id="todo-list"></div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- JS (keep at bottom) -->
+  <script src="todo.js"></script>
+
+</body>
+</html>
