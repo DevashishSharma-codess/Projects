@@ -1,0 +1,244 @@
+/* ============================================================
+   MENU & GUEST CHECK ELEMENTS
+============================================================ */
+
+.tabs {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin: 26px 0 36px;
+    flex-wrap: wrap;
+}
+
+.tab-btn {
+    padding: 9px 20px;
+    border-radius: 100px;
+    border: 1.5px solid rgba(226, 188, 132, 0.2);
+    background: rgba(255, 255, 255, 0.05);
+    color: #F5EBE0;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: all .2s;
+}
+
+.tab-btn:hover {
+    border-color: #E2BC84;
+    color: #FFFFFF;
+}
+
+.tab-btn.active {
+    background: linear-gradient(135deg, #C45A47 0%, #A83E2D 100%);
+    color: #FFFFFF;
+    border-color: #C45A47;
+    box-shadow: 0 4px 14px rgba(196, 90, 71, 0.4);
+}
+
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 22px;
+}
+
+.menu-item.guest-check {
+    background: #231811;
+    background-image: repeating-linear-gradient(transparent,
+            transparent 25px,
+            rgba(226, 188, 132, 0.04) 26px);
+    border: 1px solid rgba(226, 188, 132, 0.18);
+    border-top: 4px solid #C45A47;
+    border-radius: 6px;
+    padding: 18px 20px;
+    position: relative;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+    transition: all 0.25s ease;
+    cursor: pointer;
+    user-select: none;
+}
+
+.menu-item.guest-check:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5);
+    border-color: rgba(226, 188, 132, 0.4);
+}
+
+.menu-item.guest-check.selected {
+    border-color: #E2BC84;
+    border-top-color: #E2BC84;
+    box-shadow: 0 8px 28px rgba(226, 188, 132, 0.25);
+    background: #2c1d15;
+}
+
+.check-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+    border-bottom: 1px dashed rgba(196, 90, 71, 0.6);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+}
+
+.check-label {
+    color: #E06B58;
+    text-transform: uppercase;
+}
+
+.check-no {
+    color: #E2BC84;
+    font-family: monospace;
+    font-size: 0.75rem;
+}
+
+.menu-item-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    width: 100%;
+}
+
+.item-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    min-width: 0;
+}
+
+.item-title-wrap h3 {
+    font-size: 1.1rem;
+    color: #FDFBF8;
+    margin: 0;
+    font-family: 'Instrument Serif', serif;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.check-box {
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid rgba(226, 188, 132, 0.5);
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    background: rgba(0, 0, 0, 0.25);
+    position: relative;
+}
+
+.menu-item.guest-check:hover .check-box {
+    border-color: #E2BC84;
+}
+
+.menu-item.selected .check-box,
+.check-box.checked {
+    background-color: #C45A47;
+    border-color: #C45A47;
+}
+
+.menu-item.selected .check-box::after,
+.check-box.checked::after {
+    content: "✓";
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: bold;
+    line-height: 1;
+    display: block;
+}
+
+.dots-filler {
+    flex: 1;
+    border-bottom: 1.5px dotted rgba(226, 188, 132, 0.3);
+    margin: 0 4px;
+    min-width: 12px;
+}
+
+.price {
+    font-family: 'Instrument Serif', serif;
+    font-size: 1.25rem;
+    color: #E2BC84;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.menu-desc {
+    font-size: 0.88rem;
+    color: rgba(245, 235, 224, 0.78);
+    margin-top: 10px;
+    font-style: italic;
+    line-height: 1.4;
+}
+
+.check-footer {
+    margin-top: 14px;
+    padding-top: 10px;
+    border-top: 1px dashed rgba(226, 188, 132, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.stamp-text {
+    font-size: 0.62rem;
+    letter-spacing: 1.5px;
+    color: rgba(226, 188, 132, 0.75);
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.item-order-controls {
+    display: none;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: 10px;
+    padding-top: 8px;
+}
+
+.menu-item.selected .item-order-controls {
+    display: flex;
+}
+
+.qty-selector {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(226, 188, 132, 0.3);
+    border-radius: 50px;
+    padding: 2px 8px;
+    gap: 8px;
+}
+
+.qty-btn {
+    background: none;
+    border: none;
+    color: #E2BC84;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background 0.2s ease;
+}
+
+.qty-btn:hover {
+    background: rgba(226, 188, 132, 0.25);
+}
+
+.qty-count {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #FDFBF8;
+    min-width: 16px;
+    text-align: center;
+}

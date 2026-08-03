@@ -1,0 +1,155 @@
+/* ============================================================
+   GALLERY & POLAROID ELEMENTS
+============================================================ */
+
+.gallery-grid {
+    display: flex;
+    gap: 12px;
+    height: 520px;
+    align-items: stretch;
+}
+
+.gcol {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1 1 0;
+    min-width: 0;
+}
+
+.gcol.tall-col {
+    flex: 1.2 1 0;
+}
+
+.gcol.mid-col {
+    flex: 1.6 1 0;
+}
+
+.grow-row {
+    display: flex;
+    gap: 12px;
+    flex: 1 1 0;
+    min-height: 0;
+}
+
+.gimg-wrap {
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 0;
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: flex .5s ease;
+}
+
+.gimg-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform .5s ease, filter .4s ease;
+}
+
+.gimg-wrap:hover {
+    flex: 3 1 0;
+}
+
+.gimg-wrap:hover img {
+    filter: brightness(1);
+    transform: scale(1.05);
+}
+
+.tall-col {
+    justify-content: center;
+    align-items: center;
+}
+
+.polaroid {
+    background: #FAF5EE;
+    border: 1px solid #E7DCCB;
+    width: 90%;
+    padding: 14px 14px 40px;
+    border-radius: 4px;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    transition: transform .35s ease, box-shadow .35s ease;
+    cursor: pointer;
+}
+
+.polaroid-left {
+    transform: rotate(-4deg);
+}
+
+.polaroid-right {
+    transform: rotate(3deg);
+}
+
+.polaroid:hover {
+    transform: rotate(0deg) scale(1.05);
+    box-shadow: 0 18px 36px rgba(0, 0, 0, 0.5);
+    z-index: 5;
+}
+
+.polaroid .gimg-wrap {
+    border-radius: 2px;
+    aspect-ratio: 4 / 4.6;
+    flex: none;
+    width: 100%;
+}
+
+.polaroid .gimg-wrap img {
+    object-position: center 30%;
+}
+
+.polaroid:hover .gimg-wrap img {
+    transform: scale(1.08);
+}
+
+.polaroid-caption {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-family: 'Marck Script', 'Kalam', 'Permanent Marker', cursive;
+    font-size: 1.15rem;
+    color: #3C2A21;
+    font-weight: 600;
+    opacity: 0.95;
+}
+
+@media (max-width: 700px) {
+    .gallery-grid {
+        flex-direction: column;
+        height: auto;
+        gap: 20px;
+    }
+
+    .gcol, .gcol.tall-col, .gcol.mid-col {
+        flex: none;
+        width: 100%;
+    }
+
+    .polaroid {
+        width: 78%;
+        max-width: 320px;
+    }
+
+    .mid-col {
+        gap: 12px;
+    }
+
+    .grow-row {
+        height: 160px;
+    }
+
+    .gimg-wrap:hover {
+        flex: 1 1 0;
+    }
+
+    .gimg-wrap:hover img {
+        transform: none;
+    }
+}

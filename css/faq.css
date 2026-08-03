@@ -1,0 +1,45 @@
+/* ============================================================
+   FAQ ACCORDION ELEMENTS
+============================================================ */
+
+.faq-item {
+    border-bottom: 1px solid rgba(226, 188, 132, 0.15);
+}
+
+.faq-q {
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    padding: 18px 4px;
+    font-size: 1.02rem;
+    font-weight: 500;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    color: #FDFBF8;
+    font-family: inherit;
+}
+
+.faq-q .icon {
+    transition: transform .25s;
+    color: #E2BC84;
+    font-size: 1.3rem;
+}
+
+.faq-item.open .icon {
+    transform: rotate(45deg);
+}
+
+.faq-a {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .3s ease;
+    font-size: 0.94rem;
+    color: rgba(245, 235, 224, 0.78);
+}
+
+.faq-a p {
+    padding-bottom: 16px;
+}

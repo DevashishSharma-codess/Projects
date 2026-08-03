@@ -1,0 +1,39 @@
+/* ============================================================
+   BACK-TO-TOP BUTTON ELEMENT
+============================================================ */
+
+.back-to-top {
+    position: fixed;
+    bottom: 24px;
+    left: 24px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(35, 24, 17, 0.9);
+    border: 1.5px solid rgba(226, 188, 132, 0.3);
+    color: #E2BC84;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 998;
+    opacity: 0;
+    transform: scale(0.8);
+    pointer-events: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+}
+
+.back-to-top.show {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+}
+
+.back-to-top:hover {
+    background: #C45A47;
+    color: #fff;
+    border-color: #C45A47;
+    transform: translateY(-3px);
+}

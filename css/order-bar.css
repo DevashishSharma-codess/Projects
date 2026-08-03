@@ -1,0 +1,129 @@
+/* ============================================================
+   FLOATING ORDER BAR & TOAST NOTIFICATIONS
+============================================================ */
+
+.floating-order-bar {
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%) translateY(120px);
+    background: rgba(26, 18, 13, 0.94);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1.5px solid #E2BC84;
+    border-radius: 100px;
+    padding: 8px 12px 8px 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.65);
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275), visibility 0.35s ease;
+}
+
+.floating-order-bar.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.order-bar-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #FDFBF8;
+    white-space: nowrap;
+}
+
+.order-bar-count {
+    color: #E2BC84;
+    font-weight: 700;
+}
+
+.order-bar-dot {
+    color: rgba(226, 188, 132, 0.4);
+}
+
+.order-bar-total {
+    color: #FFFFFF;
+    font-family: 'Instrument Serif', serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.btn-order-now-main {
+    background: linear-gradient(135deg, #C45A47 0%, #A83E2D 100%);
+    color: #FFFFFF;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 100px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 14px rgba(196, 90, 71, 0.4);
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.btn-order-now-main:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(196, 90, 71, 0.6);
+}
+
+.toast-notification {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    background: #231811;
+    border: 1.5px solid #E2BC84;
+    color: #FDFBF8;
+    padding: 14px 20px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 10000;
+    font-size: 0.92rem;
+    transform: translateY(-20px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+}
+
+.toast-notification.show {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+}
+
+.toast-icon {
+    width: 24px;
+    height: 24px;
+    background: #3a6b3a;
+    color: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+}
+
+.toast-close {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 1.2rem;
+    cursor: pointer;
+    margin-left: 8px;
+    line-height: 1;
+}

@@ -1,0 +1,46 @@
+/* ============================================================
+   PRELOADER ELEMENT
+============================================================ */
+
+.page-loader {
+    position: fixed;
+    inset: 0;
+    background: #18100C;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.6s ease;
+}
+
+.page-loader.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.loader-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.loader-text {
+    font-family: 'Marck Script', 'Kalam', cursive;
+    font-size: 1.4rem;
+    color: #E2BC84;
+    letter-spacing: 0.5px;
+    animation: loaderPulse 1.8s infinite ease-in-out;
+}
+
+@keyframes loaderPulse {
+    0%, 100% {
+        opacity: 0.6;
+        transform: scale(0.98);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.02);
+    }
+}

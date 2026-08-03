@@ -1,0 +1,113 @@
+/* ============================================================
+   CHECKOUT MODAL ELEMENTS
+============================================================ */
+
+.order-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    padding: 20px;
+}
+
+.order-modal.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.order-modal-card {
+    background: #231811;
+    border: 1.5px solid #E2BC84;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 460px;
+    padding: 24px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+    transform: scale(0.92);
+    transition: transform 0.3s ease;
+}
+
+.order-modal.open .order-modal-card {
+    transform: scale(1);
+}
+
+.order-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(226, 188, 132, 0.2);
+    padding-bottom: 14px;
+    margin-bottom: 16px;
+}
+
+.order-modal-header h3 {
+    font-size: 1.4rem;
+    color: #FDFBF8;
+}
+
+.order-modal-close {
+    background: none;
+    border: none;
+    color: #E2BC84;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.order-modal-list {
+    max-height: 240px;
+    overflow-y: auto;
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.order-modal-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.95rem;
+    border-bottom: 1px dashed rgba(226, 188, 132, 0.1);
+    padding-bottom: 8px;
+}
+
+.order-modal-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    border-top: 1px solid rgba(226, 188, 132, 0.2);
+    padding-top: 14px;
+}
+
+.order-modal-total-line {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #E2BC84;
+}
+
+.btn-confirm-checkout {
+    background: linear-gradient(135deg, #C45A47 0%, #A83E2D 100%);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 100px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-confirm-checkout:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(196, 90, 71, 0.5);
+}

@@ -1,0 +1,264 @@
+/* ============================================================
+   TESTIMONIALS & TO-GO CUP WALL ELEMENTS
+============================================================ */
+
+.thread-wrap {
+    position: relative;
+    padding-top: 34px;
+}
+
+.thread-line {
+    position: absolute;
+    top: 14px;
+    left: 4%;
+    width: 92%;
+    height: 40px;
+    display: block;
+}
+
+.testimonial-wall {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 46px 34px;
+    padding: 20px 0 10px;
+}
+
+.cup-card {
+    position: relative;
+    width: 130px;
+    transform-origin: top center;
+    cursor: pointer;
+    transition: transform .35s ease;
+}
+
+.cup-card:nth-child(odd) {
+    margin-top: 28px;
+}
+
+.cup-card:nth-child(even) {
+    margin-top: 16px;
+}
+
+.tilt-1 {
+    transform: rotate(-4deg);
+}
+
+.tilt-2 {
+    transform: rotate(3deg);
+}
+
+.tilt-3 {
+    transform: rotate(-3deg);
+}
+
+.tilt-4 {
+    transform: rotate(4deg);
+}
+
+.cup-card:hover {
+    transform: rotate(0deg) translateY(-6px);
+}
+
+.clip {
+    position: absolute;
+    top: -22px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10px;
+    height: 22px;
+    background: var(--coffee);
+    border-radius: 3px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+    z-index: 5;
+}
+
+.clip::before {
+    content: "";
+    position: absolute;
+    top: 6px;
+    left: 1px;
+    width: 8px;
+    height: 8px;
+    background: var(--tan);
+    border-radius: 50%;
+}
+
+.clip::after {
+    content: "";
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 14px;
+    background: var(--tan);
+    z-index: 1;
+}
+
+.cup {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    filter: drop-shadow(0 10px 14px rgba(60, 42, 33, 0.22));
+    transition: filter .35s ease;
+}
+
+.cup-card:hover .cup {
+    filter: drop-shadow(0 16px 22px rgba(60, 42, 33, 0.3));
+}
+
+.cup-lid {
+    width: 100%;
+    height: 18px;
+    background: #FDFBF8;
+    border: 1.5px solid #E3D6C4;
+    border-bottom: none;
+    border-radius: 50% 50% 4px 4px / 70% 70% 4px 4px;
+    position: relative;
+    z-index: 2;
+}
+
+.cup-lid::before {
+    content: "";
+    position: absolute;
+    left: 4%;
+    right: 4%;
+    bottom: 3px;
+    height: 2px;
+    background: #E3D6C4;
+    border-radius: 2px;
+}
+
+.cup-lid::after {
+    content: "";
+    position: absolute;
+    top: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 7px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--cream);
+    border: 1.5px solid #E3D6C4;
+}
+
+.cup-body {
+    width: 92%;
+    aspect-ratio: 3 / 3.4;
+    background: linear-gradient(180deg, #FDFBF8 0%, #FDFBF8 34%, #E7D4B8 34%, #D9BE96 100%);
+    clip-path: polygon(6% 0%, 94% 0%, 86% 100%, 14% 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 10px 16px;
+    position: relative;
+}
+
+.cup-body::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 34%;
+    bottom: 0;
+    background: repeating-linear-gradient(90deg,
+            rgba(60, 42, 33, 0.06) 0px,
+            rgba(60, 42, 33, 0.06) 1px,
+            transparent 1px,
+            transparent 8px);
+    pointer-events: none;
+}
+
+.cup-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid var(--white);
+    box-shadow: 0 2px 6px rgba(60, 42, 33, 0.25);
+    margin-top: 6px;
+    position: relative;
+    z-index: 2;
+}
+
+.cup-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.cup-name {
+    font-family: 'Marck Script', cursive;
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: #3C2A21;
+    line-height: 1;
+    margin-top: 10px;
+    transform: rotate(-3deg);
+    position: relative;
+    z-index: 2;
+}
+
+.cup-line {
+    width: 60%;
+    height: 1px;
+    background: rgba(60, 42, 33, 0.25);
+    margin-top: 8px;
+    transform: rotate(-2deg);
+    position: relative;
+    z-index: 2;
+}
+
+.cup-base {
+    width: 78%;
+    height: 6px;
+    background: #C9A876;
+    border-radius: 0 0 4px 4px;
+    margin-top: -2px;
+}
+
+.cup-quote {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 0.82rem;
+    color: #EAE0D5;
+    text-align: center;
+    margin-top: 12px;
+    line-height: 1.35;
+    opacity: 0.85;
+}
+
+@media (max-width: 700px) {
+    .thread-line {
+        left: 8%;
+        right: 8%;
+    }
+
+    .testimonial-wall {
+        gap: 40px 20px;
+    }
+
+    .cup-card {
+        width: 38%;
+        max-width: 135px;
+        margin-top: 22px !important;
+    }
+
+    .tilt-1,
+    .tilt-3 {
+        transform: rotate(-3deg);
+    }
+
+    .tilt-2,
+    .tilt-4 {
+        transform: rotate(3deg);
+    }
+
+    .cup-card:hover {
+        transform: rotate(0deg);
+    }
+}
