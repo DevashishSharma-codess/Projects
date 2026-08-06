@@ -1,0 +1,124 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@500;600;700&family=Fraunces:ital,wght@0,600;0,700;1,600&display=swap');
+
+:root {
+  --token-accent-blue: #2597d0;
+  --token-ice-sky: #c0eaff;
+  --token-ink: #070709;
+  --token-muted: #60606c;
+  --token-white: #fff;
+  --token-deep-purple: #371866;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #FFFFFF;
+  color: var(--token-ink);
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  overflow-x: hidden;
+}
+
+/* Grid Canvas Background (Inspired by user's screenshot Image 2 & Image 4) */
+.grid-canvas {
+  background-size: 32px 32px;
+  background-image: 
+    linear-gradient(to right, rgba(226, 232, 240, 0.6) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(226, 232, 240, 0.6) 1px, transparent 1px);
+}
+
+/* Spin animation for refresh button */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.spin {
+  animation: spin 0.8s linear infinite;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F1F5F9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+/* Custom macOS Glassmorphic Quill Editor Styles */
+.ql-toolbar.ql-snow {
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  background: rgba(255, 255, 255, 0.65) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border-radius: 14px 14px 0 0 !important;
+  padding: 10px 14px !important;
+}
+
+.ql-toolbar.ql-snow .ql-formats {
+  margin-right: 12px !important;
+}
+
+.ql-toolbar.ql-snow button {
+  border-radius: 6px !important;
+  transition: all 0.2s ease !important;
+}
+
+.ql-toolbar.ql-snow button:hover,
+.ql-toolbar.ql-snow button.ql-active {
+  background: #FFFFFF !important;
+  color: #2563EB !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08) !important;
+}
+
+.ql-toolbar.ql-snow button.ql-active .ql-stroke {
+  stroke: #2563EB !important;
+}
+
+.ql-toolbar.ql-snow button.ql-active .ql-fill {
+  fill: #2563EB !important;
+}
+
+.ql-container.ql-snow {
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  border-top: none !important;
+  background: rgba(255, 255, 255, 0.75) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border-radius: 0 0 16px 16px !important;
+  font-size: 15px !important;
+}
+
+.ql-editor {
+  min-height: 220px !important;
+  max-height: 480px !important;
+  overflow-y: auto !important;
+  word-break: break-word !important;
+  overflow-wrap: anywhere !important;
+  white-space: pre-wrap !important;
+  color: #0F172A !important;
+  line-height: 1.65 !important;
+  padding: 16px 20px !important;
+}
+
+.ql-editor.ql-blank::before {
+  color: #94A3B8 !important;
+  font-style: normal !important;
+}
