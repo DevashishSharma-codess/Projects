@@ -117,6 +117,9 @@ export function getSavedFolders(): JournalFolder[] {
 
 export function saveFolders(folders: JournalFolder[]) {
     localStorage.setItem("dogear_journal_folders", JSON.stringify(folders));
+    if (typeof window !== "undefined") {
+        window.dispatchEvent(new CustomEvent("dogear_folders_updated"));
+    }
 }
 
 export function createNewFolder(name: string, description: string, color: string): JournalFolder {
@@ -138,14 +141,22 @@ export function createNewFolder(name: string, description: string, color: string
 
 export function addEntryToFolder(folderId: string, entry: JournalEntry): JournalFolder[] {
     const folders = getSavedFolders();
+    const targetFolderId = folderId || (folders.length > 0 ? folders[0].id : "folder-morning");
+
     const updated = folders.map((f) => {
-        if (f.id === folderId) {
+        const filteredEntries = f.entries.filter((e) => e.id !== entry.id);
+
+        if (f.id === targetFolderId) {
+            const entryWithFolderId = { ...entry, folderId: targetFolderId };
             return {
                 ...f,
-                entries: [entry, ...f.entries],
+                entries: [entryWithFolderId, ...filteredEntries],
             };
         }
-        return f;
+        return {
+            ...f,
+            entries: filteredEntries,
+        };
     });
     saveFolders(updated);
     return updated;

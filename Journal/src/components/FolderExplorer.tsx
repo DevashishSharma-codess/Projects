@@ -239,7 +239,15 @@ export default function FolderExplorer({ onOpenEditor }: { onOpenEditor?: (folde
     const [journalTag, setJournalTag] = useState("Reflective");
 
     useEffect(() => {
-        setFolders(getSavedFolders());
+        const syncFolders = () => {
+            setFolders(getSavedFolders());
+        };
+        syncFolders();
+
+        window.addEventListener("dogear_folders_updated", syncFolders);
+        return () => {
+            window.removeEventListener("dogear_folders_updated", syncFolders);
+        };
     }, []);
 
     const activeFolder = folders.find((f) => f.id === activeFolderId);
@@ -292,6 +300,20 @@ export default function FolderExplorer({ onOpenEditor }: { onOpenEditor?: (folde
         setJournalTitle("");
         setJournalContent("");
         setShowNewJournalModal(false);
+    };
+
+    const handleOpenInEditor = (e: React.MouseEvent, entry: JournalEntry) => {
+        e.stopPropagation();
+        setSelectedEntry(null);
+        if (typeof window !== "undefined") {
+            window.dispatchEvent(new CustomEvent("dogear_open_entry_in_editor", { detail: entry }));
+        }
+        if (onOpenEditor) {
+            onOpenEditor(entry.folderId);
+        } else {
+            const el = document.getElementById("journal-studio");
+            if (el) el.scrollIntoView({ behavior: "smooth" });
+        }
     };
 
     const displayedFolders = folders.filter((f) =>
@@ -779,11 +801,8 @@ export default function FolderExplorer({ onOpenEditor }: { onOpenEditor?: (folde
                             </button>
 
                             <button
-                                onClick={() => {
-                                    setSelectedEntry(null);
-                                    if (onOpenEditor) onOpenEditor(selectedEntry.folderId);
-                                }}
-                                style={{ border: "none", background: "#0F172A", color: "#FFFFFF", padding: "10px 20px", borderRadius: 9999, fontWeight: 700, fontSize: 13.5, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 6 }}
+                                onClick={(e) => handleOpenInEditor(e, selectedEntry)}
+                                style={{ border: "none", background: "#2563EB", color: "#FFFFFF", padding: "10px 20px", borderRadius: 9999, fontWeight: 700, fontSize: 13.5, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 6, boxShadow: "0 4px 14px rgba(37,99,235,0.3)" }}
                             >
                                 <Edit3 size={14} /> Open in Studio Editor
                             </button>

@@ -83,11 +83,24 @@ export default function JournalEditor({ onEntrySaved }: { onEntrySaved?: (entry:
     const [selectedFolderId, setSelectedFolderId] = useState<string>("");
 
     useEffect(() => {
-        const loadedFolders = getSavedFolders();
-        setFolders(loadedFolders);
-        if (loadedFolders.length > 0) {
-            setSelectedFolderId(loadedFolders[0].id);
-        }
+        const syncFolders = () => {
+            const loadedFolders = getSavedFolders();
+            setFolders(loadedFolders);
+            if (loadedFolders.length > 0) {
+                setSelectedFolderId((prev) => prev || loadedFolders[0].id);
+            }
+        };
+        syncFolders();
+
+        const handleOpenEntryEvent = (e: Event) => {
+            const customEv = e as CustomEvent<JournalEntry>;
+            if (customEv.detail) {
+                handleSelectEntryForEdit(customEv.detail);
+            }
+        };
+
+        window.addEventListener("dogear_folders_updated", syncFolders);
+        window.addEventListener("dogear_open_entry_in_editor", handleOpenEntryEvent);
 
         const saved = localStorage.getItem("dogear_journal_entries");
         if (saved) {
@@ -113,6 +126,11 @@ export default function JournalEditor({ onEntrySaved }: { onEntrySaved?: (entry:
             setEntries(initial);
             localStorage.setItem("dogear_journal_entries", JSON.stringify(initial));
         }
+
+        return () => {
+            window.removeEventListener("dogear_folders_updated", syncFolders);
+            window.removeEventListener("dogear_open_entry_in_editor", handleOpenEntryEvent);
+        };
     }, []);
 
     const toggleTag = (tagName: string) => {
@@ -143,6 +161,8 @@ export default function JournalEditor({ onEntrySaved }: { onEntrySaved?: (entry:
         const plainText = content.replace(/<[^>]*>/g, "").trim();
         if (!plainText && !content.trim()) return;
 
+        const targetFolderId = selectedFolderId || (folders.length > 0 ? folders[0].id : "folder-morning");
+
         if (editingEntryId) {
             // UPDATING EXISTING JOURNAL ENTRY
             const updated = entries.map((e) => {
@@ -153,7 +173,7 @@ export default function JournalEditor({ onEntrySaved }: { onEntrySaved?: (entry:
                         content: content,
                         tags: selectedTags.length > 0 ? selectedTags : ["Reflective"],
                         mood: selectedMood,
-                        folderId: selectedFolderId,
+                        folderId: targetFolderId,
                         fontStyle,
                     };
                 }
@@ -163,8 +183,8 @@ export default function JournalEditor({ onEntrySaved }: { onEntrySaved?: (entry:
             localStorage.setItem("dogear_journal_entries", JSON.stringify(updated));
 
             const updatedEntry = updated.find((e) => e.id === editingEntryId);
-            if (updatedEntry && selectedFolderId) {
-                addEntryToFolder(selectedFolderId, updatedEntry);
+            if (updatedEntry) {
+                addEntryToFolder(targetFolderId, updatedEntry);
             }
 
             setEditingEntryId(null);
@@ -177,7 +197,7 @@ export default function JournalEditor({ onEntrySaved }: { onEntrySaved?: (entry:
             // CREATING NEW JOURNAL ENTRY
             const newEntry: JournalEntry = {
                 id: Date.now().toString(),
-                folderId: selectedFolderId,
+                folderId: targetFolderId,
                 title: title.trim() || "Untitled Daily Reflection",
                 content: content,
                 tags: selectedTags.length > 0 ? selectedTags : ["Reflective"],
@@ -187,9 +207,7 @@ export default function JournalEditor({ onEntrySaved }: { onEntrySaved?: (entry:
                 fontStyle,
             };
 
-            if (selectedFolderId) {
-                addEntryToFolder(selectedFolderId, newEntry);
-            }
+            addEntryToFolder(targetFolderId, newEntry);
 
             const updated = [newEntry, ...entries];
             setEntries(updated);
