@@ -30,11 +30,45 @@ export interface MoodLog {
     score: number;
     color: string;
     note: string;
+    time?: string;
 }
+
 
 export interface QuoteItem {
     id: string;
     text: string;
     author: string;
     category: string;
+}
+
+export interface FolderQuoteItem {
+    id: string;
+    tabLabel: string;
+    bgColor: string;
+    textColor: string;
+    quote: string;
+    author: string;
+    handle: string;
+    codeRef?: string;
+    dateStr?: string;
+    tabLeftOffset: number;
+}
+
+export interface MoodGlassBlog {
+    id: string;
+    category: string;
+    moodLabel: string;
+    title: string;
+    subtitle: string;
+    readTime: string;
+    author: string;
+    date: string;
+    imageUrl: string;
+    content: {
+        intro: string;
+        quote: string;
+        sections: { heading: string; body: string }[];
+        takeaways: string[];
+        reflectionPrompt: string;
+    };
 }

@@ -3,8 +3,10 @@ import { Folder, FolderPlus, FileText, Search, Grid, List as ListIcon, X, Calend
 import type { JournalEntry, JournalFolder } from "../types/journal";
 import { DoodleBadge } from "./DoodleIllustrations";
 import { getSavedFolders, createNewFolder, addEntryToFolder, deleteFolder, deleteEntryFromFolder } from "../utils/folderStorage";
+import { useJournal } from "../context/JournalContext";
 
 const COLOR_OPTIONS = [
+
     { name: "Amber Gold", hex: "#F59E0B" },
     { name: "Rose Pink", hex: "#EC4899" },
     { name: "Sky Blue", hex: "#3B82F6" },
@@ -219,43 +221,45 @@ function MacFolderItem({
     );
 }
 
-export default function FolderExplorer({ onOpenEditor }: { onOpenEditor?: (folderId?: string) => void }) {
-    const [folders, setFolders] = useState<JournalFolder[]>([]);
-    const [activeFolderId, setActiveFolderId] = useState<string | null>(null);
-    const [selectedEntry, setSelectedEntry] = useState<JournalEntry | null>(null);
-    const [searchQuery, setSearchQuery] = useState("");
-    const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
-    // Modal state for Creating New Folder
-    const [showNewFolderModal, setShowNewFolderModal] = useState(false);
+export default function FolderExplorer({ onOpenEditor }: { onOpenEditor?: (folderId?: string) => void }) {
+
+
+    const {
+        folders,
+        activeFolderId,
+        setActiveFolderId,
+        selectedEntry,
+        setSelectedEntry,
+        setEditingEntry,
+        searchQuery,
+        setSearchQuery,
+        viewMode,
+        setViewMode,
+        showNewFolderModal,
+        setShowNewFolderModal,
+        showNewJournalModal,
+        setShowNewJournalModal,
+        createFolder,
+        deleteFolder,
+        addEntryToFolder,
+        deleteEntryFromFolder,
+    } = useJournal();
+
+    // Local form field inputs for modals
     const [newFolderName, setNewFolderName] = useState("");
     const [newFolderDesc, setNewFolderDesc] = useState("");
     const [selectedColor, setSelectedColor] = useState(COLOR_OPTIONS[0].hex);
 
-    // Modal state for Creating Quick Journal inside Active Folder
-    const [showNewJournalModal, setShowNewJournalModal] = useState(false);
     const [journalTitle, setJournalTitle] = useState("");
     const [journalContent, setJournalContent] = useState("");
     const [journalTag, setJournalTag] = useState("Reflective");
-
-    useEffect(() => {
-        const syncFolders = () => {
-            setFolders(getSavedFolders());
-        };
-        syncFolders();
-
-        window.addEventListener("dogear_folders_updated", syncFolders);
-        return () => {
-            window.removeEventListener("dogear_folders_updated", syncFolders);
-        };
-    }, []);
 
     const activeFolder = folders.find((f) => f.id === activeFolderId);
 
     const handleCreateFolder = () => {
         if (!newFolderName.trim()) return;
-        const created = createNewFolder(newFolderName.trim(), newFolderDesc.trim(), selectedColor);
-        setFolders(getSavedFolders());
+        const created = createFolder(newFolderName.trim(), newFolderDesc.trim(), selectedColor);
         setNewFolderName("");
         setNewFolderDesc("");
         setShowNewFolderModal(false);
@@ -265,21 +269,13 @@ export default function FolderExplorer({ onOpenEditor }: { onOpenEditor?: (folde
     const handleDeleteFolder = (e: React.MouseEvent, folderId: string, folderName: string) => {
         e.stopPropagation();
         if (window.confirm(`Delete folder "${folderName}" and all its journal entries?`)) {
-            const updated = deleteFolder(folderId);
-            setFolders(updated);
-            if (activeFolderId === folderId) {
-                setActiveFolderId(null);
-            }
+            deleteFolder(folderId);
         }
     };
 
     const handleDeleteJournal = (e: React.MouseEvent, folderId: string, entryId: string) => {
         e.stopPropagation();
-        const updated = deleteEntryFromFolder(folderId, entryId);
-        setFolders(updated);
-        if (selectedEntry?.id === entryId) {
-            setSelectedEntry(null);
-        }
+        deleteEntryFromFolder(folderId, entryId);
     };
 
     const handleCreateJournalInFolder = () => {
@@ -295,8 +291,7 @@ export default function FolderExplorer({ onOpenEditor }: { onOpenEditor?: (folde
             time: new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }),
             fontStyle: "handwriting",
         };
-        const updated = addEntryToFolder(activeFolderId, newEntry);
-        setFolders(updated);
+        addEntryToFolder(activeFolderId, newEntry);
         setJournalTitle("");
         setJournalContent("");
         setShowNewJournalModal(false);
@@ -305,6 +300,7 @@ export default function FolderExplorer({ onOpenEditor }: { onOpenEditor?: (folde
     const handleOpenInEditor = (e: React.MouseEvent, entry: JournalEntry) => {
         e.stopPropagation();
         setSelectedEntry(null);
+        setEditingEntry(entry);
         if (typeof window !== "undefined") {
             window.dispatchEvent(new CustomEvent("dogear_open_entry_in_editor", { detail: entry }));
         }
@@ -445,372 +441,374 @@ export default function FolderExplorer({ onOpenEditor }: { onOpenEditor?: (folde
 
                     {/* EXPLORER MAIN CONTENT BODY WITH TRANSPARENT GLASS BACKGROUND */}
                     <div style={{ padding: 32, minHeight: 380, background: "rgba(255, 255, 255, 0.25)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)" }}>
-                    {/* BREADCRUMB & BACK BUTTON & NEW JOURNAL IN FOLDER BUTTON */}
-                    {activeFolder && (
-                        <div style={{ marginBottom: 24, display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
-                            <button
-                                onClick={() => setActiveFolderId(null)}
-                                style={{
-                                    border: "1px solid #CBD5E1",
-                                    background: "#FFFFFF",
-                                    padding: "6px 14px",
-                                    borderRadius: 9999,
-                                    fontSize: 13,
-                                    fontWeight: 700,
-                                    color: "#0F172A",
-                                    cursor: "pointer",
-                                    display: "inline-flex",
-                                    alignItems: "center",
-                                    gap: 6,
-                                }}
-                            >
-                                <ArrowLeft size={14} /> Back to All Folders
-                            </button>
-
-                            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                                <span style={{ fontFamily: "'Outfit', sans-serif", fontSize: 16, fontWeight: 700, color: "#0F172A" }}>
-                                    📁 {activeFolder.name} ({activeFolder.entries.length} Items)
-                                </span>
-
+                        {/* BREADCRUMB & BACK BUTTON & NEW JOURNAL IN FOLDER BUTTON */}
+                        {activeFolder && (
+                            <div style={{ marginBottom: 24, display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
                                 <button
-                                    onClick={() => setShowNewJournalModal(true)}
+                                    onClick={() => setActiveFolderId(null)}
                                     style={{
-                                        border: "none",
-                                        background: "#0F172A",
-                                        color: "#FFFFFF",
-                                        padding: "7px 16px",
+                                        border: "1px solid #CBD5E1",
+                                        background: "#FFFFFF",
+                                        padding: "6px 14px",
                                         borderRadius: 9999,
-                                        fontSize: 12.5,
+                                        fontSize: 13,
                                         fontWeight: 700,
+                                        color: "#0F172A",
                                         cursor: "pointer",
                                         display: "inline-flex",
                                         alignItems: "center",
                                         gap: 6,
-                                        boxShadow: "0 4px 12px rgba(15,23,42,0.2)",
                                     }}
                                 >
-                                    <Plus size={14} /> New Journal in {activeFolder.name}
+                                    <ArrowLeft size={14} /> Back to All Folders
+                                </button>
+
+                                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                                    <span style={{ fontFamily: "'Outfit', sans-serif", fontSize: 16, fontWeight: 700, color: "#0F172A" }}>
+                                        📁 {activeFolder.name} ({activeFolder.entries.length} Items)
+                                    </span>
+
+                                    <button
+                                        onClick={() => setShowNewJournalModal(true)}
+                                        style={{
+                                            border: "none",
+                                            background: "#0F172A",
+                                            color: "#FFFFFF",
+                                            padding: "7px 16px",
+                                            borderRadius: 9999,
+                                            fontSize: 12.5,
+                                            fontWeight: 700,
+                                            cursor: "pointer",
+                                            display: "inline-flex",
+                                            alignItems: "center",
+                                            gap: 6,
+                                            boxShadow: "0 4px 12px rgba(15,23,42,0.2)",
+                                        }}
+                                    >
+                                        <Plus size={14} /> New Journal in {activeFolder.name}
+                                    </button>
+
+                                    <button
+                                        onClick={(e) => handleDeleteFolder(e, activeFolder.id, activeFolder.name)}
+                                        style={{
+                                            border: "1px solid #FCA5A5",
+                                            background: "#FEF2F2",
+                                            color: "#EF4444",
+                                            padding: "7px 14px",
+                                            borderRadius: 9999,
+                                            fontSize: 12.5,
+                                            fontWeight: 700,
+                                            cursor: "pointer",
+                                            display: "inline-flex",
+                                            alignItems: "center",
+                                            gap: 4,
+                                        }}
+                                        title="Delete Folder"
+                                    >
+                                        <Trash2 size={14} /> Delete Folder
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* MODE A: SHOW FOLDERS DIRECTORY */}
+                        {!activeFolderId ? (
+                            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 20 }}>
+                                {displayedFolders.map((folder) => (
+                                    <MacFolderItem
+                                        key={folder.id}
+                                        folder={folder}
+                                        onClick={() => setActiveFolderId(folder.id)}
+                                        onDelete={(e) => handleDeleteFolder(e, folder.id, folder.name)}
+                                    />
+                                ))}
+                            </div>
+                        ) : activeFolder ? (
+                            /* MODE B: SHOW ENTRIES INSIDE SELECTED FOLDER */
+                            <div>
+                                {activeFolder.entries.length === 0 ? (
+                                    <div style={{ textAlign: "center", padding: "40px 20px", background: "#FFFFFF", borderRadius: 20, border: "2px dashed #CBD5E1" }}>
+                                        <FileText size={36} color="#94A3B8" />
+                                        <h4 style={{ fontFamily: "'Outfit', sans-serif", fontSize: 18, color: "#0F172A", marginTop: 10 }}>This folder is empty</h4>
+                                        <p style={{ fontSize: 13.5, color: "#64748B" }}>Create your first daily journal reflection inside 📁 {activeFolder.name}.</p>
+                                        <button
+                                            onClick={() => setShowNewJournalModal(true)}
+                                            style={{ border: "none", background: "#0F172A", color: "#FFFFFF", padding: "10px 20px", borderRadius: 9999, fontWeight: 700, fontSize: 13, cursor: "pointer", marginTop: 10 }}
+                                        >
+                                            + Create Journal Entry
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
+                                        {activeFolder.entries.map((entry) => (
+                                            <div
+                                                key={entry.id}
+                                                onClick={() => setSelectedEntry(entry)}
+                                                style={{
+                                                    background: "#FFFFFF",
+                                                    borderRadius: 18,
+                                                    padding: 20,
+                                                    border: "1.5px solid #CBD5E1",
+                                                    boxShadow: "0 10px 24px rgba(15,23,42,0.06)",
+                                                    cursor: "pointer",
+                                                    position: "relative",
+                                                    transition: "transform 0.2s ease",
+                                                }}
+                                                onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-4px)")}
+                                                onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
+                                            >
+                                                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
+                                                    <span style={{ fontSize: 12, fontWeight: 700, color: "#64748B", display: "flex", alignItems: "center", gap: 4 }}>
+                                                        <Calendar size={13} /> {entry.date}
+                                                    </span>
+                                                    <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                                                        <span style={{ fontSize: 12, padding: "2px 8px", borderRadius: 9999, background: "#F1F5F9", color: "#0F172A", fontWeight: 700 }}>
+                                                            {entry.mood}
+                                                        </span>
+                                                        <button
+                                                            onClick={(e) => handleDeleteJournal(e, activeFolder.id, entry.id)}
+                                                            style={{ border: "none", background: "#FEF2F2", color: "#EF4444", width: 24, height: 24, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
+                                                            title="Delete journal entry"
+                                                        >
+                                                            <Trash2 size={12} />
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                <h4 style={{ fontFamily: "'Outfit', sans-serif", fontSize: 17, fontWeight: 700, color: "#0F172A", margin: "0 0 8px 0" }}>
+                                                    {entry.title}
+                                                </h4>
+
+                                                <p
+                                                    style={{
+                                                        fontFamily: entry.fontStyle === "handwriting" ? "'Caveat', cursive" : "'Plus Jakarta Sans', sans-serif",
+                                                        fontSize: entry.fontStyle === "handwriting" ? 18 : 14,
+                                                        color: "#475569",
+                                                        lineHeight: 1.5,
+                                                        margin: "0 0 12px 0",
+                                                        display: "-webkit-box",
+                                                        WebkitLineClamp: 3,
+                                                        WebkitBoxOrient: "vertical",
+                                                        overflow: "hidden",
+                                                    }}
+                                                >
+                                                    {entry.content}
+                                                </p>
+
+                                                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: 10, borderTop: "1px stroke #E2E8F0" }}>
+                                                    <div style={{ display: "flex", gap: 4 }}>
+                                                        {entry.tags.map((t) => (
+                                                            <span key={t} style={{ fontSize: 11, fontWeight: 700, background: "#E2E8F0", color: "#334155", padding: "2px 8px", borderRadius: 9999 }}>
+                                                                #{t}
+                                                            </span>
+                                                        ))}
+                                                    </div>
+                                                    <span style={{ fontSize: 12, fontWeight: 700, color: "#2597D0", display: "flex", alignItems: "center", gap: 2 }}>
+                                                        Open <Eye size={13} />
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        ) : null}
+                    </div>
+                </div>
+
+                {/* MODAL 1: CREATE NEW FOLDER MODAL */}
+                {showNewFolderModal && (
+                    <div style={{ position: "fixed", inset: 0, background: "rgba(15,23,42,0.5)", backdropFilter: "blur(4px)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
+                        <div style={{ background: "#FFFFFF", borderRadius: 24, padding: 32, maxWidth: 440, width: "100%", border: "2px solid #CBD5E1", boxShadow: "0 20px 40px rgba(0,0,0,0.2)" }}>
+                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
+                                <h3 style={{ fontFamily: "'Outfit', sans-serif", fontSize: 20, fontWeight: 700, color: "#0F172A", margin: 0, display: "flex", alignItems: "center", gap: 8 }}>
+                                    <FolderPlus size={20} color="#3B82F6" /> Create New Folder
+                                </h3>
+                                <button onClick={() => setShowNewFolderModal(false)} style={{ border: "none", background: "transparent", cursor: "pointer" }}>
+                                    <X size={18} color="#64748B" />
+                                </button>
+                            </div>
+
+                            <div style={{ marginBottom: 16 }}>
+                                <label style={{ display: "block", fontSize: 12.5, fontWeight: 700, color: "#64748B", marginBottom: 6 }}>
+                                    FOLDER NAME
+                                </label>
+                                <input
+                                    type="text"
+                                    placeholder="e.g. Weekly Reflections..."
+                                    value={newFolderName}
+                                    onChange={(e) => setNewFolderName(e.target.value)}
+                                    style={{ width: "100%", padding: "10px 14px", borderRadius: 12, border: "1.5px solid #CBD5E1", outline: "none", fontSize: 14, color: "#0F172A", boxSizing: "border-box" }}
+                                />
+                            </div>
+
+                            <div style={{ marginBottom: 16 }}>
+                                <label style={{ display: "block", fontSize: 12.5, fontWeight: 700, color: "#64748B", marginBottom: 6 }}>
+                                    DESCRIPTION (OPTIONAL)
+                                </label>
+                                <input
+                                    type="text"
+                                    placeholder="e.g. Thoughts & weekly summaries"
+                                    value={newFolderDesc}
+                                    onChange={(e) => setNewFolderDesc(e.target.value)}
+                                    style={{ width: "100%", padding: "10px 14px", borderRadius: 12, border: "1.5px solid #CBD5E1", outline: "none", fontSize: 13.5, color: "#0F172A", boxSizing: "border-box" }}
+                                />
+                            </div>
+
+                            <div style={{ marginBottom: 24 }}>
+                                <label style={{ display: "block", fontSize: 12.5, fontWeight: 700, color: "#64748B", marginBottom: 8 }}>
+                                    FOLDER COLOR THEME
+                                </label>
+                                <div style={{ display: "flex", gap: 10 }}>
+                                    {COLOR_OPTIONS.map((c) => (
+                                        <button
+                                            key={c.hex}
+                                            onClick={() => setSelectedColor(c.hex)}
+                                            style={{
+                                                width: 32,
+                                                height: 32,
+                                                borderRadius: "50%",
+                                                background: c.hex,
+                                                border: selectedColor === c.hex ? "3px solid #0F172A" : "none",
+                                                cursor: "pointer",
+                                                display: "flex",
+                                                alignItems: "center",
+                                                justifyContent: "center",
+                                            }}
+                                        >
+                                            {selectedColor === c.hex && <Check size={16} color="#FFFFFF" />}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <button
+                                onClick={handleCreateFolder}
+                                disabled={!newFolderName.trim()}
+                                style={{
+                                    width: "100%",
+                                    background: newFolderName.trim() ? "#0F172A" : "#CBD5E1",
+                                    color: "#FFFFFF",
+                                    border: "none",
+                                    padding: "12px",
+                                    borderRadius: 9999,
+                                    fontWeight: 700,
+                                    fontSize: 14,
+                                    cursor: newFolderName.trim() ? "pointer" : "not-allowed",
+                                }}
+                            >
+                                Create Folder
+                            </button>
+                        </div>
+                    </div>
+                )}
+
+                {/* MODAL 2: CREATE JOURNAL DIRECTLY IN ACTIVE FOLDER */}
+                {showNewJournalModal && activeFolder && (
+                    <div style={{ position: "fixed", inset: 0, background: "rgba(15,23,42,0.5)", backdropFilter: "blur(4px)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
+                        <div style={{ background: "#FFFFFF", borderRadius: 24, padding: 32, maxWidth: 540, width: "100%", border: "2px solid #CBD5E1", boxShadow: "0 20px 40px rgba(0,0,0,0.2)" }}>
+                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+                                <h3 style={{ fontFamily: "'Outfit', sans-serif", fontSize: 20, fontWeight: 700, color: "#0F172A", margin: 0 }}>
+                                    Create Journal in 📁 {activeFolder.name}
+                                </h3>
+                                <button onClick={() => setShowNewJournalModal(false)} style={{ border: "none", background: "transparent", cursor: "pointer" }}>
+                                    <X size={18} color="#64748B" />
+                                </button>
+                            </div>
+
+                            <div style={{ marginBottom: 14 }}>
+                                <input
+                                    type="text"
+                                    placeholder="Journal Title..."
+                                    value={journalTitle}
+                                    onChange={(e) => setJournalTitle(e.target.value)}
+                                    style={{ width: "100%", padding: "10px 14px", borderRadius: 12, border: "1.5px solid #CBD5E1", outline: "none", fontSize: 15, fontWeight: 700, color: "#0F172A", boxSizing: "border-box" }}
+                                />
+                            </div>
+
+                            <div style={{ marginBottom: 16 }}>
+                                <textarea
+                                    rows={5}
+                                    placeholder={`Write entry for ${activeFolder.name}...`}
+                                    value={journalContent}
+                                    onChange={(e) => setJournalContent(e.target.value)}
+                                    style={{ width: "100%", padding: "12px 14px", borderRadius: 12, border: "1.5px solid #CBD5E1", outline: "none", fontFamily: "'Caveat', cursive", fontSize: 20, color: "#1E293B", boxSizing: "border-box" }}
+                                />
+                            </div>
+
+                            <button
+                                onClick={handleCreateJournalInFolder}
+                                disabled={!journalContent.trim()}
+                                style={{ width: "100%", background: journalContent.trim() ? "#0F172A" : "#CBD5E1", color: "#FFFFFF", border: "none", padding: "12px", borderRadius: 9999, fontWeight: 700, fontSize: 14, cursor: journalContent.trim() ? "pointer" : "not-allowed" }}
+                            >
+                                Save Entry to {activeFolder.name}
+                            </button>
+                        </div>
+                    </div>
+                )}
+
+                {/* MODAL 3: JOURNAL ENTRY READING MODAL */}
+                {selectedEntry && (
+                    <div style={{ position: "fixed", inset: 0, background: "rgba(15, 23, 42, 0.6)", backdropFilter: "blur(6px)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
+                        <div style={{ background: "#FFFFFF", borderRadius: 28, padding: 36, maxWidth: 640, width: "100%", boxShadow: "0 30px 60px rgba(0,0,0,0.3)", position: "relative" }}>
+                            <button
+                                onClick={() => setSelectedEntry(null)}
+                                style={{ position: "absolute", top: 20, right: 20, border: "none", background: "#F1F5F9", borderRadius: "50%", width: 36, height: 36, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
+                            >
+                                <X size={18} color="#475569" />
+                            </button>
+
+                            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+                                <span style={{ fontSize: 13, fontWeight: 700, color: "#2597D0", background: "#E0F2FE", padding: "4px 12px", borderRadius: 9999 }}>
+                                    {selectedEntry.mood}
+                                </span>
+                                <span style={{ fontSize: 13, color: "#64748B" }}>{selectedEntry.date} • {selectedEntry.time}</span>
+                            </div>
+
+                            <h2 style={{ fontFamily: "'Fraunces', serif", fontSize: 26, color: "#0F172A", margin: "0 0 16px 0" }}>
+                                {selectedEntry.title}
+                            </h2>
+
+                            <div style={{ background: "#F8FAFC", borderRadius: 16, padding: 24, border: "1px solid #E2E8F0", marginBottom: 24 }}>
+                                <p
+                                    style={{
+                                        fontFamily: selectedEntry.fontStyle === "handwriting" ? "'Caveat', cursive" : "'Plus Jakarta Sans', sans-serif",
+                                        fontSize: selectedEntry.fontStyle === "handwriting" ? 22 : 16,
+                                        lineHeight: 1.6,
+                                        color: "#1E293B",
+                                        margin: 0,
+                                        whiteSpace: "pre-wrap",
+                                    }}
+                                >
+                                    {selectedEntry.content}
+                                </p>
+                            </div>
+
+                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                                <button
+                                    onClick={(e) => {
+                                        if (activeFolderId && selectedEntry) {
+                                            handleDeleteJournal(e, activeFolderId, selectedEntry.id);
+                                        }
+                                    }}
+                                    style={{ border: "1px solid #FCA5A5", background: "#FEF2F2", color: "#EF4444", padding: "8px 16px", borderRadius: 9999, fontWeight: 700, fontSize: 13, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 6 }}
+                                >
+                                    <Trash2 size={14} /> Delete Entry
                                 </button>
 
                                 <button
-                                    onClick={(e) => handleDeleteFolder(e, activeFolder.id, activeFolder.name)}
-                                    style={{
-                                        border: "1px solid #FCA5A5",
-                                        background: "#FEF2F2",
-                                        color: "#EF4444",
-                                        padding: "7px 14px",
-                                        borderRadius: 9999,
-                                        fontSize: 12.5,
-                                        fontWeight: 700,
-                                        cursor: "pointer",
-                                        display: "inline-flex",
-                                        alignItems: "center",
-                                        gap: 4,
-                                    }}
-                                    title="Delete Folder"
+                                    onClick={(e) => handleOpenInEditor(e, selectedEntry)}
+                                    style={{ border: "none", background: "#2563EB", color: "#FFFFFF", padding: "10px 20px", borderRadius: 9999, fontWeight: 700, fontSize: 13.5, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 6, boxShadow: "0 4px 14px rgba(37,99,235,0.3)" }}
                                 >
-                                    <Trash2 size={14} /> Delete Folder
+                                    <Edit3 size={14} /> Open in Studio Editor
                                 </button>
                             </div>
                         </div>
-                    )}
-
-                    {/* MODE A: SHOW FOLDERS DIRECTORY */}
-                    {!activeFolderId ? (
-                        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 20 }}>
-                            {displayedFolders.map((folder) => (
-                                <MacFolderItem
-                                    key={folder.id}
-                                    folder={folder}
-                                    onClick={() => setActiveFolderId(folder.id)}
-                                    onDelete={(e) => handleDeleteFolder(e, folder.id, folder.name)}
-                                />
-                            ))}
-                        </div>
-                    ) : activeFolder ? (
-                        /* MODE B: SHOW ENTRIES INSIDE SELECTED FOLDER */
-                        <div>
-                            {activeFolder.entries.length === 0 ? (
-                                <div style={{ textAlign: "center", padding: "40px 20px", background: "#FFFFFF", borderRadius: 20, border: "2px dashed #CBD5E1" }}>
-                                    <FileText size={36} color="#94A3B8" />
-                                    <h4 style={{ fontFamily: "'Outfit', sans-serif", fontSize: 18, color: "#0F172A", marginTop: 10 }}>This folder is empty</h4>
-                                    <p style={{ fontSize: 13.5, color: "#64748B" }}>Create your first daily journal reflection inside 📁 {activeFolder.name}.</p>
-                                    <button
-                                        onClick={() => setShowNewJournalModal(true)}
-                                        style={{ border: "none", background: "#0F172A", color: "#FFFFFF", padding: "10px 20px", borderRadius: 9999, fontWeight: 700, fontSize: 13, cursor: "pointer", marginTop: 10 }}
-                                    >
-                                        + Create Journal Entry
-                                    </button>
-                                </div>
-                            ) : (
-                                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
-                                    {activeFolder.entries.map((entry) => (
-                                        <div
-                                            key={entry.id}
-                                            onClick={() => setSelectedEntry(entry)}
-                                            style={{
-                                                background: "#FFFFFF",
-                                                borderRadius: 18,
-                                                padding: 20,
-                                                border: "1.5px solid #CBD5E1",
-                                                boxShadow: "0 10px 24px rgba(15,23,42,0.06)",
-                                                cursor: "pointer",
-                                                position: "relative",
-                                                transition: "transform 0.2s ease",
-                                            }}
-                                            onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-4px)")}
-                                            onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
-                                        >
-                                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
-                                                <span style={{ fontSize: 12, fontWeight: 700, color: "#64748B", display: "flex", alignItems: "center", gap: 4 }}>
-                                                    <Calendar size={13} /> {entry.date}
-                                                </span>
-                                                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                                                    <span style={{ fontSize: 12, padding: "2px 8px", borderRadius: 9999, background: "#F1F5F9", color: "#0F172A", fontWeight: 700 }}>
-                                                        {entry.mood}
-                                                    </span>
-                                                    <button
-                                                        onClick={(e) => handleDeleteJournal(e, activeFolder.id, entry.id)}
-                                                        style={{ border: "none", background: "#FEF2F2", color: "#EF4444", width: 24, height: 24, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
-                                                        title="Delete journal entry"
-                                                    >
-                                                        <Trash2 size={12} />
-                                                    </button>
-                                                </div>
-                                            </div>
-
-                                            <h4 style={{ fontFamily: "'Outfit', sans-serif", fontSize: 17, fontWeight: 700, color: "#0F172A", margin: "0 0 8px 0" }}>
-                                                {entry.title}
-                                            </h4>
-
-                                            <p
-                                                style={{
-                                                    fontFamily: entry.fontStyle === "handwriting" ? "'Caveat', cursive" : "'Plus Jakarta Sans', sans-serif",
-                                                    fontSize: entry.fontStyle === "handwriting" ? 18 : 14,
-                                                    color: "#475569",
-                                                    lineHeight: 1.5,
-                                                    margin: "0 0 12px 0",
-                                                    display: "-webkit-box",
-                                                    WebkitLineClamp: 3,
-                                                    WebkitBoxOrient: "vertical",
-                                                    overflow: "hidden",
-                                                }}
-                                            >
-                                                {entry.content}
-                                            </p>
-
-                                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: 10, borderTop: "1px stroke #E2E8F0" }}>
-                                                <div style={{ display: "flex", gap: 4 }}>
-                                                    {entry.tags.map((t) => (
-                                                        <span key={t} style={{ fontSize: 11, fontWeight: 700, background: "#E2E8F0", color: "#334155", padding: "2px 8px", borderRadius: 9999 }}>
-                                                            #{t}
-                                                        </span>
-                                                    ))}
-                                                </div>
-                                                <span style={{ fontSize: 12, fontWeight: 700, color: "#2597D0", display: "flex", alignItems: "center", gap: 2 }}>
-                                                    Open <Eye size={13} />
-                                                </span>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-                    ) : null}
-                </div>
-            </div>
-
-            {/* MODAL 1: CREATE NEW FOLDER MODAL */}
-            {showNewFolderModal && (
-                <div style={{ position: "fixed", inset: 0, background: "rgba(15,23,42,0.5)", backdropFilter: "blur(4px)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
-                    <div style={{ background: "#FFFFFF", borderRadius: 24, padding: 32, maxWidth: 440, width: "100%", border: "2px solid #CBD5E1", boxShadow: "0 20px 40px rgba(0,0,0,0.2)" }}>
-                        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
-                            <h3 style={{ fontFamily: "'Outfit', sans-serif", fontSize: 20, fontWeight: 700, color: "#0F172A", margin: 0, display: "flex", alignItems: "center", gap: 8 }}>
-                                <FolderPlus size={20} color="#3B82F6" /> Create New Folder
-                            </h3>
-                            <button onClick={() => setShowNewFolderModal(false)} style={{ border: "none", background: "transparent", cursor: "pointer" }}>
-                                <X size={18} color="#64748B" />
-                            </button>
-                        </div>
-
-                        <div style={{ marginBottom: 16 }}>
-                            <label style={{ display: "block", fontSize: 12.5, fontWeight: 700, color: "#64748B", marginBottom: 6 }}>
-                                FOLDER NAME
-                            </label>
-                            <input
-                                type="text"
-                                placeholder="e.g. Weekly Reflections..."
-                                value={newFolderName}
-                                onChange={(e) => setNewFolderName(e.target.value)}
-                                style={{ width: "100%", padding: "10px 14px", borderRadius: 12, border: "1.5px solid #CBD5E1", outline: "none", fontSize: 14, color: "#0F172A", boxSizing: "border-box" }}
-                            />
-                        </div>
-
-                        <div style={{ marginBottom: 16 }}>
-                            <label style={{ display: "block", fontSize: 12.5, fontWeight: 700, color: "#64748B", marginBottom: 6 }}>
-                                DESCRIPTION (OPTIONAL)
-                            </label>
-                            <input
-                                type="text"
-                                placeholder="e.g. Thoughts & weekly summaries"
-                                value={newFolderDesc}
-                                onChange={(e) => setNewFolderDesc(e.target.value)}
-                                style={{ width: "100%", padding: "10px 14px", borderRadius: 12, border: "1.5px solid #CBD5E1", outline: "none", fontSize: 13.5, color: "#0F172A", boxSizing: "border-box" }}
-                            />
-                        </div>
-
-                        <div style={{ marginBottom: 24 }}>
-                            <label style={{ display: "block", fontSize: 12.5, fontWeight: 700, color: "#64748B", marginBottom: 8 }}>
-                                FOLDER COLOR THEME
-                            </label>
-                            <div style={{ display: "flex", gap: 10 }}>
-                                {COLOR_OPTIONS.map((c) => (
-                                    <button
-                                        key={c.hex}
-                                        onClick={() => setSelectedColor(c.hex)}
-                                        style={{
-                                            width: 32,
-                                            height: 32,
-                                            borderRadius: "50%",
-                                            background: c.hex,
-                                            border: selectedColor === c.hex ? "3px solid #0F172A" : "none",
-                                            cursor: "pointer",
-                                            display: "flex",
-                                            alignItems: "center",
-                                            justifyContent: "center",
-                                        }}
-                                    >
-                                        {selectedColor === c.hex && <Check size={16} color="#FFFFFF" />}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-
-                        <button
-                            onClick={handleCreateFolder}
-                            disabled={!newFolderName.trim()}
-                            style={{
-                                width: "100%",
-                                background: newFolderName.trim() ? "#0F172A" : "#CBD5E1",
-                                color: "#FFFFFF",
-                                border: "none",
-                                padding: "12px",
-                                borderRadius: 9999,
-                                fontWeight: 700,
-                                fontSize: 14,
-                                cursor: newFolderName.trim() ? "pointer" : "not-allowed",
-                            }}
-                        >
-                            Create Folder
-                        </button>
                     </div>
-                </div>
-            )}
-
-            {/* MODAL 2: CREATE JOURNAL DIRECTLY IN ACTIVE FOLDER */}
-            {showNewJournalModal && activeFolder && (
-                <div style={{ position: "fixed", inset: 0, background: "rgba(15,23,42,0.5)", backdropFilter: "blur(4px)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
-                    <div style={{ background: "#FFFFFF", borderRadius: 24, padding: 32, maxWidth: 540, width: "100%", border: "2px solid #CBD5E1", boxShadow: "0 20px 40px rgba(0,0,0,0.2)" }}>
-                        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
-                            <h3 style={{ fontFamily: "'Outfit', sans-serif", fontSize: 20, fontWeight: 700, color: "#0F172A", margin: 0 }}>
-                                Create Journal in 📁 {activeFolder.name}
-                            </h3>
-                            <button onClick={() => setShowNewJournalModal(false)} style={{ border: "none", background: "transparent", cursor: "pointer" }}>
-                                <X size={18} color="#64748B" />
-                            </button>
-                        </div>
-
-                        <div style={{ marginBottom: 14 }}>
-                            <input
-                                type="text"
-                                placeholder="Journal Title..."
-                                value={journalTitle}
-                                onChange={(e) => setJournalTitle(e.target.value)}
-                                style={{ width: "100%", padding: "10px 14px", borderRadius: 12, border: "1.5px solid #CBD5E1", outline: "none", fontSize: 15, fontWeight: 700, color: "#0F172A", boxSizing: "border-box" }}
-                            />
-                        </div>
-
-                        <div style={{ marginBottom: 16 }}>
-                            <textarea
-                                rows={5}
-                                placeholder={`Write entry for ${activeFolder.name}...`}
-                                value={journalContent}
-                                onChange={(e) => setJournalContent(e.target.value)}
-                                style={{ width: "100%", padding: "12px 14px", borderRadius: 12, border: "1.5px solid #CBD5E1", outline: "none", fontFamily: "'Caveat', cursive", fontSize: 20, color: "#1E293B", boxSizing: "border-box" }}
-                            />
-                        </div>
-
-                        <button
-                            onClick={handleCreateJournalInFolder}
-                            disabled={!journalContent.trim()}
-                            style={{ width: "100%", background: journalContent.trim() ? "#0F172A" : "#CBD5E1", color: "#FFFFFF", border: "none", padding: "12px", borderRadius: 9999, fontWeight: 700, fontSize: 14, cursor: journalContent.trim() ? "pointer" : "not-allowed" }}
-                        >
-                            Save Entry to {activeFolder.name}
-                        </button>
-                    </div>
-                </div>
-            )}
-
-            {/* MODAL 3: JOURNAL ENTRY READING MODAL */}
-            {selectedEntry && (
-                <div style={{ position: "fixed", inset: 0, background: "rgba(15, 23, 42, 0.6)", backdropFilter: "blur(6px)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
-                    <div style={{ background: "#FFFFFF", borderRadius: 28, padding: 36, maxWidth: 640, width: "100%", boxShadow: "0 30px 60px rgba(0,0,0,0.3)", position: "relative" }}>
-                        <button
-                            onClick={() => setSelectedEntry(null)}
-                            style={{ position: "absolute", top: 20, right: 20, border: "none", background: "#F1F5F9", borderRadius: "50%", width: 36, height: 36, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
-                        >
-                            <X size={18} color="#475569" />
-                        </button>
-
-                        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
-                            <span style={{ fontSize: 13, fontWeight: 700, color: "#2597D0", background: "#E0F2FE", padding: "4px 12px", borderRadius: 9999 }}>
-                                {selectedEntry.mood}
-                            </span>
-                            <span style={{ fontSize: 13, color: "#64748B" }}>{selectedEntry.date} • {selectedEntry.time}</span>
-                        </div>
-
-                        <h2 style={{ fontFamily: "'Fraunces', serif", fontSize: 26, color: "#0F172A", margin: "0 0 16px 0" }}>
-                            {selectedEntry.title}
-                        </h2>
-
-                        <div style={{ background: "#F8FAFC", borderRadius: 16, padding: 24, border: "1px solid #E2E8F0", marginBottom: 24 }}>
-                            <p
-                                style={{
-                                    fontFamily: selectedEntry.fontStyle === "handwriting" ? "'Caveat', cursive" : "'Plus Jakarta Sans', sans-serif",
-                                    fontSize: selectedEntry.fontStyle === "handwriting" ? 22 : 16,
-                                    lineHeight: 1.6,
-                                    color: "#1E293B",
-                                    margin: 0,
-                                    whiteSpace: "pre-wrap",
-                                }}
-                            >
-                                {selectedEntry.content}
-                            </p>
-                        </div>
-
-                        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                            <button
-                                onClick={(e) => {
-                                    if (activeFolderId && selectedEntry) {
-                                        handleDeleteJournal(e, activeFolderId, selectedEntry.id);
-                                    }
-                                }}
-                                style={{ border: "1px solid #FCA5A5", background: "#FEF2F2", color: "#EF4444", padding: "8px 16px", borderRadius: 9999, fontWeight: 700, fontSize: 13, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 6 }}
-                            >
-                                <Trash2 size={14} /> Delete Entry
-                            </button>
-
-                            <button
-                                onClick={(e) => handleOpenInEditor(e, selectedEntry)}
-                                style={{ border: "none", background: "#2563EB", color: "#FFFFFF", padding: "10px 20px", borderRadius: 9999, fontWeight: 700, fontSize: 13.5, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 6, boxShadow: "0 4px 14px rgba(37,99,235,0.3)" }}
-                            >
-                                <Edit3 size={14} /> Open in Studio Editor
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
+                )}
             </div>
         </section>
     );
 }
+
+

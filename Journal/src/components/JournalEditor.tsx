@@ -66,7 +66,17 @@ const QUILL_FORMATS = [
     "clean",
 ];
 
+import { useJournal } from "../context/JournalContext";
+
 export default function JournalEditor({ onEntrySaved }: { onEntrySaved?: (entry: JournalEntry) => void }) {
+    const {
+        folders,
+        editingEntry,
+        setEditingEntry,
+        saveJournalEntry,
+        deleteEntryFromFolder,
+    } = useJournal();
+
     const [editingEntryId, setEditingEntryId] = useState<string | null>(null);
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
@@ -77,21 +87,23 @@ export default function JournalEditor({ onEntrySaved }: { onEntrySaved?: (entry:
     const [activePrompt, setActivePrompt] = useState(PROMPT_IDEAS[0]);
     const [savedNotification, setSavedNotification] = useState(false);
     const [filterTag, setFilterTag] = useState<string | null>(null);
-
-    // Folder selection state
-    const [folders, setFolders] = useState<JournalFolder[]>([]);
     const [selectedFolderId, setSelectedFolderId] = useState<string>("");
 
+    // Set default selected folder
     useEffect(() => {
-        const syncFolders = () => {
-            const loadedFolders = getSavedFolders();
-            setFolders(loadedFolders);
-            if (loadedFolders.length > 0) {
-                setSelectedFolderId((prev) => prev || loadedFolders[0].id);
-            }
-        };
-        syncFolders();
+        if (folders.length > 0 && !selectedFolderId) {
+            setSelectedFolderId(folders[0].id);
+        }
+    }, [folders, selectedFolderId]);
 
+    // Handle editing entry from context
+    useEffect(() => {
+        if (editingEntry) {
+            handleSelectEntryForEdit(editingEntry);
+        }
+    }, [editingEntry]);
+
+    useEffect(() => {
         const handleOpenEntryEvent = (e: Event) => {
             const customEv = e as CustomEvent<JournalEntry>;
             if (customEv.detail) {
@@ -99,39 +111,19 @@ export default function JournalEditor({ onEntrySaved }: { onEntrySaved?: (entry:
             }
         };
 
-        window.addEventListener("dogear_folders_updated", syncFolders);
         window.addEventListener("dogear_open_entry_in_editor", handleOpenEntryEvent);
 
-        const saved = localStorage.getItem("dogear_journal_entries");
-        if (saved) {
-            try {
-                setEntries(JSON.parse(saved));
-            } catch (e) {
-                console.error("Failed to load entries", e);
-            }
-        } else {
-            const initial: JournalEntry[] = [
-                {
-                    id: "seed-1",
-                    folderId: "folder-morning",
-                    title: "Morning Reflections by the Window",
-                    content: "Woke up early today before sunrise. Made a fresh cup of dark roast coffee and watched the blue light gradually warm into soft golden sunlight. Practiced 10 minutes of deep breathing and set my intention to focus on steady progress rather than perfection.",
-                    tags: ["Grateful", "Peaceful"],
-                    mood: "😌 Peaceful",
-                    date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
-                    time: "08:15 AM",
-                    fontStyle: "handwriting",
-                },
-            ];
-            setEntries(initial);
-            localStorage.setItem("dogear_journal_entries", JSON.stringify(initial));
+        // Load entries from all folders for display list
+        const allEntries = folders.flatMap((f) => f.entries || []);
+        if (allEntries.length > 0) {
+            setEntries(allEntries);
         }
 
         return () => {
-            window.removeEventListener("dogear_folders_updated", syncFolders);
             window.removeEventListener("dogear_open_entry_in_editor", handleOpenEntryEvent);
         };
-    }, []);
+    }, [folders]);
+
 
     const toggleTag = (tagName: string) => {
         setSelectedTags((prev) =>
@@ -163,66 +155,21 @@ export default function JournalEditor({ onEntrySaved }: { onEntrySaved?: (entry:
 
         const targetFolderId = selectedFolderId || (folders.length > 0 ? folders[0].id : "folder-morning");
 
-        if (editingEntryId) {
-            // UPDATING EXISTING JOURNAL ENTRY
-            const updated = entries.map((e) => {
-                if (e.id === editingEntryId) {
-                    return {
-                        ...e,
-                        title: title.trim() || "Untitled Daily Reflection",
-                        content: content,
-                        tags: selectedTags.length > 0 ? selectedTags : ["Reflective"],
-                        mood: selectedMood,
-                        folderId: targetFolderId,
-                        fontStyle,
-                    };
-                }
-                return e;
-            });
-            setEntries(updated);
-            localStorage.setItem("dogear_journal_entries", JSON.stringify(updated));
+        const saved = saveJournalEntry(targetFolderId, {
+            id: editingEntryId || undefined,
+            title: title.trim() || "Untitled Daily Reflection",
+            content,
+            tags: selectedTags.length > 0 ? selectedTags : ["Reflective"],
+            mood: selectedMood,
+            fontStyle,
+        });
 
-            const updatedEntry = updated.find((e) => e.id === editingEntryId);
-            if (updatedEntry) {
-                addEntryToFolder(targetFolderId, updatedEntry);
-            }
-
-            setEditingEntryId(null);
-            setTitle("");
-            setContent("");
-            setSavedNotification(true);
-            setTimeout(() => setSavedNotification(false), 3000);
-            if (onEntrySaved && updatedEntry) onEntrySaved(updatedEntry);
-        } else {
-            // CREATING NEW JOURNAL ENTRY
-            const newEntry: JournalEntry = {
-                id: Date.now().toString(),
-                folderId: targetFolderId,
-                title: title.trim() || "Untitled Daily Reflection",
-                content: content,
-                tags: selectedTags.length > 0 ? selectedTags : ["Reflective"],
-                mood: selectedMood,
-                date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
-                time: new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }),
-                fontStyle,
-            };
-
-            addEntryToFolder(targetFolderId, newEntry);
-
-            const updated = [newEntry, ...entries];
-            setEntries(updated);
-            localStorage.setItem("dogear_journal_entries", JSON.stringify(updated));
-
-            setTitle("");
-            setContent("");
-
-            setSavedNotification(true);
-            setTimeout(() => setSavedNotification(false), 3000);
-
-            if (onEntrySaved) {
-                onEntrySaved(newEntry);
-            }
-        }
+        setEditingEntryId(null);
+        setTitle("");
+        setContent("");
+        setSavedNotification(true);
+        setTimeout(() => setSavedNotification(false), 3000);
+        if (onEntrySaved) onEntrySaved(saved);
     };
 
     const handleDeleteEntry = (id: string) => {
@@ -230,10 +177,8 @@ export default function JournalEditor({ onEntrySaved }: { onEntrySaved?: (entry:
         if (target && target.folderId) {
             deleteEntryFromFolder(target.folderId, id);
         }
-        const updated = entries.filter((e) => e.id !== id);
-        setEntries(updated);
-        localStorage.setItem("dogear_journal_entries", JSON.stringify(updated));
     };
+
 
     const applyPrompt = () => {
         setContent((prev) => (prev ? `${prev}\n\nPrompt: ${activePrompt}\n` : `Prompt: ${activePrompt}\n\n`));
@@ -263,6 +208,36 @@ export default function JournalEditor({ onEntrySaved }: { onEntrySaved?: (entry:
                 overflow: "hidden",
             }}
         >
+            <style>{`
+                .journal-studio-layout {
+                    display: grid;
+                    grid-template-columns: 1fr 360px;
+                    gap: 0;
+                    min-height: 560px;
+                }
+                .journal-editor-left {
+                    padding: 32px;
+                    border-right: 1px solid rgba(255, 255, 255, 0.4);
+                    display: flex;
+                    flex-direction: column;
+                }
+                .journal-sidebar-right {
+                    padding: 24px;
+                }
+                @media (max-width: 960px) {
+                    .journal-studio-layout {
+                        grid-template-columns: 1fr !important;
+                    }
+                    .journal-editor-left {
+                        padding: 18px 14px !important;
+                        border-right: none !important;
+                        border-bottom: 1px solid rgba(255, 255, 255, 0.4) !important;
+                    }
+                    .journal-sidebar-right {
+                        padding: 18px 14px !important;
+                    }
+                }
+            `}</style>
             <div style={{ position: "relative", zIndex: 2, maxWidth: 1180, margin: "0 auto" }}>
                 {/* Section Header */}
                 <div style={{ textAlign: "center", marginBottom: 36 }}>
@@ -295,8 +270,10 @@ export default function JournalEditor({ onEntrySaved }: { onEntrySaved?: (entry:
                             padding: "14px 22px",
                             borderBottom: "1px solid rgba(255, 255, 255, 0.4)",
                             display: "flex",
+                            flexWrap: "wrap",
                             alignItems: "center",
                             justifyContent: "space-between",
+                            gap: 10,
                         }}
                     >
                         {/* Traffic Lights */}
@@ -318,9 +295,9 @@ export default function JournalEditor({ onEntrySaved }: { onEntrySaved?: (entry:
                     </div>
 
                     {/* MAIN EDITOR & SIDEBAR LAYOUT */}
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 360px", gap: 0, minHeight: 560 }}>
+                    <div className="journal-studio-layout">
                         {/* LEFT EDITOR CANVAS */}
-                        <div style={{ padding: 32, borderRight: "1px solid rgba(255, 255, 255, 0.4)", display: "flex", flexDirection: "column" }}>
+                        <div className="journal-editor-left">
                             {/* macOS Toolbar */}
                             <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 16, marginBottom: 24, paddingBottom: 16, borderBottom: "1px solid rgba(255, 255, 255, 0.4)" }}>
                                 {/* Folder Selector */}
@@ -619,7 +596,7 @@ export default function JournalEditor({ onEntrySaved }: { onEntrySaved?: (entry:
                         </div>
 
                         {/* RIGHT macOS SIDEBAR: PAST REFLECTIONS */}
-                        <div style={{ padding: 24, background: "rgba(255, 255, 255, 0.2)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)", display: "flex", flexDirection: "column" }}>
+                        <div className="journal-sidebar-right" style={{ background: "rgba(255, 255, 255, 0.2)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)", display: "flex", flexDirection: "column" }}>
                             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
                                 <h3 style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'Outfit', sans-serif", fontSize: 17, fontWeight: 700, color: "#0F172A", margin: 0, display: "flex", alignItems: "center", gap: 8 }}>
                                     <BookOpen size={17} color="#2597D0" /> Past Reflections

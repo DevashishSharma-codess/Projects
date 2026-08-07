@@ -235,10 +235,24 @@ const GLASS_BLOGS: MoodGlassBlog[] = [
     },
 ];
 
+import { useJournal } from "../context/JournalContext";
+
 export default function BentoArchive() {
-    const [activeIndex, setActiveIndex] = useState(2); // Center card default
-    const [selectedBlog, setSelectedBlog] = useState<MoodGlassBlog | null>(null);
+    const {
+        bentoActiveIndex: activeIndex,
+        setBentoActiveIndex: setActiveIndex,
+        selectedBlog,
+        setSelectedBlog,
+    } = useJournal();
+
+    const [winWidth, setWinWidth] = useState(typeof window !== "undefined" ? window.innerWidth : 1200);
     const containerRef = useRef<HTMLDivElement>(null);
+
+    React.useEffect(() => {
+        const handleResize = () => setWinWidth(window.innerWidth);
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
 
     const activeBlog = GLASS_BLOGS[activeIndex] || GLASS_BLOGS[2];
 
@@ -250,13 +264,16 @@ export default function BentoArchive() {
         setActiveIndex((prev) => (prev - 1 + GLASS_BLOGS.length) % GLASS_BLOGS.length);
     };
 
+
+    const isMobile = winWidth < 640;
+
     return (
         <section
             id="bento-archive"
             style={{
                 position: "relative",
                 background: "transparent",
-                padding: "90px 24px 110px 24px",
+                padding: isMobile ? "60px 16px 80px 16px" : "90px 24px 110px 24px",
                 width: "100%",
                 margin: 0,
                 overflow: "hidden",
@@ -270,7 +287,7 @@ export default function BentoArchive() {
                     ref={containerRef}
                     style={{
                         position: "relative",
-                        height: 440,
+                        height: isMobile ? 320 : 440,
                         width: "100%",
                         maxWidth: 1140,
                         margin: "0 auto 20px auto",
@@ -284,7 +301,7 @@ export default function BentoArchive() {
                         onClick={handlePrev}
                         style={{
                             position: "absolute",
-                            left: 0,
+                            left: isMobile ? 4 : 0,
                             top: "50%",
                             transform: "translateY(-50%)",
                             zIndex: 130,
@@ -293,8 +310,8 @@ export default function BentoArchive() {
                             backdropFilter: "blur(16px)",
                             WebkitBackdropFilter: "blur(16px)",
                             color: "#0F172A",
-                            width: 50,
-                            height: 50,
+                            width: isMobile ? 40 : 50,
+                            height: isMobile ? 40 : 50,
                             borderRadius: "50%",
                             display: "flex",
                             alignItems: "center",
@@ -307,14 +324,14 @@ export default function BentoArchive() {
                         onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-50%) scale(1.08)")}
                         onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(-50%) scale(1)")}
                     >
-                        <ChevronLeft size={24} />
+                        <ChevronLeft size={isMobile ? 20 : 24} />
                     </button>
 
                     <button
                         onClick={handleNext}
                         style={{
                             position: "absolute",
-                            right: 0,
+                            right: isMobile ? 4 : 0,
                             top: "50%",
                             transform: "translateY(-50%)",
                             zIndex: 130,
@@ -323,8 +340,8 @@ export default function BentoArchive() {
                             backdropFilter: "blur(16px)",
                             WebkitBackdropFilter: "blur(16px)",
                             color: "#0F172A",
-                            width: 50,
-                            height: 50,
+                            width: isMobile ? 40 : 50,
+                            height: isMobile ? 40 : 50,
                             borderRadius: "50%",
                             display: "flex",
                             alignItems: "center",
@@ -337,7 +354,7 @@ export default function BentoArchive() {
                         onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-50%) scale(1.08)")}
                         onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(-50%) scale(1)")}
                     >
-                        <ChevronRight size={24} />
+                        <ChevronRight size={isMobile ? 20 : 24} />
                     </button>
 
                     {/* ROTATIONAL CIRCULAR DOME ARCH TRACK */}
@@ -350,20 +367,23 @@ export default function BentoArchive() {
 
                         const isCenter = offset === 0;
 
-                        const angleStep = 20;
+                        const angleStep = isMobile ? 26 : 20;
                         const angleDeg = offset * angleStep;
                         const angleRad = (angleDeg * Math.PI) / 180;
 
-                        const radiusX = 460;
-                        const radiusY = 170;
+                        const radiusX = Math.min(460, Math.max(120, (winWidth - 80) * 0.36));
+                        const radiusY = Math.min(170, Math.max(70, (winWidth - 80) * 0.12));
 
                         const posX = Math.sin(angleRad) * radiusX;
                         const posY = (1 - Math.cos(angleRad)) * radiusY;
 
                         const rotation = angleDeg;
                         const scale = isCenter ? 1.2 : Math.max(0.78, 1.08 - Math.abs(offset) * 0.08);
-                        const opacity = Math.abs(offset) > 3 ? 0 : Math.max(0.5, 1 - Math.abs(offset) * 0.16);
+                        const opacity = Math.abs(offset) > 2 ? 0 : Math.max(0.5, 1 - Math.abs(offset) * 0.16);
                         const zIndex = 100 - Math.abs(offset) * 10;
+
+                        const cardWidth = isCenter ? (isMobile ? 155 : 215) : (isMobile ? 125 : 175);
+                        const cardHeight = isCenter ? (isMobile ? 215 : 285) : (isMobile ? 170 : 235);
 
                         return (
                             <div
@@ -374,8 +394,8 @@ export default function BentoArchive() {
                                 }}
                                 style={{
                                     position: "absolute",
-                                    width: isCenter ? 215 : 175,
-                                    height: isCenter ? 285 : 235,
+                                    width: cardWidth,
+                                    height: cardHeight,
                                     borderRadius: 32,
                                     overflow: "hidden",
                                     cursor: "pointer",
@@ -387,7 +407,7 @@ export default function BentoArchive() {
                                         : "0 14px 35px rgba(15, 23, 42, 0.12)",
                                     transition: "all 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
                                     border: isCenter ? "4px solid #FFFFFF" : "2px solid rgba(255, 255, 255, 0.75)",
-                                    pointerEvents: Math.abs(offset) > 3 ? "none" : "auto",
+                                    pointerEvents: Math.abs(offset) > 2 ? "none" : "auto",
                                 }}
                             >
                                 {/* Full Cover Pinterest Image */}

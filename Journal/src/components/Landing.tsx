@@ -69,12 +69,18 @@ function DogearWhiteLogo({ size = 30, color = "#FFFFFF" }: { size?: number | str
 
 
 
-export default function Landing() {
-    const [activeModeIndex, setActiveModeIndex] = useState(0);
-    const [activeTab, setActiveTab] = useState<"hero" | "folders" | "editor" | "mood" | "quotes" | "bento">("hero");
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+import { useJournal } from "../context/JournalContext";
 
-    const [scrolled, setScrolled] = useState(false);
+export default function Landing() {
+    const {
+        activeModeIndex,
+        setActiveModeIndex,
+        mobileMenuOpen,
+        setMobileMenuOpen,
+        scrolled,
+        setScrolled,
+        scrollToSection,
+    } = useJournal();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -87,25 +93,17 @@ export default function Landing() {
 
         window.addEventListener("scroll", handleScroll, { passive: true });
         return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
+    }, [setScrolled]);
 
     useEffect(() => {
         const timer = setInterval(() => {
             setActiveModeIndex((prev) => (prev + 1) % MODES.length);
         }, 2800);
         return () => clearInterval(timer);
-    }, []);
+    }, [setActiveModeIndex]);
 
     const activeMode = MODES[activeModeIndex];
 
-    const scrollToSection = (id: string, tab: typeof activeTab) => {
-        setActiveTab(tab);
-        setMobileMenuOpen(false);
-        const el = document.getElementById(id);
-        if (el) {
-            el.scrollIntoView({ behavior: "smooth" });
-        }
-    };
 
     return (
         <div style={{ background: "#FFFFFF", minHeight: "100vh", fontFamily: "'Plus Jakarta Sans', 'Inter', sans-serif", color: "#1E293B" }}>
@@ -333,8 +331,82 @@ export default function Landing() {
         }
 
         @media (max-width: 900px) {
-          .hero-scene { transform: scale(0.65); transform-origin: bottom center; }
+          .hero-section {
+            padding: 16px 16px 0 16px !important;
+            margin: 8px !important;
+            border-radius: 20px !important;
+            min-height: auto !important;
+          }
+          .hero-scene {
+            transform: scale(0.52) !important;
+            transform-origin: bottom center !important;
+            height: 320px !important;
+            margin-top: -20px !important;
+          }
           .nav-center { display: none !important; }
+          .mobile-menu-btn { display: flex !important; }
+          .nav-auth-actions { display: none !important; }
+          .footer-grid-main {
+            grid-template-columns: 1fr !important;
+            gap: 28px !important;
+            padding: 24px 20px 0 20px !important;
+          }
+          .footer-grid-links {
+            grid-template-columns: repeat(3, 1fr) !important;
+            gap: 20px !important;
+          }
+          .footer-legal-bar {
+            flex-direction: column !important;
+            gap: 12px !important;
+            text-align: center !important;
+            padding: 0 16px !important;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .hero-scene {
+            transform: scale(0.42) !important;
+            height: 270px !important;
+          }
+          .card-left { left: 5% !important; bottom: 40px !important; }
+          .card-right { right: 5% !important; bottom: 40px !important; }
+          .folder-3d-container { width: 90vw !important; max-width: 500px !important; }
+          .folder-front-flap { width: 92vw !important; max-width: 520px !important; }
+          .footer-grid-links {
+            grid-template-columns: 1fr !important;
+            gap: 24px !important;
+          }
+        }
+
+        .mobile-menu-btn {
+          display: none;
+          align-items: center;
+          justify-content: center;
+          background: rgba(255, 255, 255, 0.25);
+          border: 1px solid rgba(255, 255, 255, 0.5);
+          color: #FFFFFF;
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          cursor: pointer;
+        }
+
+        .mobile-drawer-overlay {
+          position: fixed;
+          inset: 0;
+          background: rgba(15, 23, 42, 0.85);
+          backdrop-filter: blur(24px);
+          -webkit-backdrop-filter: blur(24px);
+          z-index: 999;
+          display: flex;
+          flex-direction: column;
+          padding: 24px;
+          animation: fadeIn 0.25s ease;
+        }
+
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(-10px); }
+          to { opacity: 1; transform: translateY(0); }
         }
       `}</style>
 
@@ -360,6 +432,51 @@ export default function Landing() {
                         ))}
                     </div>
 
+                    {/* MOBILE MENU DRAWER OVERLAY */}
+                    {mobileMenuOpen && (
+                        <div className="mobile-drawer-overlay">
+                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 32 }}>
+                                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                                    <DogearWhiteLogo size={32} />
+                                    <span style={{ fontFamily: "'Helvetica Neue', sans-serif", fontWeight: 700, fontSize: 24, color: "#FFFFFF" }}>
+                                        Dogear
+                                    </span>
+                                </div>
+                                <button onClick={() => setMobileMenuOpen(false)} style={{ background: "rgba(255,255,255,0.2)", border: "none", color: "#FFFFFF", width: 40, height: 40, borderRadius: "50%", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                    <X size={22} />
+                                </button>
+                            </div>
+
+                            <nav style={{ display: "flex", flexDirection: "column", gap: 20, marginBottom: 40 }}>
+                                <a onClick={() => scrollToSection("folder-explorer", "folders")} style={{ color: "#FFFFFF", fontSize: 20, fontWeight: 700, textDecoration: "none", display: "flex", alignItems: "center", gap: 12 }}>
+                                    📁 Folders Directory
+                                </a>
+                                <a onClick={() => scrollToSection("journal-studio", "editor")} style={{ color: "#FFFFFF", fontSize: 20, fontWeight: 700, textDecoration: "none", display: "flex", alignItems: "center", gap: 12 }}>
+                                    ✏️ Daily Studio Editor
+                                </a>
+                                <a onClick={() => scrollToSection("mood-tracker", "mood")} style={{ color: "#FFFFFF", fontSize: 20, fontWeight: 700, textDecoration: "none", display: "flex", alignItems: "center", gap: 12 }}>
+                                    📊 Mood Analytics
+                                </a>
+                                <a onClick={() => scrollToSection("inspirational-quotes", "quotes")} style={{ color: "#FFFFFF", fontSize: 20, fontWeight: 700, textDecoration: "none", display: "flex", alignItems: "center", gap: 12 }}>
+                                    💡 Daily Quotes Hub
+                                </a>
+                                <a onClick={() => scrollToSection("bento-archive", "bento")} style={{ color: "#FFFFFF", fontSize: 20, fontWeight: 700, textDecoration: "none", display: "flex", alignItems: "center", gap: 12 }}>
+                                    🔮 Bento Memory Vault
+                                </a>
+                            </nav>
+
+                            <div style={{ marginTop: "auto", display: "flex", flexDirection: "column", gap: 12 }}>
+                                <button
+                                    onClick={() => scrollToSection("journal-studio", "editor")}
+                                    className="cta-btn-white"
+                                    style={{ width: "100%", padding: "14px", fontSize: 16 }}
+                                >
+                                    Open Journal Studio
+                                </button>
+                            </div>
+                        </div>
+                    )}
+
                     {/* STICKY FLOATING PILL NAVBAR ON SCROLL */}
                     <header
                         style={{
@@ -367,16 +484,16 @@ export default function Landing() {
                             top: scrolled ? 16 : 0,
                             left: scrolled ? "50%" : "auto",
                             transform: scrolled ? "translateX(-50%)" : "none",
-                            width: scrolled ? "calc(100% - 48px)" : "100%",
+                            width: scrolled ? "calc(100% - 32px)" : "100%",
                             maxWidth: scrolled ? 1040 : "100%",
                             zIndex: 100,
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "space-between",
-                            padding: scrolled ? "10px 24px" : "0px",
+                            padding: scrolled ? "10px 20px" : "0px",
                             borderRadius: scrolled ? 9999 : 0,
                             background: scrolled
-                                ? "rgba(15, 23, 42, 0.65)"
+                                ? "rgba(15, 23, 42, 0.75)"
                                 : "transparent",
                             backdropFilter: scrolled ? "blur(20px)" : "none",
                             WebkitBackdropFilter: scrolled ? "blur(20px)" : "none",
@@ -406,7 +523,8 @@ export default function Landing() {
                             <a className="nav-link" href="#bento-archive">Community</a>
                         </nav>
 
-                        <div style={{ display: "flex", alignItems: "center", gap: scrolled ? 14 : 20 }}>
+                        {/* Desktop Auth Links */}
+                        <div className="nav-auth-actions" style={{ display: "flex", alignItems: "center", gap: scrolled ? 14 : 20 }}>
                             <a href="#journal-studio" style={{ color: "#FFFFFF", textDecoration: "none", fontWeight: 600, fontSize: 14, opacity: 0.95 }}>Log in</a>
                             <button
                                 className="cta-btn-white"
@@ -422,6 +540,11 @@ export default function Landing() {
                                 Sign up
                             </button>
                         </div>
+
+                        {/* Mobile Hamburger Button */}
+                        <button className="mobile-menu-btn" onClick={() => setMobileMenuOpen(true)}>
+                            <Menu size={20} />
+                        </button>
                     </header>
 
                     {/* HERO HEADLINE & TEXT */}
@@ -571,6 +694,7 @@ export default function Landing() {
 
                         {/* UPPER DETAILS SECTION ("all the details upwards") */}
                         <div
+                            className="footer-grid-main"
                             style={{
                                 position: "relative",
                                 zIndex: 10,
@@ -630,7 +754,7 @@ export default function Landing() {
                             </div>
 
                             {/* RIGHT COLUMNS: PRODUCT, RESOURCES, COMPANY */}
-                            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 36 }}>
+                            <div className="footer-grid-links" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 36 }}>
                                 {/* Col 1: Product */}
                                 <div>
                                     <h4 style={{ fontSize: 16, fontWeight: 800, color: "#0F172A", margin: "0 0 16px 0", letterSpacing: "0.01em" }}>
@@ -695,7 +819,7 @@ export default function Landing() {
                                     src="/folder_helpers_transparent.png"
                                     alt="Folder Carrying Helpers"
                                     style={{
-                                        height: "clamp(130px, 16vw, 230px)",
+                                        height: "clamp(100px, 14vw, 230px)",
                                         width: "auto",
                                         filter: "drop-shadow(0 12px 24px rgba(15, 46, 34, 0.18))",
                                         pointerEvents: "none",
@@ -709,7 +833,7 @@ export default function Landing() {
                                 style={{
                                     margin: 0,
                                     padding: 0,
-                                    fontSize: "clamp(5rem, 16vw, 15rem)",
+                                    fontSize: "clamp(2.4rem, 13.5vw, 15rem)",
                                     fontWeight: 900,
                                     fontFamily: "'Outfit', 'Plus Jakarta Sans', sans-serif",
                                     letterSpacing: "-0.04em",
@@ -723,6 +847,7 @@ export default function Landing() {
                                     display: "inline-flex",
                                     alignItems: "center",
                                     justifyContent: "center",
+                                    maxWidth: "100%",
                                 }}
                             >
                                 D
@@ -734,6 +859,7 @@ export default function Landing() {
 
                             {/* COPYRIGHT & LEGAL BAR AT VERY BOTTOM */}
                             <div
+                                className="footer-legal-bar"
                                 style={{
                                     width: "100%",
                                     maxWidth: 1280,

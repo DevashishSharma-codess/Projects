@@ -205,31 +205,32 @@ const ALL_QUOTE_SETS: FolderQuoteItem[][] = [
     ],
 ];
 
-export default function QuotesHub() {
-    const [setIndex, setSetIndex] = useState(0);
-    const [folderQuotes, setFolderQuotes] = useState<FolderQuoteItem[]>(ALL_QUOTE_SETS[0]);
-    const [activeIndex, setActiveIndex] = useState(4); // Default front card: ChatGPT (index 4)
-    const [savedQuotes, setSavedQuotes] = useState<FolderQuoteItem[]>([ALL_QUOTE_SETS[0][4], ALL_QUOTE_SETS[0][0]]);
-    const [savedIndex, setSavedIndex] = useState(0);
-    const [paperOpening, setPaperOpening] = useState(false);
-    const [isPaperOpened, setIsPaperOpened] = useState(false); // Controls full paper unfolding modal/overlay
-    const [copiedId, setCopiedId] = useState<string | null>(null);
-    const [reloading, setReloading] = useState(false);
+import { useJournal } from "../context/JournalContext";
 
-    // Load saved quotes from localStorage
-    useEffect(() => {
-        const saved = localStorage.getItem("dogear_favorite_quotes");
-        if (saved) {
-            try {
-                const parsed = JSON.parse(saved);
-                if (Array.isArray(parsed) && parsed.length > 0) {
-                    setSavedQuotes(parsed);
-                }
-            } catch (e) {
-                console.error(e);
-            }
-        }
-    }, []);
+export default function QuotesHub() {
+    const {
+        quoteSetIndex: setIndex,
+        setQuoteSetIndex: setSetIndex,
+        activeQuoteIndex: activeIndex,
+        setActiveQuoteIndex: setActiveIndex,
+        savedQuotes,
+        savedIndex,
+        setSavedIndex,
+        isPaperOpened,
+        setIsPaperOpened,
+        copiedQuoteId: copiedId,
+        setCopiedQuoteId: setCopiedId,
+        quoteReloading: reloading,
+        setQuoteReloading: setReloading,
+        toggleSaveQuote,
+        removeSavedQuote: contextRemoveSavedQuote,
+    } = useJournal();
+
+    const [paperOpening, setPaperOpening] = useState(false);
+
+    // Initial fallback if savedQuotes is empty
+    const currentSavedQuotes = savedQuotes.length > 0 ? savedQuotes : [ALL_QUOTE_SETS[0][4], ALL_QUOTE_SETS[0][0]];
+    const folderQuotes = ALL_QUOTE_SETS[setIndex % ALL_QUOTE_SETS.length];
 
     const handleReloadQuotes = (e?: React.MouseEvent) => {
         if (e) e.stopPropagation();
@@ -237,7 +238,6 @@ export default function QuotesHub() {
         setTimeout(() => {
             const nextSetIdx = (setIndex + 1) % ALL_QUOTE_SETS.length;
             setSetIndex(nextSetIdx);
-            setFolderQuotes(ALL_QUOTE_SETS[nextSetIdx]);
             setActiveIndex(4);
             setReloading(false);
         }, 350);
@@ -245,47 +245,38 @@ export default function QuotesHub() {
 
     const toggleFavorite = (item: FolderQuoteItem, e: React.MouseEvent) => {
         e.stopPropagation();
-        const exists = savedQuotes.some((q) => q.quote === item.quote);
-        let updated: FolderQuoteItem[];
-        if (exists) {
-            updated = savedQuotes.filter((q) => q.quote !== item.quote);
-        } else {
-            updated = [item, ...savedQuotes];
-        }
-        setSavedQuotes(updated);
-        localStorage.setItem("dogear_favorite_quotes", JSON.stringify(updated));
+        toggleSaveQuote(item);
     };
 
     const nextSavedQuote = (e?: React.MouseEvent) => {
         if (e) e.stopPropagation();
-        if (savedQuotes.length <= 1) return;
+        if (currentSavedQuotes.length <= 1) return;
         setPaperOpening(true);
         setTimeout(() => {
-            setSavedIndex((prev) => (prev + 1) % savedQuotes.length);
+            setSavedIndex((prev) => (prev + 1) % currentSavedQuotes.length);
             setTimeout(() => setPaperOpening(false), 50);
         }, 200);
     };
 
     const prevSavedQuote = (e?: React.MouseEvent) => {
         if (e) e.stopPropagation();
-        if (savedQuotes.length <= 1) return;
+        if (currentSavedQuotes.length <= 1) return;
         setPaperOpening(true);
         setTimeout(() => {
-            setSavedIndex((prev) => (prev - 1 + savedQuotes.length) % savedQuotes.length);
+            setSavedIndex((prev) => (prev - 1 + currentSavedQuotes.length) % currentSavedQuotes.length);
             setTimeout(() => setPaperOpening(false), 50);
         }, 200);
     };
 
     const removeSavedQuote = (item: FolderQuoteItem, e?: React.MouseEvent) => {
         if (e) e.stopPropagation();
-        const updated = savedQuotes.filter((q) => q.quote !== item.quote);
-        setSavedQuotes(updated);
-        localStorage.setItem("dogear_favorite_quotes", JSON.stringify(updated));
-        if (savedIndex >= updated.length && updated.length > 0) {
-            setSavedIndex(updated.length - 1);
+        contextRemoveSavedQuote(item.id);
+        if (savedIndex >= currentSavedQuotes.length - 1 && currentSavedQuotes.length > 1) {
+            setSavedIndex(currentSavedQuotes.length - 2);
         }
         setIsPaperOpened(false);
     };
+
 
     const copyQuote = (item: FolderQuoteItem, e: React.MouseEvent) => {
         e.stopPropagation();
@@ -341,6 +332,7 @@ export default function QuotesHub() {
 
             {/* LIGHTER GLASSMORPHIC FOLDER MAIN BODY CONTAINER */}
             <div
+                className="quotes-hub-container"
                 style={{
                     position: "relative",
                     background: "linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, rgba(59, 130, 246, 0.26) 50%, rgba(147, 197, 253, 0.2) 100%)",
@@ -353,6 +345,14 @@ export default function QuotesHub() {
                     overflow: "hidden",
                 }}
             >
+                <style>{`
+                    @media (max-width: 640px) {
+                        .quotes-hub-container {
+                            padding: 32px 14px !important;
+                            border-radius: 0 20px 20px 20px !important;
+                        }
+                    }
+                `}</style>
                 {/* WHITE PAPER SHEET SLIT PEEKING AT TOP EDGE OF FOLDER CONTAINER */}
                 <div
                     style={{
@@ -475,8 +475,8 @@ export default function QuotesHub() {
                     <div
                         style={{
                             display: "grid",
-                            gridTemplateColumns: "repeat(auto-fit, minmax(480px, 1fr))",
-                            gap: 56,
+                            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+                            gap: 32,
                             alignItems: "center",
                             justifyContent: "center",
                             position: "relative",
@@ -488,7 +488,7 @@ export default function QuotesHub() {
                                 position: "relative",
                                 width: "100%",
                                 maxWidth: 520,
-                                height: 500,
+                                height: "clamp(400px, 60vh, 500px)",
                                 margin: "0 auto",
                                 display: "flex",
                                 alignItems: "center",
@@ -501,9 +501,9 @@ export default function QuotesHub() {
                                 const isCopied = copiedId === item.id;
 
                                 // Compact staggered offset so left stack stays neatly inside left column
-                                const offsetStep = 24;
-                                const leftOffsetStep = 18;
-                                const baseTop = 20 + idx * offsetStep;
+                                const offsetStep = 18;
+                                const leftOffsetStep = 8;
+                                const baseTop = 16 + idx * offsetStep;
                                 const baseLeft = idx * leftOffsetStep;
 
                                 return (
@@ -514,7 +514,7 @@ export default function QuotesHub() {
                                             position: "absolute",
                                             top: baseTop,
                                             left: baseLeft,
-                                            width: isFront ? "88%" : "80%",
+                                            width: isFront ? "94%" : "88%",
                                             height: isFront ? 350 : 250,
                                             zIndex: isFront ? 50 : 10 + idx,
                                             cursor: "pointer",

@@ -70,10 +70,14 @@ body {
   -webkit-backdrop-filter: blur(16px) !important;
   border-radius: 14px 14px 0 0 !important;
   padding: 10px 14px !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 4px !important;
 }
 
 .ql-toolbar.ql-snow .ql-formats {
-  margin-right: 12px !important;
+  margin-right: 8px !important;
+  margin-bottom: 4px !important;
 }
 
 .ql-toolbar.ql-snow button {
@@ -107,7 +111,7 @@ body {
 }
 
 .ql-editor {
-  min-height: 220px !important;
+  min-height: 200px !important;
   max-height: 480px !important;
   overflow-y: auto !important;
   word-break: break-word !important;
@@ -122,3 +126,13 @@ body {
   color: #94A3B8 !important;
   font-style: normal !important;
 }
+
+/* Responsive Helper Rules */
+@media (max-width: 640px) {
+  .ql-editor {
+    padding: 12px 14px !important;
+    font-size: 14px !important;
+    min-height: 160px !important;
+  }
+}
+
