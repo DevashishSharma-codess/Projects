@@ -282,18 +282,18 @@ function todayStr(): string {
 }
 
 const SEED_LOGS: LogMap = {
-    "2026-07-01": { id:"s1",  day:"2026-07-01", moodKey:"peaceful",  moodLabel:"Peaceful",   icon:"Heart",     score:4.2, color:"#3B82F6", note:"Great morning coffee." },
-    "2026-07-05": { id:"s2",  day:"2026-07-05", moodKey:"energetic", moodLabel:"Energetic",  icon:"Zap",       score:4.5, color:"#10B981", note:"Completed sprint goal!" },
-    "2026-07-09": { id:"s3",  day:"2026-07-09", moodKey:"radiant",   moodLabel:"Radiant",    icon:"Sparkles",  score:4.9, color:"#F59E0B", note:"Family weekend getaway." },
-    "2026-07-13": { id:"s4",  day:"2026-07-13", moodKey:"focused",   moodLabel:"Focused",    icon:"Compass",   score:3.9, color:"#A855F7", note:"Deep work session." },
-    "2026-07-16": { id:"s5",  day:"2026-07-16", moodKey:"stressed",  moodLabel:"Stressed",   icon:"Activity",  score:2.4, color:"#EF4444", note:"Tight deadline." },
-    "2026-07-20": { id:"s6",  day:"2026-07-20", moodKey:"peaceful",  moodLabel:"Peaceful",   icon:"Heart",     score:4.6, color:"#3B82F6", note:"Relaxing Sunday walk." },
-    "2026-07-24": { id:"s7",  day:"2026-07-24", moodKey:"radiant",   moodLabel:"Radiant",    icon:"Sparkles",  score:5.0, color:"#F59E0B", note:"Key project milestone!" },
-    "2026-07-27": { id:"s8",  day:"2026-07-27", moodKey:"focused",   moodLabel:"Focused",    icon:"Compass",   score:4.3, color:"#A855F7", note:"Strategic roadmap planning." },
-    "2026-07-30": { id:"s9",  day:"2026-07-30", moodKey:"energetic", moodLabel:"Energetic",  icon:"Zap",       score:4.7, color:"#10B981", note:"High energy team workout." },
-    "2026-08-01": { id:"s10", day:"2026-08-01", moodKey:"peaceful",  moodLabel:"Peaceful",   icon:"Heart",     score:4.1, color:"#3B82F6", note:"New month fresh start." },
-    "2026-08-03": { id:"s11", day:"2026-08-03", moodKey:"radiant",   moodLabel:"Radiant",    icon:"Sparkles",  score:4.8, color:"#F59E0B", note:"Product launch success!" },
-    "2026-08-05": { id:"s12", day:todayStr(),   moodKey:"focused",   moodLabel:"Focused",    icon:"Compass",   score:4.2, color:"#A855F7", note:"Dark glassmorphic dashboard." },
+    "2026-07-01": { id:"s1", day:"2026-07-01", time:"12:00", hourSlot:"2026-07-01-12", timestamp:new Date("2026-07-01T12:00:00").getTime(), moodKey:"peaceful", moodLabel:"Peaceful", icon:"Heart", score:4.2, color:"#3B82F6", note:"Great morning coffee." },
+    "2026-07-05": { id:"s2", day:"2026-07-05", time:"12:00", hourSlot:"2026-07-05-12", timestamp:new Date("2026-07-05T12:00:00").getTime(), moodKey:"energetic", moodLabel:"Energetic", icon:"Zap", score:4.5, color:"#10B981", note:"Completed sprint goal!" },
+    "2026-07-09": { id:"s3", day:"2026-07-09", time:"12:00", hourSlot:"2026-07-09-12", timestamp:new Date("2026-07-09T12:00:00").getTime(), moodKey:"radiant", moodLabel:"Radiant", icon:"Sparkles", score:4.9, color:"#F59E0B", note:"Family weekend getaway." },
+    "2026-07-13": { id:"s4", day:"2026-07-13", time:"12:00", hourSlot:"2026-07-13-12", timestamp:new Date("2026-07-13T12:00:00").getTime(), moodKey:"focused", moodLabel:"Focused", icon:"Compass", score:3.9, color:"#A855F7", note:"Deep work session." },
+    "2026-07-16": { id:"s5", day:"2026-07-16", time:"12:00", hourSlot:"2026-07-16-12", timestamp:new Date("2026-07-16T12:00:00").getTime(), moodKey:"stressed", moodLabel:"Stressed", icon:"Activity", score:2.4, color:"#EF4444", note:"Tight deadline." },
+    "2026-07-20": { id:"s6", day:"2026-07-20", time:"12:00", hourSlot:"2026-07-20-12", timestamp:new Date("2026-07-20T12:00:00").getTime(), moodKey:"peaceful", moodLabel:"Peaceful", icon:"Heart", score:4.6, color:"#3B82F6", note:"Relaxing Sunday walk." },
+    "2026-07-24": { id:"s7", day:"2026-07-24", time:"12:00", hourSlot:"2026-07-24-12", timestamp:new Date("2026-07-24T12:00:00").getTime(), moodKey:"radiant", moodLabel:"Radiant", icon:"Sparkles", score:5.0, color:"#F59E0B", note:"Key project milestone!" },
+    "2026-07-27": { id:"s8", day:"2026-07-27", time:"12:00", hourSlot:"2026-07-27-12", timestamp:new Date("2026-07-27T12:00:00").getTime(), moodKey:"focused", moodLabel:"Focused", icon:"Compass", score:4.3, color:"#A855F7", note:"Strategic roadmap planning." },
+    "2026-07-30": { id:"s9", day:"2026-07-30", time:"12:00", hourSlot:"2026-07-30-12", timestamp:new Date("2026-07-30T12:00:00").getTime(), moodKey:"energetic", moodLabel:"Energetic", icon:"Zap", score:4.7, color:"#10B981", note:"High energy team workout." },
+    "2026-08-01": { id:"s10", day:"2026-08-01", time:"12:00", hourSlot:"2026-08-01-12", timestamp:new Date("2026-08-01T12:00:00").getTime(), moodKey:"peaceful", moodLabel:"Peaceful", icon:"Heart", score:4.1, color:"#3B82F6", note:"New month fresh start." },
+    "2026-08-03": { id:"s11", day:"2026-08-03", time:"12:00", hourSlot:"2026-08-03-12", timestamp:new Date("2026-08-03T12:00:00").getTime(), moodKey:"radiant", moodLabel:"Radiant", icon:"Sparkles", score:4.8, color:"#F59E0B", note:"Product launch success!" },
+    "2026-08-05": { id:"s12", day:todayStr(), time:"12:00", hourSlot:`${todayStr()}-12`, timestamp:new Date(`${todayStr()}T12:00:00`).getTime(), moodKey:"focused", moodLabel:"Focused", icon:"Compass", score:4.2, color:"#A855F7", note:"Dark glassmorphic dashboard." },
 };
 
 const DAYS_OF_WEEK = ["S", "M", "T", "W", "T", "F", "S"];

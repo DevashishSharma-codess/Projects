@@ -280,21 +280,21 @@ export const JournalProvider: React.FC<{ children: React.ReactNode }> = ({ child
         const raw = localStorage.getItem("dogear_mood_logs");
         if (raw) {
             try {
-                const parsed = JSON.parse(raw);
+                const parsed: Record<string, any> = JSON.parse(raw);
                 // Migrate any legacy YYYY-MM-DD keys to YYYY-MM-DD-HH hourSlot keys
                 const migrated: Record<string, MoodLog> = {};
                 for (const [key, item] of Object.entries(parsed)) {
                     if (key.match(/^\d{4}-\d{2}-\d{2}$/)) {
-                        const { hourSlot, time, timestamp } = getHourSlotInfo(key, item.time || "12:00");
+                        const { hourSlot, time, timestamp } = getHourSlotInfo(key, (item as any).time || "12:00");
                         migrated[hourSlot] = {
-                            ...item,
+                            ...(item as MoodLog),
                             day: key,
                             time,
                             hourSlot,
                             timestamp,
                         };
                     } else {
-                        migrated[key] = item;
+                        migrated[key] = item as MoodLog;
                     }
                 }
                 return { ...SEED_MOOD_LOGS, ...migrated };
