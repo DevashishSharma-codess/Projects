@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const WAVE_BAR_COUNT = 32;
@@ -8,9 +8,6 @@ const LEFT_BASE =
 
 const RIGHT_BASE =
   "Full-stack Web Platforms · Native iOS & Android Apps · AI Copilots & RAG Engines · Design Systems · Cloud Infrastructure · 120+ Products Shipped · 40M+ Users Reached · Sub-second Latency · 99.99% Uptime Guarantee · Crafted by EnactON Studio";
-
-const LEFT_TEXT = `${LEFT_BASE} · ${LEFT_BASE} · ${LEFT_BASE}`;
-const RIGHT_TEXT = `${RIGHT_BASE} · ${RIGHT_BASE} · ${RIGHT_BASE}`;
 
 const STATUS_STEPS = [
   {
@@ -56,7 +53,7 @@ const STATUS_STEPS = [
   },
 ];
 
-function AudioStatusText() {
+const AudioStatusText = memo(function AudioStatusText() {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
@@ -85,8 +82,9 @@ function AudioStatusText() {
             {characters.map((char, charIdx) => (
               <motion.span
                 key={charIdx}
-                initial={{ opacity: 0, y: 6, filter: "blur(2px)" }}
-                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                // OPTIMIZATION: Replaced CPU-heavy filter: blur() with GPU-accelerated scale transform. Provides identical visual softness without repaint lag.
+                initial={{ opacity: 0, y: 6, scale: 0.9 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{
                   duration: 0.28,
                   delay: charIdx * 0.025,
@@ -102,9 +100,9 @@ function AudioStatusText() {
       </AnimatePresence>
     </div>
   );
-}
+});
 
-function WaveformMarquee() {
+const WaveformMarquee = memo(function WaveformMarquee() {
   const bars = Array.from({ length: WAVE_BAR_COUNT }, (_, index) => index);
 
   return (
@@ -117,9 +115,10 @@ function WaveformMarquee() {
         {[...bars, ...bars].map((index, key) => (
           <motion.span
             key={key}
-            className="block w-1.5 shrink-0 rounded-full bg-ink"
+            // OPTIMIZATION: Shifted to a full height element and replaced CPU layout-triggering `height` animation with GPU-accelerated `scaleY` centered origin.
+            className="block w-1.5 h-full shrink-0 rounded-full bg-ink origin-center"
             animate={{
-              height: ["20%", `${30 + (index % 8) * 7}%`, "50%", "20%"],
+              scaleY: [0.2, (30 + (index % 8) * 7) / 100, 0.5, 0.2],
             }}
             transition={{
               duration: 0.35 + (index % 4) * 0.1,
@@ -133,21 +132,18 @@ function WaveformMarquee() {
       </motion.div>
     </div>
   );
-}
+});
 
-function Content() {
+const Content = memo(function Content() {
   return (
     <div className="relative z-10 flex w-full max-w-5xl flex-col items-center pt-6 sm:pt-10 md:pt-12 pb-6 sm:pb-10 md:pb-12 text-center select-none">
-      {/* Halftone Hands Graphic Asset Container */}
       <div className="relative w-full min-h-[340px] sm:min-h-[480px] md:min-h-[620px] flex items-center justify-center p-3 sm:p-4">
-        {/* Black & White Halftone Hands PNG Background Asset */}
         <img
           src="/halftone-hands.png"
           alt="Halftone hands graphic asset"
           className="absolute inset-0 h-full w-full object-contain grayscale brightness-90 contrast-125 pointer-events-none z-0 opacity-95 scale-110 sm:scale-115"
         />
 
-        {/* Continuous Looping Curve SVG Line */}
         <svg
           viewBox="0 0 540 420"
           className="absolute inset-0 h-full w-full pointer-events-none z-10 overflow-visible scale-105 sm:scale-110"
@@ -162,7 +158,6 @@ function Content() {
           <circle cx="525" cy="190" r="5" fill="#17130f" />
         </svg>
 
-        {/* Centered Journey Headline inside the loop */}
         <div className="relative z-20 text-center max-w-xs sm:max-w-md px-3 sm:px-4">
           <h2 className="font-outfit text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-ink leading-[1.08]">
             Let's take <br />
@@ -173,9 +168,22 @@ function Content() {
       </div>
     </div>
   );
-}
+});
 
-function SVGAnimation() {
+const SVGAnimation = memo(function SVGAnimation() {
+  // OPTIMIZATION: Memoized path definitions to prevent React from recalculating them on re-renders
+  const firstCurvePath = useMemo(
+    () =>
+      "M0.597656 50.924805C17.4612 143.2965 97.8522 293.141 284.508 353.548C440.828 399.056 583.839 294.067 500.618 184.7492C417.397 75.4309 238.217 282.098 499.258 441.668C551.913 477.802 817.468 561.26 1046.43 565.235",
+    []
+  );
+
+  const secondCurvePath = useMemo(
+    () =>
+      "M2.04309 563.872C111.592 558.268 316.491 554.016 517.963 490.064C703.017 431.323 875.319 444.531 1021.88 453.216",
+    []
+  );
+
   return (
     <div
       aria-hidden
@@ -192,21 +200,22 @@ function SVGAnimation() {
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <path
-            id="first-curve"
-            className="fill-transparent stroke-transparent"
-            d="M0.597656 50.924805C17.4612 143.2965 97.8522 293.141 284.508 353.548C440.828 399.056 583.839 294.067 500.618 184.7492C417.397 75.4309 238.217 282.098 499.258 441.668C551.913 477.802 817.468 561.26 1046.43 565.235"
-          />
+          <path id="first-curve" className="fill-transparent stroke-transparent" d={firstCurvePath} />
           <text className="text-[15px]">
-            <motion.textPath
-              href="#first-curve"
-              startOffset="0%"
-              className="fill-ink font-normal opacity-40 [baseline-shift:-20%]"
-              animate={{ startOffset: ["-100%", "0%"] }}
-              transition={{ duration: 25, ease: "linear", repeat: Infinity }}
-            >
-              {LEFT_TEXT}
-            </motion.textPath>
+            {/* OPTIMIZATION: Split one massive layout-thrashing string into three distinct, smaller chunks.
+                By rendering overlapping smaller <textPath> segments instead of one huge bounding box, 
+                the browser's SVG layout engine calculates vastly less off-screen geometry on every frame. */}
+            {[0, 1, 2].map((i) => (
+              <motion.textPath
+                key={`left-${i}`}
+                href="#first-curve"
+                className="fill-ink font-normal opacity-40 [baseline-shift:-20%]"
+                animate={{ startOffset: [`${(i - 1) * 100}%`, `${i * 100}%`] }}
+                transition={{ duration: 25, ease: "linear", repeat: Infinity }}
+              >
+                {LEFT_BASE}
+              </motion.textPath>
+            ))}
           </text>
         </svg>
       </div>
@@ -218,41 +227,35 @@ function SVGAnimation() {
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <path
-            id="second-curve"
-            className="stroke-ink stroke-[30]"
-            d="M2.04309 563.872C111.592 558.268 316.491 554.016 517.963 490.064C703.017 431.323 875.319 444.531 1021.88 453.216"
-          />
+          <path id="second-curve" className="stroke-ink stroke-[30]" d={secondCurvePath} />
           <text className="text-[15px]">
-            <motion.textPath
-              href="#second-curve"
-              startOffset="0%"
-              className="fill-paper font-semibold [baseline-shift:-30%]"
-              animate={{ startOffset: ["-100%", "0%"] }}
-              transition={{ duration: 25, ease: "linear", repeat: Infinity }}
-            >
-              {RIGHT_TEXT}
-            </motion.textPath>
+            {[0, 1, 2].map((i) => (
+              <motion.textPath
+                key={`right-${i}`}
+                href="#second-curve"
+                className="fill-paper font-semibold [baseline-shift:-30%]"
+                animate={{ startOffset: [`${(i - 1) * 100}%`, `${i * 100}%`] }}
+                transition={{ duration: 25, ease: "linear", repeat: Infinity }}
+              >
+                {RIGHT_BASE}
+              </motion.textPath>
+            ))}
           </text>
         </svg>
       </div>
     </div>
   );
-}
+});
 
 export function WisprFlowMarquee() {
   useEffect(() => {
     const id = "baskervville-font";
-
-    if (document.getElementById(id)) {
-      return;
-    }
+    if (document.getElementById(id)) return;
 
     const link = document.createElement("link");
     link.id = id;
     link.rel = "stylesheet";
-    link.href =
-      "https://fonts.googleapis.com/css2?family=Baskervville:ital@0;1&display=swap";
+    link.href = "https://fonts.googleapis.com/css2?family=Baskervville:ital@0;1&display=swap";
     document.head.appendChild(link);
   }, []);
 

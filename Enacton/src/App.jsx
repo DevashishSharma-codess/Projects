@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
-import Lenis from "lenis";
+// 🚨 REMOVED: import Lenis from "lenis";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Navbar } from "./Navbar";
 import { Grain } from "./components/Grain";
-import { MarqueeStrip } from "./components/Marquee";
+import { WisprFlowMarquee } from "./components/Marquee";
 import { WhatWeDo } from "./components/WhatWeDo";
 import { ProductShowcase } from "./components/ProductShowcase";
 import { About } from "./components/About";
 import { Testimonials } from "./components/Testimonilas";
-import { WisprFlowMarquee } from "./components/Marque";
+
 import { Footer } from "./components/Footer";
 import { LogoMark } from "./components/LogoMark";
 
@@ -55,9 +55,7 @@ const PATHS = [
 function HeroLineAnimation() {
   return (
     <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 w-full px-3 sm:px-6 pb-3 sm:pb-6 md:pb-8">
-      {/* Stage matches SVG viewBox (734:405) aspect ratio */}
       <div className="relative mx-auto aspect-[734/405] max-h-[30vh] sm:max-h-[32vh] w-full max-w-[620px] sm:max-w-[720px] lg:max-w-[780px]">
-        {/* Responsive Capability Tags */}
         <div className="pointer-events-auto border border-white/40 bg-gradient-to-br from-black/45 via-black/35 to-black/25 backdrop-blur-xl px-2.5 py-1 text-center font-mono text-[8px] sm:text-[10px] md:text-xs font-semibold uppercase text-white shadow-xl sm:px-4 sm:py-2 md:w-60 md:px-4 tracking-wider absolute left-[50.41%] top-0 z-30 w-fit -translate-x-1/2 -translate-y-1/2">
           Autonomous AI Agents
         </div>
@@ -74,7 +72,6 @@ function HeroLineAnimation() {
           Enterprise Systems
         </div>
 
-        {/* Converging SVG Line Paths at z-10 */}
         <svg
           role="presentation"
           viewBox="0 0 734 405"
@@ -107,7 +104,6 @@ function HeroLineAnimation() {
           ))}
         </svg>
 
-        {/* Destination Node: Glossy Black Translucent Box with White EnactON LogoMark */}
         <div className="pointer-events-auto absolute bottom-0 left-[50.41%] size-16 sm:size-24 md:size-28 lg:size-32 -translate-x-1/2 translate-y-1/2 rounded-xl bg-gradient-to-br from-black/90 via-black/75 to-black/50 backdrop-blur-xl border border-white/40 shadow-2xl p-1.5 sm:p-2.5 z-40 flex items-center justify-center">
           <LogoMark className="text-white w-7 h-7 sm:w-10 sm:h-10 lg:w-12 lg:h-12 drop-shadow-lg" />
         </div>
@@ -126,7 +122,6 @@ export const Hero = () => {
       data-testid="hero-section"
       className="relative h-[100dvh] w-full max-w-full overflow-hidden flex flex-col items-center justify-between bg-[#fdfbf9] select-none"
     >
-      {/* Background image */}
       <motion.div
         initial={{ scale: 1.12 }}
         animate={{ scale: 1 }}
@@ -140,13 +135,10 @@ export const Hero = () => {
         />
       </motion.div>
 
-      {/* Atmospheric overlays for readability */}
       <div className="absolute inset-0 bg-gradient-to-b from-paper/40 via-transparent to-paper z-0" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_45%,rgba(253,251,249,0.65),transparent_70%)] z-0" />
 
-      {/* Hero Headline & Subtext Content */}
       <div className="relative z-20 max-w-5xl mx-auto px-5 sm:px-8 text-center pt-20 sm:pt-28 pb-2">
-        {/* Main Headline */}
         <motion.h1
           variants={lineContainer}
           initial="hidden"
@@ -163,7 +155,6 @@ export const Hero = () => {
           ))}
         </motion.h1>
 
-        {/* Subtext */}
         <motion.p
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
@@ -175,7 +166,6 @@ export const Hero = () => {
           AI-powered products for modern businesses.
         </motion.p>
 
-        {/* CTA Buttons */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
@@ -200,62 +190,30 @@ export const Hero = () => {
         </motion.div>
       </div>
 
-      {/* Converging SVG Line Animation Stage at Bottom */}
       <HeroLineAnimation />
     </section>
   );
 };
 
 /* ---------------------------------------------------------
-   Main App Export with Lenis Liquid Smooth Scroll Integration
+   Main App Export (NATIVE SCROLL)
 --------------------------------------------------------- */
 export default function App() {
-  useEffect(() => {
-    // Initialize Lenis Inertia Smooth Scroll
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: true,
-      wheelMultiplier: 1.0,
-      touchMultiplier: 1.5,
-    });
-
-    // Synchronize Lenis Scroll Events with GSAP ScrollTrigger
-    lenis.on("scroll", () => {
-      ScrollTrigger.update();
-    });
-
-    const updateLenis = (time) => {
-      lenis.raf(time * 1000);
-    };
-
-    gsap.ticker.add(updateLenis);
-    gsap.ticker.lagSmoothing(0);
-
-    // Refresh ScrollTrigger calculations after Lenis mounts
-    const refreshTimer = setTimeout(() => {
-      ScrollTrigger.refresh();
-    }, 150);
-
-    return () => {
-      clearTimeout(refreshTimer);
-      gsap.ticker.remove(updateLenis);
-      lenis.destroy();
-    };
-  }, []);
-
+  // 🚨 OPTIMIZATION: Removed the Lenis useEffect entirely.
+  // The browser will now handle scrolling natively via the GPU, 
+  // resolving the conflict with the SVG text path calculations.
+  
   return (
     <div className="min-h-screen bg-paper text-ink font-sans relative selection:bg-[#C2612B] selection:text-white overflow-x-hidden">
       <Grain />
       <Navbar />
       <main>
         <Hero />
-        <MarqueeStrip />
+        <WisprFlowMarquee />
         <WhatWeDo />
         <ProductShowcase />
         <About />
         <Testimonials />
-        <WisprFlowMarquee />
       </main>
       <Footer />
     </div>
