@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Search, Star, GitFork, ExternalLink, Sparkles, ArrowUpRight, Grid, LayoutGrid, Layers, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Star, GitFork, ExternalLink, Sparkles, ArrowUpRight, Grid, LayoutGrid, Layers, ChevronLeft, ChevronRight } from 'lucide-react'
 import AuraGlassButton from '../common/AuraGlassButton'
+import SearchAutocomplete from '../common/SearchAutocomplete'
 import { useRepos } from '../../hooks/useRepos'
 import type { GitHubRepo } from '../../api/fetchRepos'
 
@@ -133,11 +134,12 @@ const Section2 = () => {
   const repos = userRepos.length > 0 ? userRepos : (data?.repos ?? [])
 
   // Fetch specific GitHub user & user's repos
-  async function fetchUser() {
-    if (!username.trim()) return
+  async function fetchUser(name?: string) {
+    const searchName = name || username
+    if (!searchName.trim()) return
 
     try {
-      const res = await fetch(`https://api.github.com/users/${username}`)
+      const res = await fetch(`https://api.github.com/users/${searchName}`)
       const userData = await res.json()
       setUser(userData)
 
@@ -175,7 +177,7 @@ const Section2 = () => {
       <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-purple-950/20 rounded-full blur-[150px] pointer-events-none" />
 
       {/* Top Header & Search Bar */}
-      <div className="w-full max-w-7xl flex flex-col md:flex-row items-start md:items-end justify-between gap-6 z-10 mb-10">
+      <div className="w-full max-w-7xl flex flex-col md:flex-row items-start md:items-end justify-between gap-6 z-30 relative mb-10">
         
         <div>
           <h2 className="text-4xl sm:text-6xl lg:text-7xl font-black text-white tracking-tight leading-none">
@@ -207,21 +209,15 @@ const Section2 = () => {
             <span className="hidden sm:inline">{isAsymmetricLayout ? 'Asymmetric Bento' : '3-Column Grid'}</span>
           </AuraGlassButton>
 
-          {/* 🔍 Search Input */}
-          <div className="flex items-center gap-2 bg-white/10 backdrop-blur-xl border border-white/20 p-1.5 pl-4 rounded-full shadow-xl flex-1 md:flex-initial">
-            <Search className="w-4 h-4 text-gray-300" />
-            <input
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && fetchUser()}
-              type="text"
-              placeholder="Search GitHub user..."
-              className="bg-transparent text-white placeholder-gray-400 outline-none w-full md:w-40 text-sm"
-            />
-            <AuraGlassButton onClick={fetchUser} size="sm">
-              Search
-            </AuraGlassButton>
-          </div>
+          {/* 🔍 Search Input with Autocomplete */}
+          <SearchAutocomplete
+            onSelectRepo={(repo) => window.open(repo.html_url, '_blank')}
+            onSearchUser={(username) => {
+              setUsername(username)
+              fetchUser(username)
+            }}
+            placeholder="Search GitHub repos..."
+          />
         </div>
       </div>
 
