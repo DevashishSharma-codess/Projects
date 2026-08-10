@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { useQuotes } from "../hooks/useQuotes";
 import { Copy, Check, Bookmark, ArrowRight, ArrowLeft, RefreshCw, Trash2, MousePointer, Sparkles, ChevronRight, ChevronLeft, X, FileText, CornerDownLeft } from "lucide-react";
 import type { QuoteItem } from "../types/journal";
 export type { QuoteItem };
@@ -228,19 +229,25 @@ export default function QuotesHub() {
 
     const [paperOpening, setPaperOpening] = useState(false);
 
-    const currentSavedQuotes = savedQuotes.length > 0 ? savedQuotes : [ALL_QUOTE_SETS[0][4], ALL_QUOTE_SETS[0][0]];
-    const folderQuotes = ALL_QUOTE_SETS[setIndex % ALL_QUOTE_SETS.length];
+    // ── React Query: fetch quotes from API ──
+    const { data: apiQuotes, isLoading, isError, refetch } = useQuotes(setIndex);
 
-    const handleReloadQuotes = (e?: React.MouseEvent) => {
+    // Use API-fetched quotes when available, fall back to hardcoded data
+    const folderQuotes = apiQuotes && apiQuotes.length > 0
+        ? apiQuotes
+        : ALL_QUOTE_SETS[setIndex % ALL_QUOTE_SETS.length];
+
+    const currentSavedQuotes = savedQuotes.length > 0 ? savedQuotes : [ALL_QUOTE_SETS[0][4], ALL_QUOTE_SETS[0][0]];
+
+    const handleReloadQuotes = useCallback((e?: React.MouseEvent) => {
         if (e) e.stopPropagation();
         setReloading(true);
-        setTimeout(() => {
-            const nextSetIdx = (setIndex + 1) % ALL_QUOTE_SETS.length;
-            setSetIndex(nextSetIdx);
-            setActiveIndex(4);
-            setReloading(false);
-        }, 350);
-    };
+        const nextSetIdx = setIndex + 1;
+        setSetIndex(nextSetIdx);
+        setActiveIndex(4);
+        // The useQuotes hook will automatically refetch with the new page index
+        setTimeout(() => setReloading(false), 350);
+    }, [setIndex, setSetIndex, setActiveIndex, setReloading]);
 
     const toggleFavorite = (item: FolderQuoteItem, e: React.MouseEvent) => {
         e.stopPropagation();
