@@ -5,6 +5,23 @@ import { DoodleBadge } from "./DoodleIllustrations";
 import { getSavedFolders, createNewFolder, addEntryToFolder, deleteFolder, deleteEntryFromFolder } from "../utils/folderStorage";
 import { useJournal } from "../context/JournalContext";
 
+function cleanHtmlText(htmlStr: string): string {
+    if (!htmlStr) return "";
+    return htmlStr
+        .replace(/<br\s*\/?>/gi, "\n")
+        .replace(/<\/p>/gi, "\n")
+        .replace(/<\/div>/gi, "\n")
+        .replace(/<[^>]*>/g, "")
+        .replace(/&nbsp;/g, " ")
+        .replace(/&amp;/g, "&")
+        .replace(/&lt;/g, "<")
+        .replace(/&gt;/g, ">")
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'")
+        .replace(/\n\s*\n/g, "\n\n")
+        .trim();
+}
+
 const COLOR_OPTIONS = [
 
     { name: "Amber Gold", hex: "#F59E0B" },
@@ -592,7 +609,7 @@ export default function FolderExplorer({ onOpenEditor }: { onOpenEditor?: (folde
                                                         overflow: "hidden",
                                                     }}
                                                 >
-                                                    {entry.content}
+                                                    {cleanHtmlText(entry.content)}
                                                 </p>
 
                                                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: 10, borderTop: "1px stroke #E2E8F0" }}>
@@ -780,7 +797,7 @@ export default function FolderExplorer({ onOpenEditor }: { onOpenEditor?: (folde
                                         whiteSpace: "pre-wrap",
                                     }}
                                 >
-                                    {selectedEntry.content}
+                                    {cleanHtmlText(selectedEntry.content)}
                                 </p>
                             </div>
 

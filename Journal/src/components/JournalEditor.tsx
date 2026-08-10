@@ -614,8 +614,21 @@ export default function JournalEditor({ onEntrySaved }: { onEntrySaved?: (entry:
                                     </div>
                                 ) : (
                                     entries.map((entry) => {
+                                        const cleanText = entry.content
+                                            ? entry.content
+                                                .replace(/<br\s*\/?>/gi, "\n")
+                                                .replace(/<\/p>/gi, "\n")
+                                                .replace(/<\/div>/gi, "\n")
+                                                .replace(/<[^>]*>/g, "")
+                                                .replace(/&nbsp;/g, " ")
+                                                .replace(/&amp;/g, "&")
+                                                .replace(/&lt;/g, "<")
+                                                .replace(/&gt;/g, ">")
+                                                .replace(/&quot;/g, '"')
+                                                .replace(/&#39;/g, "'")
+                                                .trim()
+                                            : "";
                                         const isEditing = editingEntryId === entry.id;
-                                        const cleanText = entry.content.replace(/<[^>]*>/g, "");
                                         return (
                                             <div
                                                 key={entry.id}

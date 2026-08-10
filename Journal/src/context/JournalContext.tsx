@@ -9,20 +9,60 @@ import {
 } from "../utils/folderStorage";
 
 // Seed mood logs for initial load if none saved
-const todayStr = () => new Date().toISOString().slice(0, 10);
+export const getHourSlotInfo = (day: string, timeStr: string) => {
+    let hour = 12;
+    let minute = 0;
+
+    if (!timeStr) {
+        const now = new Date();
+        hour = now.getHours();
+        minute = now.getMinutes();
+    } else {
+        const match24 = timeStr.match(/^(\d{1,2}):(\d{2})/);
+        if (match24) {
+            hour = parseInt(match24[1], 10);
+            minute = parseInt(match24[2], 10);
+        } else {
+            const match12 = timeStr.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)?/i);
+            if (match12) {
+                hour = parseInt(match12[1], 10);
+                minute = parseInt(match12[2], 10);
+                const period = match12[3]?.toUpperCase();
+                if (period === "PM" && hour < 12) hour += 12;
+                if (period === "AM" && hour === 12) hour = 0;
+            }
+        }
+    }
+
+    const hh = String(hour).padStart(2, "0");
+    const mm = String(minute).padStart(2, "0");
+    const hourSlot = `${day}-${hh}`;
+    const time = `${hh}:${mm}`;
+
+    const dateObj = new Date(`${day}T${time}:00`);
+    const timestamp = isNaN(dateObj.getTime()) ? Date.now() : dateObj.getTime();
+
+    return { hourSlot, time, timestamp };
+};
+
+// Seed mood logs for initial load if none saved
 const SEED_MOOD_LOGS: Record<string, MoodLog> = {
-    "2026-07-01": { id: "s1", day: "2026-07-01", moodKey: "peaceful", moodLabel: "Peaceful", icon: "Heart", score: 4.2, color: "#3B82F6", note: "Great morning coffee." },
-    "2026-07-05": { id: "s2", day: "2026-07-05", moodKey: "energetic", moodLabel: "Energetic", icon: "Zap", score: 4.5, color: "#10B981", note: "Completed sprint goal!" },
-    "2026-07-09": { id: "s3", day: "2026-07-09", moodKey: "radiant", moodLabel: "Radiant", icon: "Sparkles", score: 4.9, color: "#F59E0B", note: "Family weekend getaway." },
-    "2026-07-13": { id: "s4", day: "2026-07-13", moodKey: "focused", moodLabel: "Focused", icon: "Compass", score: 3.9, color: "#A855F7", note: "Deep work session." },
-    "2026-07-16": { id: "s5", day: "2026-07-16", moodKey: "stressed", moodLabel: "Stressed", icon: "Activity", score: 2.4, color: "#EF4444", note: "Tight deadline." },
-    "2026-07-20": { id: "s6", day: "2026-07-20", moodKey: "peaceful", moodLabel: "Peaceful", icon: "Heart", score: 4.6, color: "#3B82F6", note: "Relaxing Sunday walk." },
-    "2026-07-24": { id: "s7", day: "2026-07-24", moodKey: "radiant", moodLabel: "Radiant", icon: "Sparkles", score: 5.0, color: "#F59E0B", note: "Key project milestone!" },
-    "2026-07-27": { id: "s8", day: "2026-07-27", moodKey: "focused", moodLabel: "Focused", icon: "Compass", score: 4.3, color: "#A855F7", note: "Strategic roadmap planning." },
-    "2026-07-30": { id: "s9", day: "2026-07-30", moodKey: "energetic", moodLabel: "Energetic", icon: "Zap", score: 4.7, color: "#10B981", note: "High energy team workout." },
-    "2026-08-01": { id: "s10", day: "2026-08-01", moodKey: "peaceful", moodLabel: "Peaceful", icon: "Heart", score: 4.1, color: "#3B82F6", note: "New month fresh start." },
-    "2026-08-03": { id: "s11", day: "2026-08-03", moodKey: "radiant", moodLabel: "Radiant", icon: "Sparkles", score: 4.8, color: "#F59E0B", note: "Product launch success!" },
-    "2026-08-05": { id: "s12", day: todayStr(), moodKey: "focused", moodLabel: "Focused", icon: "Compass", score: 4.2, color: "#A855F7", note: "Dark glassmorphic dashboard." },
+    "2026-07-01-09": { id: "s1", day: "2026-07-01", time: "09:00", hourSlot: "2026-07-01-09", timestamp: new Date("2026-07-01T09:00:00").getTime(), moodKey: "peaceful", moodLabel: "Peaceful", icon: "Heart", score: 4.5, color: "#3B82F6", note: "Great morning coffee." },
+    "2026-07-05-14": { id: "s2", day: "2026-07-05", time: "14:00", hourSlot: "2026-07-05-14", timestamp: new Date("2026-07-05T14:00:00").getTime(), moodKey: "energetic", moodLabel: "Energetic", icon: "Zap", score: 4.2, color: "#10B981", note: "Completed sprint goal!" },
+    "2026-07-09-18": { id: "s3", day: "2026-07-09", time: "18:00", hourSlot: "2026-07-09-18", timestamp: new Date("2026-07-09T18:00:00").getTime(), moodKey: "radiant", moodLabel: "Radiant", icon: "Sparkles", score: 5.0, color: "#F59E0B", note: "Family weekend getaway." },
+    "2026-07-13-10": { id: "s4", day: "2026-07-13", time: "10:00", hourSlot: "2026-07-13-10", timestamp: new Date("2026-07-13T10:00:00").getTime(), moodKey: "focused", moodLabel: "Focused", icon: "Compass", score: 4.0, color: "#A855F7", note: "Deep work session." },
+    "2026-07-16-16": { id: "s5", day: "2026-07-16", time: "16:00", hourSlot: "2026-07-16-16", timestamp: new Date("2026-07-16T16:00:00").getTime(), moodKey: "stressed", moodLabel: "Stressed", icon: "Activity", score: 2.0, color: "#EF4444", note: "Tight deadline." },
+    "2026-07-20-11": { id: "s6", day: "2026-07-20", time: "11:00", hourSlot: "2026-07-20-11", timestamp: new Date("2026-07-20T11:00:00").getTime(), moodKey: "peaceful", moodLabel: "Peaceful", icon: "Heart", score: 4.5, color: "#3B82F6", note: "Relaxing Sunday walk." },
+    "2026-07-24-15": { id: "s7", day: "2026-07-24", time: "15:00", hourSlot: "2026-07-24-15", timestamp: new Date("2026-07-24T15:00:00").getTime(), moodKey: "radiant", moodLabel: "Radiant", icon: "Sparkles", score: 5.0, color: "#F59E0B", note: "Key project milestone!" },
+    "2026-07-27-09": { id: "s8", day: "2026-07-27", time: "09:00", hourSlot: "2026-07-27-09", timestamp: new Date("2026-07-27T09:00:00").getTime(), moodKey: "focused", moodLabel: "Focused", icon: "Compass", score: 4.0, color: "#A855F7", note: "Strategic roadmap planning." },
+    "2026-07-30-17": { id: "s9", day: "2026-07-30", time: "17:00", hourSlot: "2026-07-30-17", timestamp: new Date("2026-07-30T17:00:00").getTime(), moodKey: "energetic", moodLabel: "Energetic", icon: "Zap", score: 4.2, color: "#10B981", note: "High energy team workout." },
+    "2026-08-01-08": { id: "s10", day: "2026-08-01", time: "08:00", hourSlot: "2026-08-01-08", timestamp: new Date("2026-08-01T08:00:00").getTime(), moodKey: "peaceful", moodLabel: "Peaceful", icon: "Heart", score: 4.5, color: "#3B82F6", note: "New month fresh start." },
+    "2026-08-03-12": { id: "s11", day: "2026-08-03", time: "12:00", hourSlot: "2026-08-03-12", timestamp: new Date("2026-08-03T12:00:00").getTime(), moodKey: "radiant", moodLabel: "Radiant", icon: "Sparkles", score: 5.0, color: "#F59E0B", note: "Product launch success!" },
+    "2026-08-05-14": { id: "s12", day: "2026-08-05", time: "14:00", hourSlot: "2026-08-05-14", timestamp: new Date("2026-08-05T14:00:00").getTime(), moodKey: "focused", moodLabel: "Focused", icon: "Compass", score: 4.0, color: "#A855F7", note: "Dark glassmorphic dashboard." },
+    "2026-08-07-10": { id: "s13", day: "2026-08-07", time: "10:00", hourSlot: "2026-08-07-10", timestamp: new Date("2026-08-07T10:00:00").getTime(), moodKey: "energetic", moodLabel: "Energetic", icon: "Zap", score: 4.2, color: "#10B981", note: "Morning run." },
+    "2026-08-08-16": { id: "s14", day: "2026-08-08", time: "16:00", hourSlot: "2026-08-08-16", timestamp: new Date("2026-08-08T16:00:00").getTime(), moodKey: "peaceful", moodLabel: "Peaceful", icon: "Heart", score: 4.5, color: "#3B82F6", note: "Weekend reading." },
+    "2026-08-09-11": { id: "s15", day: "2026-08-09", time: "11:00", hourSlot: "2026-08-09-11", timestamp: new Date("2026-08-09T11:00:00").getTime(), moodKey: "radiant", moodLabel: "Radiant", icon: "Sparkles", score: 5.0, color: "#F59E0B", note: "Sunny afternoon." },
+    "2026-08-10-09": { id: "s16", day: "2026-08-10", time: "09:00", hourSlot: "2026-08-10-09", timestamp: new Date("2026-08-10T09:00:00").getTime(), moodKey: "focused", moodLabel: "Focused", icon: "Compass", score: 4.0, color: "#A855F7", note: "Morning planning." },
 };
 
 export type ActiveTabType = "hero" | "folders" | "editor" | "mood" | "quotes" | "bento";
@@ -107,7 +147,7 @@ export interface JournalContextType {
         note: string,
         time?: string
     ) => void;
-    deleteMoodLog: (day: string) => void;
+    deleteMoodLog: (key: string) => void;
 
 
     // --- Quotes Hub State ---
@@ -239,7 +279,26 @@ export const JournalProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const [moodLogs, setMoodLogs] = useState<Record<string, MoodLog>>(() => {
         const raw = localStorage.getItem("dogear_mood_logs");
         if (raw) {
-            try { return JSON.parse(raw); } catch { /* ignore */ }
+            try {
+                const parsed = JSON.parse(raw);
+                // Migrate any legacy YYYY-MM-DD keys to YYYY-MM-DD-HH hourSlot keys
+                const migrated: Record<string, MoodLog> = {};
+                for (const [key, item] of Object.entries(parsed)) {
+                    if (key.match(/^\d{4}-\d{2}-\d{2}$/)) {
+                        const { hourSlot, time, timestamp } = getHourSlotInfo(key, item.time || "12:00");
+                        migrated[hourSlot] = {
+                            ...item,
+                            day: key,
+                            time,
+                            hourSlot,
+                            timestamp,
+                        };
+                    } else {
+                        migrated[key] = item;
+                    }
+                }
+                return { ...SEED_MOOD_LOGS, ...migrated };
+            } catch { /* ignore */ }
         }
         return SEED_MOOD_LOGS;
     });
@@ -271,30 +330,37 @@ export const JournalProvider: React.FC<{ children: React.ReactNode }> = ({ child
         score: number,
         color: string,
         note: string,
-        time?: string
+        timeInput?: string
     ) => {
-        const formattedTime = time || new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
+        const rawTime = timeInput || new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: false });
+        const { hourSlot, time, timestamp } = getHourSlotInfo(day, rawTime);
+
         const newLog: MoodLog = {
             id: `mood-${Date.now()}`,
             day,
+            time,
+            hourSlot,
+            timestamp,
             moodKey,
             moodLabel,
             icon,
             score,
             color,
             note: note || "",
-            time: formattedTime,
         };
-        const updated = { ...moodLogs, [day]: newLog };
+
+        // Key by hourSlot to guarantee 1 mood per hour slot!
+        const updated = { ...moodLogs, [hourSlot]: newLog };
         saveMoodLogsToStorage(updated);
     };
 
 
-    const deleteMoodLog = (day: string) => {
+    const deleteMoodLog = (key: string) => {
         const updated = { ...moodLogs };
-        delete updated[day];
+        delete updated[key];
         saveMoodLogsToStorage(updated);
     };
+
 
     // --- Quotes Hub ---
     const [quoteSetIndex, setQuoteSetIndex] = useState(0);

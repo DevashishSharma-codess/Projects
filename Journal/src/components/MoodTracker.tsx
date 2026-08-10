@@ -344,7 +344,25 @@ function buildSparkPath(pts: { x: number; y: number }[]): string {
     return d;
 }
 
-import { useJournal } from "../context/JournalContext";
+import { useJournal, getHourSlotInfo } from "../context/JournalContext";
+
+const isFutureDateTime = (dateStr: string, timeStr: string): boolean => {
+    if (!dateStr) return false;
+    const now = new Date();
+    const todayDateStr = now.toISOString().slice(0, 10);
+    if (dateStr > todayDateStr) return true;
+    if (dateStr === todayDateStr) {
+        const parts = (timeStr || "00:00").split(":");
+        const h = parseInt(parts[0] || "0", 10);
+        const m = parseInt(parts[1] || "0", 10);
+        const currentH = now.getHours();
+        const currentM = now.getMinutes();
+        if (h > currentH || (h === currentH && m > currentM)) {
+            return true;
+        }
+    }
+    return false;
+};
 
 export default function MoodTracker() {
     const today = new Date();
@@ -397,13 +415,19 @@ export default function MoodTracker() {
     // Toast state for future date validation error
     const [futureDateToast, setFutureDateToast] = useState(false);
 
-    // Time input state for today logging and modal editing
-    const [noteTime, setNoteTime] = useState(() =>
-        new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })
-    );
-    const [modalTime, setModalTime] = useState(() =>
-        new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })
-    );
+    // Quick Log date & time inputs
+    const [selectedLogDate, setSelectedLogDate] = useState(() => todayStr());
+    const [selectedLogTime, setSelectedLogTime] = useState(() => {
+        const now = new Date();
+        return `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+    });
+
+    // Modal date & time inputs
+    const [modalDate, setModalDate] = useState(() => todayStr());
+    const [modalTime, setModalTime] = useState(() => {
+        const now = new Date();
+        return `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+    });
 
     const [songMood, setSongMood] = useState<string>("radiant");
     const [songIndex, setSongIndex] = useState<number>(0);
@@ -413,7 +437,7 @@ export default function MoodTracker() {
     const calCells = useMemo(() => buildCalendarDays(calYear, calMonth), [calYear, calMonth]);
 
     const logsArray = useMemo(
-        () => Object.values(logs).sort((a, b) => a.day.localeCompare(b.day)),
+        () => Object.values(logs).sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0)),
         [logs]
     );
 
@@ -422,51 +446,46 @@ export default function MoodTracker() {
         return logsArray.filter(l => l.moodKey === categoryFilter);
     }, [logsArray, categoryFilter]);
 
-    // Generate continuous date data for Weekly (7 days), Monthly (30 days), or 3 Months (90 days)
-    const timeframeDaysCount = timeframe === "weekly" ? 7 : timeframe === "monthly" ? 30 : 90;
-
+    // Generate continuous date & time data for graph
     const graphTimeframePoints = useMemo(() => {
-        const list: GraphPoint[] = [];
-        const baseDate = new Date();
+        let filtered = categoryFilter === "all"
+            ? logsArray
+            : logsArray.filter(l => l.moodKey === categoryFilter);
 
-        for (let i = timeframeDaysCount - 1; i >= 0; i--) {
-            const d = new Date(baseDate);
-            d.setDate(baseDate.getDate() - i);
-            const key = d.toISOString().slice(0, 10);
-            
-            if (logs[key]) {
-                const l = logs[key];
-                if (categoryFilter === "all" || l.moodKey === categoryFilter) {
-                    list.push({
-                        id: key,
-                        day: key,
-                        score: l.score,
-                        moodLabel: l.moodLabel,
-                        moodKey: l.moodKey,
-                        color: l.color,
-                        note: l.note,
-                        time: l.time,
-                        isLogged: true,
-                    });
-                }
-            } else if (categoryFilter === "all") {
-                // Synthetic smooth curve point for unlogged days to display full trend curve
-                const dayNum = d.getDate();
-                const synScore = Number((3.6 + Math.sin(dayNum * 0.5) * 1.0).toFixed(1));
-                const synMood = synScore >= 4.5 ? MOOD_OPTIONS[0] : synScore >= 4.0 ? MOOD_OPTIONS[1] : synScore >= 3.5 ? MOOD_OPTIONS[2] : MOOD_OPTIONS[4];
-                list.push({
-                    id: key,
-                    day: key,
-                    score: synScore,
-                    moodLabel: synMood.label,
-                    moodKey: synMood.key,
-                    color: synMood.color,
-                    isLogged: false,
-                });
-            }
+        const now = new Date();
+        const cutoffDate = new Date();
+
+        if (timeframe === "weekly") {
+            cutoffDate.setDate(now.getDate() - 7);
+        } else if (timeframe === "monthly") {
+            cutoffDate.setDate(now.getDate() - 30);
+        } else if (timeframe === "3months") {
+            cutoffDate.setDate(now.getDate() - 90);
         }
+
+        const cutoffTs = cutoffDate.getTime();
+        let timeframeLogs = filtered.filter(l => (l.timestamp || new Date(l.day).getTime()) >= cutoffTs);
+
+        if (timeframeLogs.length === 0) {
+            timeframeLogs = filtered;
+        }
+
+        const list: GraphPoint[] = timeframeLogs.map(l => ({
+            id: l.hourSlot || l.id,
+            day: l.day,
+            time: l.time || "12:00",
+            hourSlot: l.hourSlot || `${l.day}-12`,
+            timestamp: l.timestamp || new Date(`${l.day}T12:00:00`).getTime(),
+            score: l.score,
+            moodLabel: l.moodLabel,
+            moodKey: l.moodKey,
+            color: l.color,
+            note: l.note,
+            isLogged: true,
+        }));
+
         return list;
-    }, [logs, timeframeDaysCount, categoryFilter]);
+    }, [logsArray, timeframe, categoryFilter]);
 
 
     const totalLogs = logsArray.length;
@@ -488,11 +507,12 @@ export default function MoodTracker() {
     const dominantMood = getMoodOption(dominantMoodKey);
 
     const streak = useMemo(() => {
+        const loggedDates = new Set(Object.values(logs).map(l => l.day));
         let s = 0;
         const d = new Date();
         while (true) {
             const k = d.toISOString().slice(0, 10);
-            if (!logs[k]) break;
+            if (!loggedDates.has(k)) break;
             s++;
             d.setDate(d.getDate() - 1);
         }
@@ -503,9 +523,19 @@ export default function MoodTracker() {
     const H = 120;
 
     const chartPoints = useMemo(() => {
-        if (graphTimeframePoints.length < 2) return [];
+        if (graphTimeframePoints.length === 0) return [];
+        const padX = 18;
+        const availW = W - padX * 2;
+        if (graphTimeframePoints.length === 1) {
+            const pt = graphTimeframePoints[0];
+            const y = H - 15 - ((pt.score - 1.0) / (5.0 - 1.0)) * (H - 30);
+            return [
+                { x: padX, y, pt },
+                { x: W - padX, y, pt },
+            ];
+        }
         return graphTimeframePoints.map((pt, i) => {
-            const x = (i / (graphTimeframePoints.length - 1)) * W;
+            const x = padX + (i / (graphTimeframePoints.length - 1)) * availW;
             // Scale score (1.0 to 5.0) onto canvas height H with 15% padding top and bottom
             const y = H - 15 - ((pt.score - 1.0) / (5.0 - 1.0)) * (H - 30);
             return { x, y, pt };
@@ -513,47 +543,66 @@ export default function MoodTracker() {
     }, [graphTimeframePoints]);
 
     const sparkPath = useMemo(() => buildSparkPath(chartPoints), [chartPoints]);
-    const areaPath = sparkPath ? `${sparkPath} L ${W} ${H} L 0 ${H} Z` : "";
+    const areaPath = useMemo(() => {
+        if (!sparkPath || chartPoints.length === 0) return "";
+        const firstX = chartPoints[0].x;
+        const lastX = chartPoints[chartPoints.length - 1].x;
+        return `${sparkPath} L ${lastX} ${H} L ${firstX} ${H} Z`;
+    }, [sparkPath, chartPoints]);
 
     const handleLogTodayMood = () => {
+        if (isFutureDateTime(selectedLogDate, selectedLogTime)) {
+            setFutureDateToast(true);
+            setTimeout(() => setFutureDateToast(false), 3000);
+            return;
+        }
         addMoodLog(
-            todayKey,
+            selectedLogDate,
             selectedMoodOption.key,
             selectedMoodOption.label,
             selectedMoodOption.iconName,
             selectedMoodOption.score,
             selectedMoodOption.color,
             noteInput.trim() || `Feeling ${selectedMoodOption.label}`,
-            noteTime
+            selectedLogTime
         );
         setNoteInput("");
         setLogSuccess(true);
         setTimeout(() => setLogSuccess(false), 2500);
     };
 
-    const openModal = (key: string) => {
-        if (key > todayKey) {
+    const openModal = (dateStr: string, timeStr?: string) => {
+        const now = new Date();
+        const defaultTime = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+        const targetTime = timeStr || defaultTime;
+
+        if (isFutureDateTime(dateStr, targetTime)) {
             setFutureDateToast(true);
             setTimeout(() => setFutureDateToast(false), 3000);
             return;
         }
-        setSelectedDate(key);
-        setModalMood(logs[key] ? getMoodOption(logs[key].moodKey) : MOOD_OPTIONS[0]);
-        setModalNote(logs[key]?.note ?? "");
-        setModalTime(logs[key]?.time || new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }));
+
+        const { hourSlot } = getHourSlotInfo(dateStr, targetTime);
+        const existing = logs[hourSlot];
+
+        setSelectedDate(dateStr);
+        setModalDate(dateStr);
+        setModalTime(existing?.time || targetTime);
+        setModalMood(existing ? getMoodOption(existing.moodKey) : MOOD_OPTIONS[0]);
+        setModalNote(existing?.note ?? "");
         setShowModal(true);
         setLogSuccess(false);
     };
 
     const saveModalLog = () => {
-        if (!selectedDate) return;
-        if (selectedDate > todayKey) {
+        if (!modalDate) return;
+        if (isFutureDateTime(modalDate, modalTime)) {
             setFutureDateToast(true);
             setTimeout(() => setFutureDateToast(false), 3000);
             return;
         }
         addMoodLog(
-            selectedDate,
+            modalDate,
             modalMood.key,
             modalMood.label,
             modalMood.iconName,
@@ -570,6 +619,7 @@ export default function MoodTracker() {
         deleteMoodLog(key);
         setShowModal(false);
     };
+
 
 
 
@@ -895,22 +945,52 @@ export default function MoodTracker() {
                         }
                         .mood-dash-inner-grid {
                             display: grid;
-                            grid-template-columns: 1.2fr 1fr;
-                            gap: 20px;
-                            margin-bottom: 20px;
+                            grid-template-columns: 1fr 1fr;
+                            gap: 18px;
+                            margin-bottom: 18px;
+                        }
+                        .mood-stat-grid {
+                            display: grid;
+                            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+                            gap: 12px;
                         }
                         .mood-table-overflow {
                             width: 100%;
                             overflow-x: auto;
+                            -webkit-overflow-scrolling: touch;
                         }
-                        @media (max-width: 1024px) {
+                        @media (max-width: 1120px) {
                             .mood-dash-grid {
                                 grid-template-columns: 1fr !important;
                             }
                         }
-                        @media (max-width: 860px) {
+                        @media (max-width: 880px) {
                             .mood-dash-inner-grid {
                                 grid-template-columns: 1fr !important;
+                            }
+                        }
+                        @media (max-width: 768px) {
+                            .mood-tracker-wrapper {
+                                flex-direction: column !important;
+                                gap: 14px !important;
+                            }
+                            .mood-left-dock {
+                                width: 100% !important;
+                                min-height: auto !important;
+                                height: auto !important;
+                                flex-direction: row !important;
+                                padding: 10px 16px !important;
+                                justify-content: space-between !important;
+                                border-radius: 20px !important;
+                            }
+                            .mood-left-dock > div {
+                                flex-direction: row !important;
+                                justify-content: space-around !important;
+                                width: 100% !important;
+                            }
+                            .mood-tracker-window {
+                                padding: 16px 14px !important;
+                                border-radius: 22px !important;
                             }
                         }
                     `}</style>
@@ -974,11 +1054,15 @@ export default function MoodTracker() {
                                 <div style={{ background: "rgba(255, 255, 255, 0.55)", borderRadius: 20, padding: "18px", border: "1px solid rgba(255, 255, 255, 0.8)", boxShadow: "0 4px 15px rgba(15, 23, 42, 0.03)" }}>
                                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
                                         <span style={{ fontSize: 12, fontWeight: 700, color: "#0F172A" }}>
-                                            Date of Log
+                                            Calendar ({MONTH_NAMES[calMonth]} {calYear})
                                         </span>
-                                        <div style={{ display: "flex", gap: 4 }}>
-                                            <button onClick={prevMonth} style={{ background: "#FFFFFF", border: "1px solid rgba(255, 255, 255, 0.9)", borderRadius: 6, color: "#0F172A", cursor: "pointer", padding: 3, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 2px 6px rgba(0,0,0,0.05)" }}><ChevronLeft size={14} /></button>
-                                            <button onClick={nextMonth} style={{ background: "#FFFFFF", border: "1px solid rgba(255, 255, 255, 0.9)", borderRadius: 6, color: "#0F172A", cursor: "pointer", padding: 3, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 2px 6px rgba(0,0,0,0.05)" }}><ChevronRight size={14} /></button>
+                                        <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
+                                            <button onClick={prevMonth} title="Previous Month" style={{ background: "#FFFFFF", border: "1px solid rgba(255, 255, 255, 0.9)", borderRadius: 6, color: "#0F172A", cursor: "pointer", padding: "2px 8px", display: "flex", alignItems: "center", gap: 3, fontSize: 11, fontWeight: 600, boxShadow: "0 2px 6px rgba(0,0,0,0.05)" }}>
+                                                <ChevronLeft size={13} /> {calMonth === 0 ? "Dec" : MONTH_NAMES[calMonth - 1].slice(0, 3)}
+                                            </button>
+                                            <button onClick={nextMonth} title="Next Month" style={{ background: "#FFFFFF", border: "1px solid rgba(255, 255, 255, 0.9)", borderRadius: 6, color: "#0F172A", cursor: "pointer", padding: "2px 8px", display: "flex", alignItems: "center", gap: 3, fontSize: 11, fontWeight: 600, boxShadow: "0 2px 6px rgba(0,0,0,0.05)" }}>
+                                                {calMonth === 11 ? "Jan" : MONTH_NAMES[calMonth + 1].slice(0, 3)} <ChevronRight size={13} />
+                                            </button>
                                         </div>
                                     </div>
 
@@ -994,7 +1078,8 @@ export default function MoodTracker() {
                                         {calCells.map((day, idx) => {
                                             if (!day) return <div key={idx} style={{ height: 28 }} />;
                                             const key = dateKey(calYear, calMonth, day);
-                                            const log = logs[key];
+                                            const dayLogs = Object.values(logs).filter(l => l.day === key);
+                                            const log = dayLogs.length > 0 ? dayLogs[dayLogs.length - 1] : null;
                                             const mood = log ? getMoodOption(log.moodKey) : null;
                                             const isToday = key === todayKey;
                                             const isFuture = key > todayKey;
@@ -1032,11 +1117,53 @@ export default function MoodTracker() {
 
                                 {/* Mood Category Selection Sub-Widget */}
                                 <div style={{ background: "rgba(255, 255, 255, 0.55)", borderRadius: 20, padding: "18px", border: "1px solid rgba(255, 255, 255, 0.8)", display: "flex", flexDirection: "column", justifyContent: "space-between", boxShadow: "0 4px 15px rgba(15, 23, 42, 0.03)" }}>
-                                    <span style={{ fontSize: 12, fontWeight: 700, color: "#0F172A", marginBottom: 10, display: "block" }}>
-                                        Daily Mood Option
-                                    </span>
+                                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
+                                        <span style={{ fontSize: 12, fontWeight: 700, color: "#0F172A" }}>
+                                            Quick Log Mood
+                                        </span>
+                                        <span style={{ fontSize: 11, fontWeight: 750, color: selectedMoodOption.color }}>
+                                            Score: {selectedMoodOption.score.toFixed(1)}
+                                        </span>
+                                    </div>
 
-                                    <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 6, marginBottom: 12 }}>
+                                    {/* Date & Time Selectors */}
+                                    <div style={{ display: "flex", gap: 6, marginBottom: 10 }}>
+                                        <input
+                                            type="date"
+                                            max={todayStr()}
+                                            value={selectedLogDate}
+                                            onChange={(e) => setSelectedLogDate(e.target.value)}
+                                            style={{
+                                                flex: 1,
+                                                padding: "4px 8px",
+                                                borderRadius: 8,
+                                                border: "1px solid rgba(15, 23, 42, 0.15)",
+                                                background: "#FFFFFF",
+                                                fontSize: 11,
+                                                fontWeight: 600,
+                                                color: "#0F172A",
+                                                outline: "none",
+                                            }}
+                                        />
+                                        <input
+                                            type="time"
+                                            value={selectedLogTime}
+                                            onChange={(e) => setSelectedLogTime(e.target.value)}
+                                            style={{
+                                                width: 85,
+                                                padding: "4px 8px",
+                                                borderRadius: 8,
+                                                border: "1px solid rgba(15, 23, 42, 0.15)",
+                                                background: "#FFFFFF",
+                                                fontSize: 11,
+                                                fontWeight: 600,
+                                                color: "#0F172A",
+                                                outline: "none",
+                                            }}
+                                        />
+                                    </div>
+
+                                    <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 4, marginBottom: 10 }}>
                                         {MOOD_OPTIONS.map((m) => {
                                             const isSel = selectedMoodOption.key === m.key;
                                             return (
@@ -1046,15 +1173,15 @@ export default function MoodTracker() {
                                                     style={{
                                                         border: isSel ? "1px solid rgba(255, 255, 255, 0.9)" : "1px solid rgba(255, 255, 255, 0.7)",
                                                         background: isSel ? "#FFFFFF" : "rgba(255, 255, 255, 0.6)",
-                                                        color: isSel ? "#0F172A" : "#334155",
-                                                        borderRadius: 999,
-                                                        padding: "7px 10px",
-                                                        fontSize: 11,
-                                                        fontWeight: isSel ? 650 : 500,
+                                                        color: isSel ? m.color : "#334155",
+                                                        borderRadius: 8,
+                                                        padding: "5px 4px",
+                                                        fontSize: 10.5,
+                                                        fontWeight: isSel ? 750 : 500,
                                                         cursor: "pointer",
                                                         textAlign: "center",
-                                                        transition: "all 0.2s ease",
-                                                        boxShadow: isSel ? "0 4px 12px rgba(15, 23, 42, 0.08)" : "none",
+                                                        transition: "all 0.15s ease",
+                                                        boxShadow: isSel ? "0 2px 8px rgba(15, 23, 42, 0.08)" : "none",
                                                     }}
                                                 >
                                                     {m.label}
@@ -1063,169 +1190,37 @@ export default function MoodTracker() {
                                         })}
                                     </div>
 
-                                    <div style={{ textAlign: "center", marginTop: 4 }}>
-                                        <div style={{ fontSize: 32, fontWeight: 700, color: "#0F172A", lineHeight: 1 }}>
-                                            {selectedMoodOption.score.toFixed(1)}
-                                        </div>
-                                        <span style={{ fontSize: 11, color: "#475569", fontWeight: 500 }}>
-                                            / {selectedMoodOption.label.toLowerCase()} score
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* SVG Smooth Area Chart */}
-                            <div
-                                style={{ background: "rgba(255, 255, 255, 0.55)", borderRadius: 20, padding: "16px", border: "1px solid rgba(255, 255, 255, 0.8)", marginBottom: 20, position: "relative" }}
-                                onMouseLeave={() => setHoverIdx(null)}
-                                onMouseMove={(e) => {
-                                    const rect = e.currentTarget.getBoundingClientRect();
-                                    const mouseX = e.clientX - rect.left;
-                                    if (rect.width > 0 && chartPoints.length > 0) {
-                                        const relativeX = (mouseX / rect.width) * W;
-                                        let closestIdx = 0;
-                                        let minDistance = Infinity;
-                                        chartPoints.forEach((pt, idx) => {
-                                            const dist = Math.abs(pt.x - relativeX);
-                                            if (dist < minDistance) {
-                                                minDistance = dist;
-                                                closestIdx = idx;
-                                            }
-                                        });
-                                        setHoverIdx(closestIdx);
-                                    }
-                                }}
-                            >
-                                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-                                    <span style={{ fontSize: 11.5, fontWeight: 700, color: "#0F172A", display: "flex", alignItems: "center", gap: 6 }}>
-                                        <LineChart size={14} color="#2563EB" />
-                                        Mood Overview Graph ({timeframe === "weekly" ? "7 Days" : timeframe === "monthly" ? "30 Days" : "90 Days"})
-                                    </span>
-                                    <span style={{ fontSize: 10.5, color: "#64748B", fontWeight: 500 }}>Hover & click points to inspect logs</span>
-                                </div>
-
-                                <div style={{ position: "relative", width: "100%", height: 130 }}>
-                                    <svg
-                                        viewBox={`0 0 ${W} ${H}`}
-                                        style={{ width: "100%", height: "100%", display: "block", overflow: "visible" }}
+                                    <button
+                                        onClick={handleLogTodayMood}
+                                        disabled={isFutureDateTime(selectedLogDate, selectedLogTime)}
+                                        style={{
+                                            width: "100%",
+                                            border: "none",
+                                            background: isFutureDateTime(selectedLogDate, selectedLogTime)
+                                                ? "#94A3B8"
+                                                : logSuccess ? "#10B981" : "linear-gradient(135deg, #3B82F6 0%, #2563EB 100%)",
+                                            color: "#FFFFFF",
+                                            fontSize: 11.5,
+                                            fontWeight: 700,
+                                            padding: "7px 0",
+                                            borderRadius: 10,
+                                            cursor: isFutureDateTime(selectedLogDate, selectedLogTime) ? "not-allowed" : "pointer",
+                                            boxShadow: isFutureDateTime(selectedLogDate, selectedLogTime) ? "none" : "0 3px 10px rgba(37, 99, 235, 0.3)",
+                                            transition: "all 0.2s ease",
+                                        }}
                                     >
-                                        <defs>
-                                            <linearGradient id="innerGlassGrad" x1="0" y1="0" x2="0" y2="1">
-                                                <stop offset="0%" stopColor="#2563EB" stopOpacity="0.25" />
-                                                <stop offset="100%" stopColor="#2563EB" stopOpacity="0.0" />
-                                            </linearGradient>
-                                        </defs>
-
-                                        {/* Y-axis Guideline Gridlines */}
-                                        <line x1={0} y1={H - 15 - ((5.0 - 1.0) / 4) * (H - 30)} x2={W} y2={H - 15 - ((5.0 - 1.0) / 4) * (H - 30)} stroke="rgba(37, 99, 235, 0.12)" strokeDasharray="3 3" />
-                                        <line x1={0} y1={H - 15 - ((3.0 - 1.0) / 4) * (H - 30)} x2={W} y2={H - 15 - ((3.0 - 1.0) / 4) * (H - 30)} stroke="rgba(37, 99, 235, 0.12)" strokeDasharray="3 3" />
-                                        <line x1={0} y1={H - 15 - ((1.0 - 1.0) / 4) * (H - 30)} x2={W} y2={H - 15 - ((1.0 - 1.0) / 4) * (H - 30)} stroke="rgba(37, 99, 235, 0.12)" strokeDasharray="3 3" />
-
-                                        {/* Area Fill & Sparkline Stroke */}
-                                        {areaPath && (
-                                            <path d={areaPath} fill="url(#innerGlassGrad)" style={{ transition: "d 0.5s cubic-bezier(0.16, 1, 0.3, 1)" }} />
-                                        )}
-                                        {sparkPath && (
-                                            <path d={sparkPath} fill="none" stroke="#2563EB" strokeWidth="2.8" strokeLinecap="round" style={{ transition: "d 0.5s cubic-bezier(0.16, 1, 0.3, 1)" }} />
-                                        )}
-
-                                        {/* Hover Guide Line */}
-                                        {hoverIdx !== null && chartPoints[hoverIdx] && (
-                                            <line
-                                                x1={chartPoints[hoverIdx].x}
-                                                y1={0}
-                                                x2={chartPoints[hoverIdx].x}
-                                                y2={H}
-                                                stroke="rgba(37, 99, 235, 0.45)"
-                                                strokeWidth="1.5"
-                                                strokeDasharray="3 3"
-                                            />
-                                        )}
-
-                                        {/* Data Dots & Interactive Point Slices */}
-                                        {chartPoints.map((item, i) => {
-                                            const isHov = hoverIdx === i;
-                                            const isLogged = item.pt.isLogged;
-                                            const sliceWidth = chartPoints.length > 1 ? W / (chartPoints.length - 1) : W;
-                                            const isFuture = item.pt.day > todayKey;
-                                            return (
-                                                <g
-                                                    key={i}
-                                                    onMouseEnter={() => setHoverIdx(i)}
-                                                    onClick={() => openModal(item.pt.day)}
-                                                    style={{ cursor: isFuture ? "not-allowed" : "pointer" }}
-                                                >
-                                                    {/* Invisible mouse target rectangle */}
-                                                    <rect
-                                                        x={item.x - sliceWidth / 2}
-                                                        y={0}
-                                                        width={sliceWidth}
-                                                        height={H}
-                                                        fill="rgba(0, 0, 0, 0.001)"
-                                                        pointerEvents="all"
-                                                    />
-                                                    {/* Visual Point Marker Circle */}
-                                                    <circle
-                                                        cx={item.x}
-                                                        cy={item.y}
-                                                        r={isHov ? 6.5 : isLogged ? 4 : 2.5}
-                                                        fill={isHov ? item.pt.color : isLogged ? item.pt.color : "#FFFFFF"}
-                                                        stroke={isHov ? "#FFFFFF" : isLogged ? "#FFFFFF" : "#94A3B8"}
-                                                        strokeWidth={isHov ? 2.5 : isLogged ? 2 : 1.2}
-                                                        style={{ transition: "all 0.15s ease" }}
-                                                    />
-                                                </g>
-                                            );
-                                        })}
-                                    </svg>
-
-                                    {/* Hover Tooltip */}
-                                    {hoverIdx !== null && chartPoints[hoverIdx] && (
-                                        <div
-                                            style={{
-                                                position: "absolute",
-                                                top: Math.max(chartPoints[hoverIdx].y - 52, -10),
-                                                left: `${Math.min(Math.max((chartPoints[hoverIdx].x / W) * 100, 14), 86)}%`,
-                                                background: "rgba(15, 23, 42, 0.94)",
-                                                backdropFilter: "blur(12px)",
-                                                WebkitBackdropFilter: "blur(12px)",
-                                                color: "#FFFFFF",
-                                                padding: "8px 14px",
-                                                borderRadius: 12,
-                                                boxShadow: "0 12px 30px rgba(15,23,42,0.4), 0 0 0 1px rgba(255,255,255,0.15)",
-                                                fontSize: 11.5,
-                                                fontWeight: 600,
-                                                pointerEvents: "none",
-                                                transform: "translate(-50%, -100%)",
-                                                whiteSpace: "nowrap",
-                                                zIndex: 30,
-                                                transition: "all 0.15s ease",
-                                            }}
-                                        >
-                                            <div style={{ fontSize: 10, color: "#94A3B8", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.04em", marginBottom: 2 }}>
-                                                {chartPoints[hoverIdx].pt.day} {chartPoints[hoverIdx].pt.time ? `• ${chartPoints[hoverIdx].pt.time}` : ""}
-                                            </div>
-                                            <div style={{ color: chartPoints[hoverIdx].pt.color, fontWeight: 750, fontSize: 12.5, display: "flex", alignItems: "center", gap: 6 }}>
-                                                <span style={{ width: 7, height: 7, borderRadius: "50%", background: chartPoints[hoverIdx].pt.color, display: "inline-block", boxShadow: `0 0 8px ${chartPoints[hoverIdx].pt.color}` }} />
-                                                {chartPoints[hoverIdx].pt.moodLabel} (Score: {chartPoints[hoverIdx].pt.score.toFixed(1)} / 5.0)
-                                            </div>
-                                            {chartPoints[hoverIdx].pt.note ? (
-                                                <div style={{ fontSize: 10.5, color: "rgba(255,255,255,0.85)", fontWeight: 400, marginTop: 4, maxWidth: 200, overflow: "hidden", textOverflow: "ellipsis" }}>
-                                                    "{chartPoints[hoverIdx].pt.note}"
-                                                </div>
-                                            ) : (
-                                                <div style={{ fontSize: 9.5, color: "rgba(255,255,255,0.5)", fontWeight: 500, marginTop: 2, fontStyle: "italic" }}>
-                                                    {chartPoints[hoverIdx].pt.isLogged ? "No note recorded" : "Estimated trend (unlogged)"}
-                                                </div>
-                                            )}
-                                        </div>
-                                    )}
+                                        {isFutureDateTime(selectedLogDate, selectedLogTime)
+                                            ? "⚠️ Cannot Log Future"
+                                            : logSuccess ? "✓ Logged!" : "+ Log Mood Entry"}
+                                    </button>
                                 </div>
                             </div>
+
+
 
 
                             {/* Bottom Stat Row */}
-                            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12, paddingTop: 16, borderTop: "1px solid rgba(255, 255, 255, 0.7)" }}>
+                            <div className="mood-stat-grid" style={{ paddingTop: 16, borderTop: "1px solid rgba(255, 255, 255, 0.7)" }}>
                                 <div>
                                     <span style={{ fontSize: 11, color: "#475569", fontWeight: 600, display: "block" }}>Logged Days</span>
                                     <span style={{ fontSize: 19, fontWeight: 700, color: "#0F172A" }}>{totalLogs} <span style={{ fontSize: 11, color: "#64748B", fontWeight: 500 }}>/ month</span></span>
@@ -1290,7 +1285,8 @@ export default function MoodTracker() {
                                             const d = new Date();
                                             d.setDate(today.getDate() + dayOffset);
                                             const key = d.toISOString().slice(0, 10);
-                                            const log = logs[key];
+                                            const dayLogs = Object.values(logs).filter(l => l.day === key);
+                                            const log = dayLogs.length > 0 ? dayLogs[dayLogs.length - 1] : null;
                                             const mood = log ? getMoodOption(log.moodKey) : null;
                                             const isToday = key === todayKey;
                                             const isFuture = key > todayKey;
@@ -1680,7 +1676,8 @@ export default function MoodTracker() {
                             {calCells.map((day, idx) => {
                                 if (!day) return <div key={idx} style={{ height: 64 }} />;
                                 const key = dateKey(calYear, calMonth, day);
-                                const log = logs[key];
+                                const dayLogs = Object.values(logs).filter(l => l.day === key);
+                                const log = dayLogs.length > 0 ? dayLogs[dayLogs.length - 1] : null;
                                 const mood = log ? getMoodOption(log.moodKey) : null;
                                 const isToday = key === todayKey;
                                 const isFuture = key > todayKey;
@@ -1893,17 +1890,30 @@ export default function MoodTracker() {
                                             const d = new Date(pt.day + "T12:00:00");
                                             const dayNum = d.getDate();
                                             const baseWellness = Number((2.8 + Math.cos(dayNum * 0.45) * 0.85).toFixed(1));
+                                            const timeLabel = pt.time ? ` (${pt.time})` : "";
+                                            
+                                            // Map score to ordinal levels 1..6 for clean equal Y-axis spacing
+                                            let level = 3;
+                                            if (pt.score >= 4.8) level = 6;      // 5.0 Radiant
+                                            else if (pt.score >= 4.4) level = 5; // 4.5 Peaceful
+                                            else if (pt.score >= 4.1) level = 4; // 4.2 Energetic
+                                            else if (pt.score >= 3.0) level = 3; // 4.0 Focused
+                                            else if (pt.score >= 1.8) level = 2; // 2.0 Stressed
+                                            else level = 1;                      // 1.5 Low Energy
+
                                             return {
                                                 date: pt.day,
-                                                dateLabel: d.toLocaleDateString("en-US", { month: "short", day: "numeric" }),
+                                                time: pt.time,
+                                                dateLabel: `${d.toLocaleDateString("en-US", { month: "short", day: "numeric" })}${timeLabel}`,
                                                 moodScore: pt.score,
+                                                moodLevel: level,
                                                 wellnessIndex: baseWellness,
                                                 moodLabel: pt.moodLabel,
                                                 color: pt.color,
                                                 note: pt.note,
                                             };
                                         })}
-                                        margin={{ top: 10, right: 10, left: 10, bottom: 0 }}
+                                        margin={{ top: 15, right: 15, left: 15, bottom: 0 }}
                                     >
                                         <defs>
                                             {/* Layer 1: Light Sky Blue Gradient Fill */}
@@ -1924,14 +1934,30 @@ export default function MoodTracker() {
                                             dataKey="dateLabel"
                                             axisLine={false}
                                             tickLine={false}
-                                            tick={{ fontSize: 11, fill: "#64748B", fontWeight: 500 }}
+                                            tick={{ fontSize: 10.5, fill: "#64748B", fontWeight: 500 }}
                                             dy={8}
-                                            interval={timeframe === "weekly" ? 0 : timeframe === "monthly" ? 4 : 11}
+                                            interval={timeframe === "weekly" ? 0 : timeframe === "monthly" ? 2 : 5}
                                         />
 
-                                        <YAxis hide domain={[0, 5.5]} />
+                                        <YAxis
+                                            domain={[0.5, 6.5]}
+                                            ticks={[1, 2, 3, 4, 5, 6]}
+                                            tickFormatter={(val) => {
+                                                if (val === 6) return "5.0 Radiant";
+                                                if (val === 5) return "4.5 Peaceful";
+                                                if (val === 4) return "4.2 Energetic";
+                                                if (val === 3) return "4.0 Focused";
+                                                if (val === 2) return "2.0 Stressed";
+                                                if (val === 1) return "1.5 Low Energy";
+                                                return "";
+                                            }}
+                                            axisLine={false}
+                                            tickLine={false}
+                                            tick={{ fontSize: 10, fill: "#475569", fontWeight: 600 }}
+                                            width={105}
+                                        />
 
-                                        {/* Simple Tooltip without raw score numbers */}
+                                        {/* Rich Tooltip with Time & Mood Score details */}
                                         <Tooltip
                                             content={({ active, payload }) => {
                                                 if (active && payload && payload.length) {
@@ -1940,24 +1966,30 @@ export default function MoodTracker() {
                                                         <div
                                                             style={{
                                                                 background: "#FFFFFF",
-                                                                borderRadius: 10,
+                                                                borderRadius: 12,
                                                                 border: "1px solid #E2E8F0",
-                                                                padding: "8px 12px",
-                                                                boxShadow: "0 8px 20px rgba(15, 23, 42, 0.1)",
+                                                                padding: "10px 14px",
+                                                                boxShadow: "0 10px 25px rgba(15, 23, 42, 0.12)",
                                                                 fontSize: 11.5,
                                                                 color: "#0F172A",
                                                                 fontFamily: FONT_FAMILY,
                                                             }}
                                                         >
-                                                            <div style={{ fontSize: 10.5, color: "#64748B", fontWeight: 500, marginBottom: 4 }}>
+                                                            <div style={{ fontSize: 10.5, color: "#64748B", fontWeight: 600, marginBottom: 4 }}>
                                                                 {new Date(data.date + "T12:00:00").toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}
+                                                                {data.time ? ` • ${data.time}` : ""}
                                                             </div>
-                                                            <div style={{ display: "flex", alignItems: "center", gap: 6, color: data.color, fontWeight: 650 }}>
-                                                                <div style={{ width: 6, height: 6, borderRadius: "50%", background: data.color }} />
-                                                                <span>{data.moodLabel}</span>
+                                                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, margin: "4px 0" }}>
+                                                                <div style={{ display: "flex", alignItems: "center", gap: 6, color: data.color, fontWeight: 700 }}>
+                                                                    <div style={{ width: 7, height: 7, borderRadius: "50%", background: data.color }} />
+                                                                    <span>{data.moodLabel}</span>
+                                                                </div>
+                                                                <span style={{ fontSize: 11, fontWeight: 700, color: "#0F172A" }}>
+                                                                    Score: {data.moodScore.toFixed(1)} / 5.0
+                                                                </span>
                                                             </div>
                                                             {data.note && (
-                                                                <div style={{ fontSize: 10, color: "#475569", marginTop: 2, fontWeight: 400 }}>
+                                                                <div style={{ fontSize: 10, color: "#475569", marginTop: 4, fontWeight: 400, fontStyle: "italic", maxWidth: 220 }}>
                                                                     "{data.note}"
                                                                 </div>
                                                             )}
@@ -1970,12 +2002,12 @@ export default function MoodTracker() {
 
                                         <Area
                                             type="monotone"
-                                            dataKey="moodScore"
+                                            dataKey="moodLevel"
                                             name="Mood Trend"
-                                            stroke="#60A5FA"
-                                            strokeWidth={2}
-                                            dot={false}
-                                            activeDot={{ r: 4, strokeWidth: 0 }}
+                                            stroke="#3B82F6"
+                                            strokeWidth={2.5}
+                                            dot={{ r: 3.5, fill: "#3B82F6", strokeWidth: 1.5, stroke: "#FFFFFF" }}
+                                            activeDot={{ r: 6, strokeWidth: 2, stroke: "#FFFFFF" }}
                                             fillOpacity={1}
                                             fill="url(#shadcnAreaMood)"
                                         />
@@ -2204,10 +2236,10 @@ export default function MoodTracker() {
                         >
                             <div>
                                 <h3 style={{ fontSize: 16, fontWeight: 700, color: "#0F172A", margin: 0 }}>
-                                    {logs[selectedDate] ? "Edit Mood Entry" : "Log Mood"}
+                                    {logs[getHourSlotInfo(modalDate, modalTime).hourSlot] ? "Edit Mood Entry" : "Log Hourly Mood"}
                                 </h3>
                                 <p style={{ fontSize: 12, color: "#475569", margin: "2px 0 0 0", fontWeight: 500 }}>
-                                    {new Date(selectedDate + "T12:00:00").toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric" })}
+                                    {new Date(modalDate + "T" + (modalTime || "12:00") + ":00").toLocaleString("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric", hour: "2-digit", minute: "2-digit" })}
                                 </p>
                             </div>
                             <button
@@ -2220,6 +2252,69 @@ export default function MoodTracker() {
 
                         {/* Modal Body */}
                         <div style={{ padding: "20px 24px" }}>
+
+                            {/* Date & Time Selectors */}
+                            <div style={{ display: "flex", gap: 12, marginBottom: 16 }}>
+                                <div style={{ flex: 1 }}>
+                                    <label style={{ display: "block", fontSize: 10.5, fontWeight: 700, color: "#475569", textTransform: "uppercase", letterSpacing: "0.04em", marginBottom: 4 }}>
+                                        SELECT DATE
+                                    </label>
+                                    <input
+                                        type="date"
+                                        max={todayStr()}
+                                        value={modalDate}
+                                        onChange={(e) => setModalDate(e.target.value)}
+                                        style={{
+                                            width: "100%",
+                                            padding: "8px 12px",
+                                            borderRadius: 10,
+                                            border: "1px solid rgba(15, 23, 42, 0.2)",
+                                            background: "#FFFFFF",
+                                            fontSize: 12.5,
+                                            fontWeight: 700,
+                                            color: "#0F172A",
+                                            outline: "none",
+                                            boxSizing: "border-box",
+                                        }}
+                                    />
+                                </div>
+                                <div style={{ flex: 1 }}>
+                                    <label style={{ display: "block", fontSize: 10.5, fontWeight: 700, color: "#475569", textTransform: "uppercase", letterSpacing: "0.04em", marginBottom: 4 }}>
+                                        SELECT TIME
+                                    </label>
+                                    <input
+                                        type="time"
+                                        value={modalTime}
+                                        onChange={(e) => setModalTime(e.target.value)}
+                                        style={{
+                                            width: "100%",
+                                            padding: "8px 12px",
+                                            borderRadius: 10,
+                                            border: "1px solid rgba(15, 23, 42, 0.2)",
+                                            background: "#FFFFFF",
+                                            fontSize: 12.5,
+                                            fontWeight: 700,
+                                            color: "#0F172A",
+                                            outline: "none",
+                                            boxSizing: "border-box",
+                                        }}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Validation / Info Banners */}
+                            {isFutureDateTime(modalDate, modalTime) && (
+                                <div style={{ fontSize: 11.5, fontWeight: 650, color: "#DC2626", background: "rgba(239, 68, 68, 0.12)", border: "1px solid rgba(239, 68, 68, 0.3)", padding: "8px 12px", borderRadius: 10, marginBottom: 14 }}>
+                                    ⚠️ Future dates or times cannot be logged. Please select a current or past time.
+                                </div>
+                            )}
+
+                            {!isFutureDateTime(modalDate, modalTime) && logs[getHourSlotInfo(modalDate, modalTime).hourSlot] && (
+                                <div style={{ fontSize: 11.5, fontWeight: 650, color: "#2563EB", background: "rgba(37, 99, 235, 0.1)", border: "1px solid rgba(37, 99, 235, 0.25)", padding: "8px 12px", borderRadius: 10, marginBottom: 14 }}>
+                                    ℹ️ An entry for this hour slot ({getHourSlotInfo(modalDate, modalTime).time.split(":")[0]}:00 - {getHourSlotInfo(modalDate, modalTime).time.split(":")[0]}:59) exists. Saving will update this hour's mood.
+                                </div>
+                            )}
+
                             <label style={{ display: "block", fontSize: 11, fontWeight: 650, color: "#475569", marginBottom: 10, letterSpacing: "0.04em" }}>
                                 SELECT MOOD CATEGORY
                             </label>
@@ -2258,7 +2353,7 @@ export default function MoodTracker() {
                                 })}
                             </div>
 
-                            {/* Evaluated Score & Entry Time Row */}
+                            {/* Evaluated Score Row */}
                             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16, background: "rgba(15, 23, 42, 0.04)", padding: "10px 14px", borderRadius: 12, border: "1px solid rgba(15, 23, 42, 0.08)" }}>
                                 <div>
                                     <span style={{ fontSize: 10, fontWeight: 700, color: "#64748B", textTransform: "uppercase", letterSpacing: "0.04em" }}>EVALUATED SCORE</span>
@@ -2267,24 +2362,10 @@ export default function MoodTracker() {
                                     </span>
                                 </div>
                                 <div style={{ textAlign: "right" }}>
-                                    <span style={{ fontSize: 10, fontWeight: 700, color: "#64748B", textTransform: "uppercase", letterSpacing: "0.04em", display: "block", marginBottom: 2 }}>ENTRY TIME</span>
-                                    <input
-                                        type="text"
-                                        value={modalTime}
-                                        onChange={(e) => setModalTime(e.target.value)}
-                                        style={{
-                                            width: 95,
-                                            padding: "4px 8px",
-                                            borderRadius: 8,
-                                            border: "1px solid rgba(15, 23, 42, 0.2)",
-                                            background: "#FFFFFF",
-                                            fontSize: 12,
-                                            fontWeight: 700,
-                                            color: "#0F172A",
-                                            textAlign: "center",
-                                            outline: "none",
-                                        }}
-                                    />
+                                    <span style={{ fontSize: 10, fontWeight: 700, color: "#64748B", textTransform: "uppercase", letterSpacing: "0.04em", display: "block", marginBottom: 2 }}>HOUR SLOT</span>
+                                    <span style={{ fontSize: 13, fontWeight: 700, color: "#0F172A", display: "block" }}>
+                                        {getHourSlotInfo(modalDate, modalTime).time.split(":")[0]}:00
+                                    </span>
                                 </div>
                             </div>
 
@@ -2311,12 +2392,11 @@ export default function MoodTracker() {
                             />
                         </div>
 
-
                         {/* Modal Footer */}
                         <div style={{ padding: "16px 24px", borderTop: "1px solid rgba(15, 23, 42, 0.1)", display: "flex", gap: 10, background: "rgba(15, 23, 42, 0.02)" }}>
-                            {logs[selectedDate] && (
+                            {logs[getHourSlotInfo(modalDate, modalTime).hourSlot] && (
                                 <button
-                                    onClick={() => deleteModalLog(selectedDate)}
+                                    onClick={() => deleteModalLog(getHourSlotInfo(modalDate, modalTime).hourSlot)}
                                     style={{ padding: "10px 16px", borderRadius: 12, border: "none", background: "rgba(239, 68, 68, 0.15)", color: "#DC2626", fontSize: 13, fontWeight: 600, cursor: "pointer" }}
                                 >
                                     Remove
@@ -2324,21 +2404,24 @@ export default function MoodTracker() {
                             )}
                             <button
                                 onClick={saveModalLog}
+                                disabled={isFutureDateTime(modalDate, modalTime)}
                                 style={{
                                     flex: 1,
-                                    background: logSuccess ? "#10B981" : "linear-gradient(135deg, #3B82F6 0%, #2563EB 100%)",
+                                    background: isFutureDateTime(modalDate, modalTime)
+                                        ? "#94A3B8"
+                                        : logSuccess ? "#10B981" : "linear-gradient(135deg, #3B82F6 0%, #2563EB 100%)",
                                     color: "#FFFFFF",
                                     border: "none",
                                     padding: "10px 16px",
                                     borderRadius: 12,
                                     fontWeight: 600,
                                     fontSize: 13,
-                                    cursor: "pointer",
+                                    cursor: isFutureDateTime(modalDate, modalTime) ? "not-allowed" : "pointer",
                                     display: "flex",
                                     alignItems: "center",
                                     justifyContent: "center",
                                     gap: 6,
-                                    boxShadow: "0 4px 14px rgba(37, 99, 235, 0.35)",
+                                    boxShadow: isFutureDateTime(modalDate, modalTime) ? "none" : "0 4px 14px rgba(37, 99, 235, 0.35)",
                                 }}
                             >
                                 {logSuccess ? <CheckCircle2 size={16} /> : <modalMood.Icon size={16} />} Save Entry

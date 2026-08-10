@@ -21,7 +21,7 @@ const ALL_QUOTE_SETS: FolderQuoteItem[][] = [
         {
             id: "q1",
             tabLabel: "Claude",
-            bgColor: "#F472B6", // Vivid Pink
+            bgColor: "#F472B6",
             textColor: "#111827",
             quote: "Happiness is not something readymade. It comes from your own actions.",
             author: "Dalai Lama",
@@ -33,7 +33,7 @@ const ALL_QUOTE_SETS: FolderQuoteItem[][] = [
         {
             id: "q2",
             tabLabel: "Aiko",
-            bgColor: "#818CF8", // Soft Periwinkle Blue
+            bgColor: "#818CF8",
             textColor: "#FFFFFF",
             quote: "Write it on your heart that every day is the best day in the year.",
             author: "Ralph Waldo Emerson",
@@ -45,7 +45,7 @@ const ALL_QUOTE_SETS: FolderQuoteItem[][] = [
         {
             id: "q3",
             tabLabel: "Perplexity",
-            bgColor: "#FFFFFF", // Crisp White
+            bgColor: "#FFFFFF",
             textColor: "#0F172A",
             quote: "You have power over your mind - not outside events. Realize this, and you will find strength.",
             author: "Marcus Aurelius",
@@ -57,7 +57,7 @@ const ALL_QUOTE_SETS: FolderQuoteItem[][] = [
         {
             id: "q4",
             tabLabel: "Limitless",
-            bgColor: "#3B82F6", // Vivid Royal Blue
+            bgColor: "#3B82F6",
             textColor: "#FFFFFF",
             quote: "What you do today can improve all your tomorrows.",
             author: "Ralph Marston",
@@ -69,7 +69,7 @@ const ALL_QUOTE_SETS: FolderQuoteItem[][] = [
         {
             id: "q5",
             tabLabel: "ChatGPT",
-            bgColor: "#D4FE00", // Neon Lime / Yellow-Green (Front Card in Photo)
+            bgColor: "#D4FE00",
             textColor: "#111827",
             quote: "Design should dominate things, not dominate people.",
             author: "Dieter Rams",
@@ -228,7 +228,6 @@ export default function QuotesHub() {
 
     const [paperOpening, setPaperOpening] = useState(false);
 
-    // Initial fallback if savedQuotes is empty
     const currentSavedQuotes = savedQuotes.length > 0 ? savedQuotes : [ALL_QUOTE_SETS[0][4], ALL_QUOTE_SETS[0][0]];
     const folderQuotes = ALL_QUOTE_SETS[setIndex % ALL_QUOTE_SETS.length];
 
@@ -277,7 +276,6 @@ export default function QuotesHub() {
         setIsPaperOpened(false);
     };
 
-
     const copyQuote = (item: FolderQuoteItem, e: React.MouseEvent) => {
         e.stopPropagation();
         navigator.clipboard.writeText(`"${item.quote}" — ${item.author}`);
@@ -299,29 +297,30 @@ export default function QuotesHub() {
             style={{
                 position: "relative",
                 maxWidth: 1280,
-                margin: "60px auto",
-                padding: "0 24px",
+                margin: "clamp(24px, 4vh, 48px) auto clamp(32px, 5vh, 56px) auto",
+                padding: "0 20px",
+                boxSizing: "border-box",
             }}
         >
             {/* LIGHTER GLASSMORPHIC FOLDER TOP TAB */}
             <div
                 style={{
                     position: "relative",
-                    width: 260,
-                    height: 48,
+                    width: 220,
+                    height: 38,
                     background: "linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(59, 130, 246, 0.45) 100%)",
                     backdropFilter: "blur(20px)",
                     WebkitBackdropFilter: "blur(20px)",
-                    borderRadius: "22px 22px 0 0",
+                    borderRadius: "18px 18px 0 0",
                     border: "1.5px solid rgba(255, 255, 255, 0.5)",
                     borderBottom: "none",
                     boxShadow: "0 -8px 20px rgba(0, 0, 0, 0.12)",
                     display: "flex",
                     alignItems: "center",
-                    padding: "0 26px",
+                    padding: "0 20px",
                     color: "#FFFFFF",
                     fontFamily: "'Outfit', sans-serif",
-                    fontSize: 15,
+                    fontSize: 13.5,
                     fontWeight: 900,
                     letterSpacing: "0.06em",
                     zIndex: 10,
@@ -338,17 +337,18 @@ export default function QuotesHub() {
                     background: "linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, rgba(59, 130, 246, 0.26) 50%, rgba(147, 197, 253, 0.2) 100%)",
                     backdropFilter: "blur(32px) saturate(180%)",
                     WebkitBackdropFilter: "blur(32px) saturate(180%)",
-                    borderRadius: "0 36px 36px 36px",
-                    padding: "54px 36px",
+                    borderRadius: "0 28px 28px 28px",
+                    padding: "clamp(28px, 4vw, 44px) clamp(24px, 5vw, 48px) clamp(32px, 4vw, 44px)",
                     boxShadow: "0 40px 100px rgba(15, 23, 42, 0.3), inset 0 2px 3px rgba(255, 255, 255, 0.6)",
                     border: "1.5px solid rgba(255, 255, 255, 0.4)",
                     overflow: "hidden",
+                    boxSizing: "border-box",
                 }}
             >
                 <style>{`
                     @media (max-width: 640px) {
                         .quotes-hub-container {
-                            padding: 32px 14px !important;
+                            padding: 24px 16px 28px !important;
                             border-radius: 0 20px 20px 20px !important;
                         }
                     }
@@ -357,12 +357,12 @@ export default function QuotesHub() {
                 <div
                     style={{
                         position: "absolute",
-                        top: 8,
+                        top: 6,
                         left: 20,
                         right: 20,
-                        height: 8,
+                        height: 6,
                         background: "#FFFFFF",
-                        borderRadius: 4,
+                        borderRadius: 3,
                         boxShadow: "0 2px 8px rgba(0,0,0,0.18)",
                         opacity: 0.9,
                     }}
@@ -370,16 +370,16 @@ export default function QuotesHub() {
 
                 <div style={{ position: "relative", zIndex: 2, maxWidth: 1200, margin: "0 auto" }}>
                     {/* NORMAL CLEAN HEADING AT TOP */}
-                    <div style={{ textAlign: "center", marginBottom: 44 }}>
-                        <h2 style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 700, fontSize: "clamp(30px, 4vw, 46px)", color: "#FFFFFF", marginTop: 0, marginBottom: 0 }}>
+                    <div style={{ textAlign: "center", marginBottom: "clamp(20px, 3vw, 32px)" }}>
+                        <h2 style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 700, fontSize: "clamp(26px, 3.2vw, 38px)", color: "#FFFFFF", marginTop: 0, marginBottom: 0 }}>
                             Daily Spark & <span style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic", fontWeight: 400, color: "#FFFFFF" }}>Mindful Quotes</span>
                         </h2>
-                        <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", color: "rgba(255, 255, 255, 0.95)", fontSize: "16px", maxWidth: 620, margin: "10px auto 0 auto" }}>
+                        <p style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", color: "rgba(255, 255, 255, 0.95)", fontSize: "14.5px", maxWidth: 580, margin: "8px auto 0 auto" }}>
                             Start your journal session with perspective. Save your favorite quotes directly into your bookmarked folder.
                         </p>
 
                         {/* GLASSMORPHIC CONTROL CENTER GLASS BUTTON */}
-                        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", marginTop: 24 }}>
+                        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", marginTop: "clamp(16px, 2.4vw, 24px)" }}>
                             <button
                                 onClick={handleReloadQuotes}
                                 disabled={reloading}
@@ -436,13 +436,13 @@ export default function QuotesHub() {
                                         }}
                                     >
                                         {[
-                                            0,0,0,1,0,0,0,
-                                            0,0,0,1,1,0,0,
-                                            0,0,0,1,1,1,0,
-                                            1,1,1,1,1,1,1,
-                                            0,0,0,1,1,1,0,
-                                            0,0,0,1,1,0,0,
-                                            0,0,0,1,0,0,0,
+                                            0, 0, 0, 1, 0, 0, 0,
+                                            0, 0, 0, 1, 1, 0, 0,
+                                            0, 0, 0, 1, 1, 1, 0,
+                                            1, 1, 1, 1, 1, 1, 1,
+                                            0, 0, 0, 1, 1, 1, 0,
+                                            0, 0, 0, 1, 1, 0, 0,
+                                            0, 0, 0, 1, 0, 0, 0,
                                         ].map((pixel, i) => (
                                             <div
                                                 key={i}
@@ -475,8 +475,8 @@ export default function QuotesHub() {
                     <div
                         style={{
                             display: "grid",
-                            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-                            gap: 32,
+                            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+                            gap: "clamp(28px, 5vw, 64px)",
                             alignItems: "center",
                             justifyContent: "center",
                             position: "relative",
@@ -488,7 +488,7 @@ export default function QuotesHub() {
                                 position: "relative",
                                 width: "100%",
                                 maxWidth: 520,
-                                height: "clamp(400px, 60vh, 500px)",
+                                height: "clamp(300px, 34vw, 360px)",
                                 margin: "0 auto",
                                 display: "flex",
                                 alignItems: "center",
@@ -500,7 +500,6 @@ export default function QuotesHub() {
                                 const isFav = savedQuotes.some((q) => q.quote === item.quote);
                                 const isCopied = copiedId === item.id;
 
-                                // Compact staggered offset so left stack stays neatly inside left column
                                 const offsetStep = 18;
                                 const leftOffsetStep = 8;
                                 const baseTop = 16 + idx * offsetStep;
@@ -515,7 +514,7 @@ export default function QuotesHub() {
                                             top: baseTop,
                                             left: baseLeft,
                                             width: isFront ? "94%" : "88%",
-                                            height: isFront ? 350 : 250,
+                                            height: isFront ? "82%" : "62%",
                                             zIndex: isFront ? 50 : 10 + idx,
                                             cursor: "pointer",
                                             transition: "all 0.35s cubic-bezier(0.16, 1, 0.3, 1)",
@@ -542,6 +541,7 @@ export default function QuotesHub() {
                                                 fontWeight: 800,
                                                 color: item.textColor,
                                                 boxShadow: "0 -4px 12px rgba(0, 0, 0, 0.08)",
+                                                flexShrink: 0,
                                             }}
                                         >
                                             {item.tabLabel}
@@ -553,7 +553,7 @@ export default function QuotesHub() {
                                                 flex: 1,
                                                 background: item.bgColor,
                                                 borderRadius: item.tabLeftOffset === 0 ? "0 22px 22px 22px" : "22px",
-                                                padding: "28px 30px 22px 30px",
+                                                padding: "clamp(16px, 2vw, 22px) clamp(18px, 2.4vw, 24px) clamp(14px, 1.8vw, 18px)",
                                                 boxShadow: isFront
                                                     ? "0 25px 60px rgba(0, 0, 0, 0.35), 0 4px 12px rgba(0, 0, 0, 0.12)"
                                                     : "0 12px 30px rgba(0, 0, 0, 0.2)",
@@ -563,6 +563,7 @@ export default function QuotesHub() {
                                                 position: "relative",
                                                 overflow: "hidden",
                                                 color: item.textColor,
+                                                boxSizing: "border-box",
                                             }}
                                         >
                                             {/* MAIN QUOTE TEXT */}
@@ -571,10 +572,10 @@ export default function QuotesHub() {
                                                     style={{
                                                         fontFamily: "'Outfit', 'Plus Jakarta Sans', sans-serif",
                                                         fontWeight: 800,
-                                                        fontSize: isFront ? "clamp(22px, 2.4vw, 28px)" : "19px",
-                                                        lineHeight: 1.2,
+                                                        fontSize: isFront ? "clamp(17px, 2vw, 22px)" : "16px",
+                                                        lineHeight: 1.3,
                                                         letterSpacing: "-0.02em",
-                                                        margin: "0 0 14px 0",
+                                                        margin: "0 0 10px 0",
                                                         color: item.textColor,
                                                     }}
                                                 >
@@ -583,12 +584,12 @@ export default function QuotesHub() {
                                             </div>
 
                                             {/* BOTTOM FOOTER: AUTHOR HANDLE & DOODLE ARROW / ACTIONS */}
-                                            <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", position: "relative", zIndex: 2 }}>
+                                            <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", position: "relative", zIndex: 2, gap: 10 }}>
                                                 <div>
                                                     <span style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 14, fontWeight: 700, display: "block", color: item.textColor }}>
                                                         {item.handle}
                                                     </span>
-                                                    <span style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 11.5, fontWeight: 600, opacity: 0.8, display: "block", marginTop: 2, color: item.textColor }}>
+                                                    <span style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 11.5, fontWeight: 600, opacity: 0.8, display: "block", marginTop: 3, color: item.textColor }}>
                                                         — {item.author}
                                                     </span>
                                                 </div>
@@ -635,6 +636,7 @@ export default function QuotesHub() {
                                                                     cursor: "pointer",
                                                                     backdropFilter: "blur(8px)",
                                                                     transition: "all 0.2s ease",
+                                                                    flexShrink: 0,
                                                                 }}
                                                             >
                                                                 <Bookmark size={13} fill={isFav ? "#FFFFFF" : "none"} />
@@ -646,7 +648,7 @@ export default function QuotesHub() {
                                                     <div
                                                         onClick={nextCard}
                                                         title="Next Quote Card"
-                                                        style={{ cursor: "pointer", display: "flex", alignItems: "center", padding: 2 }}
+                                                        style={{ cursor: "pointer", display: "flex", alignItems: "center", padding: 2, flexShrink: 0 }}
                                                     >
                                                         <svg width="38" height="26" viewBox="0 0 46 32" fill="none">
                                                             <path
@@ -666,16 +668,16 @@ export default function QuotesHub() {
                             })}
                         </div>
 
-                        {/* RIGHT COLUMN: BOOKMARKED SAVED QUOTES FOLDER (MAC FOLDER SHAPE FROM JOURNAL FOLDER DIRECTORY) */}
+                        {/* RIGHT COLUMN: BOOKMARKED SAVED QUOTES FOLDER */}
                         <div
                             style={{
                                 position: "relative",
                                 width: "100%",
                                 maxWidth: 540,
-                                height: 520,
+                                height: "clamp(300px, 34vw, 360px)",
                                 margin: "0 auto",
                                 background: "linear-gradient(135deg, #60A5FA 0%, #3B82F6 100%)",
-                                borderRadius: 36,
+                                borderRadius: 28,
                                 border: "1.5px solid rgba(255, 255, 255, 0.4)",
                                 boxShadow: "0 30px 80px rgba(59, 130, 246, 0.35), inset 0 2px 3px rgba(255, 255, 255, 0.6)",
                                 overflow: "hidden",
@@ -699,7 +701,6 @@ export default function QuotesHub() {
                                     paddingTop: 10,
                                 }}
                             >
-                                {/* Glossy Top Lighting Overlay */}
                                 <div
                                     style={{
                                         position: "absolute",
@@ -708,7 +709,6 @@ export default function QuotesHub() {
                                     }}
                                 />
 
-                                {/* 3 FANNING SAVED QUOTE PAPER SHEETS STICKING OUT OF MAC FOLDER */}
                                 <div
                                     style={{
                                         position: "relative",
@@ -721,7 +721,7 @@ export default function QuotesHub() {
                                         zIndex: 1,
                                     }}
                                 >
-                                    {/* Sheet 1 (Left Back Paper - Rose Pink to Magenta Gradient) */}
+                                    {/* Sheet 1 */}
                                     <div
                                         style={{
                                             width: "36%",
@@ -741,7 +741,7 @@ export default function QuotesHub() {
                                         <div style={{ width: "60%", height: 3, background: "rgba(255, 255, 255, 0.5)", borderRadius: 2 }} />
                                     </div>
 
-                                    {/* Sheet 2 (Right Back Paper - Sunset Yellow to Amber Gold Gradient) */}
+                                    {/* Sheet 2 */}
                                     <div
                                         style={{
                                             width: "36%",
@@ -761,7 +761,7 @@ export default function QuotesHub() {
                                         <div style={{ width: "55%", height: 3, background: "rgba(15, 23, 42, 0.3)", borderRadius: 2 }} />
                                     </div>
 
-                                    {/* Sheet 3 (Center Main Front Active Saved Quote Paper Sheet - High-Contrast Non-Blue Light Gradient) */}
+                                    {/* Sheet 3 - Active saved quote paper */}
                                     <div
                                         onClick={() => setIsPaperOpened(true)}
                                         title="Click Real Paper Document to Unfold Quote 📄"
@@ -771,14 +771,14 @@ export default function QuotesHub() {
                                             width: "74%",
                                             height: "100%",
                                             background: activeSavedQuote.bgColor === "#D4FE00"
-                                                ? "linear-gradient(135deg, #FFFBEB 0%, #FACC15 40%, #D4FE00 100%)" // Lime Gold
+                                                ? "linear-gradient(135deg, #FFFBEB 0%, #FACC15 40%, #D4FE00 100%)"
                                                 : activeSavedQuote.bgColor === "#F472B6"
-                                                ? "linear-gradient(135deg, #FFF1F2 0%, #F472B6 50%, #FB7185 100%)" // Rose Pink
-                                                : activeSavedQuote.bgColor === "#818CF8"
-                                                ? "linear-gradient(135deg, #F5F3FF 0%, #C4B5FD 50%, #A78BFA 100%)" // Lilac Lavender
-                                                : activeSavedQuote.bgColor === "#FFFFFF"
-                                                ? "linear-gradient(135deg, #FFFFFF 0%, #FFFBEB 50%, #FDE68A 100%)" // Pearl Ivory
-                                                : "linear-gradient(135deg, #ECFDF5 0%, #A7F3D0 50%, #34D399 100%)", // Mint Emerald (High Contrast vs Blue Folder!)
+                                                    ? "linear-gradient(135deg, #FFF1F2 0%, #F472B6 50%, #FB7185 100%)"
+                                                    : activeSavedQuote.bgColor === "#818CF8"
+                                                        ? "linear-gradient(135deg, #F5F3FF 0%, #C4B5FD 50%, #A78BFA 100%)"
+                                                        : activeSavedQuote.bgColor === "#FFFFFF"
+                                                            ? "linear-gradient(135deg, #FFFFFF 0%, #FFFBEB 50%, #FDE68A 100%)"
+                                                            : "linear-gradient(135deg, #ECFDF5 0%, #A7F3D0 50%, #34D399 100%)",
                                             borderRadius: "14px 14px 0 0",
                                             boxShadow: "0 -10px 30px rgba(0,0,0,0.25), inset 0 1.5px 2px rgba(255,255,255,0.9)",
                                             transform: paperOpening
@@ -786,7 +786,7 @@ export default function QuotesHub() {
                                                 : "rotate(-2deg) translateY(0px)",
                                             transformOrigin: "bottom center",
                                             zIndex: 2,
-                                            padding: "16px 20px 10px 20px",
+                                            padding: "clamp(12px, 1.6vw, 16px) clamp(14px, 2vw, 20px) 10px",
                                             boxSizing: "border-box",
                                             cursor: "pointer",
                                             display: "flex",
@@ -795,15 +795,14 @@ export default function QuotesHub() {
                                             border: "1px solid rgba(255, 255, 255, 0.8)",
                                             color: "#0F172A",
                                             transition: "all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1)",
+                                            overflow: "hidden",
                                         }}
                                     >
-                                        {/* BINDER HOLE PUNCH MARKS & CREASE */}
                                         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6, padding: "0 8px" }}>
                                             <div style={{ width: 7, height: 7, borderRadius: "50%", background: "rgba(15,23,42,0.2)", boxShadow: "inset 0 1px 2px rgba(0,0,0,0.2)" }} />
                                             <div style={{ width: 7, height: 7, borderRadius: "50%", background: "rgba(15,23,42,0.2)", boxShadow: "inset 0 1px 2px rgba(0,0,0,0.2)" }} />
                                         </div>
 
-                                        {/* HEADER: CODE REF + SAVED COUNT + NAV CONTROLS */}
                                         <div>
                                             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
                                                 <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, fontWeight: 900, color: "#0F172A" }}>
@@ -843,17 +842,16 @@ export default function QuotesHub() {
                                                     fontWeight: 900,
                                                     color: "#0F172A",
                                                     margin: "0 0 4px 0",
-                                                    lineHeight: 1.2,
+                                                    lineHeight: 1.25,
                                                 }}
                                             >
-                                                “{activeSavedQuote.quote}”
+                                                "{activeSavedQuote.quote}"
                                             </h4>
                                             <span style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 11, fontWeight: 700, color: "#334155" }}>
                                                 — {activeSavedQuote.author}
                                             </span>
                                         </div>
 
-                                        {/* FOOTER */}
                                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingTop: 4, borderTop: "1px solid rgba(15,23,42,0.12)" }}>
                                             <span style={{ fontFamily: "'Outfit', sans-serif", fontSize: 10, fontWeight: 800, color: "#0F172A" }}>
                                                 {activeSavedQuote.tabLabel.toUpperCase()}
@@ -866,7 +864,7 @@ export default function QuotesHub() {
                                 </div>
                             </div>
 
-                            {/* BOTTOM MAC FOLDER SVG FRONT FLAP (EXACT MATCH TO JOURNAL FOLDER DIRECTORY) */}
+                            {/* BOTTOM MAC FOLDER SVG FRONT FLAP */}
                             <div
                                 style={{
                                     position: "relative",
@@ -876,7 +874,6 @@ export default function QuotesHub() {
                                     zIndex: 3,
                                 }}
                             >
-                                {/* SVG Mac Folder Raised Shoulder Front Flap */}
                                 <svg
                                     width="100%"
                                     height="100%"
@@ -896,27 +893,24 @@ export default function QuotesHub() {
                                     />
                                 </svg>
 
-                                {/* TITLE POSITIONED INSIDE THE RAISED LEFT TAB CUTOUT */}
-                                <div style={{ position: "absolute", top: 12, left: 24, width: "45%", zIndex: 5 }}>
-                                    <h3 style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif', fontSize: 16, fontWeight: 800, color: "#FFFFFF", margin: 0, lineHeight: 1.25, letterSpacing: "-0.01em" }}>
+                                <div style={{ position: "absolute", top: 14, left: 24, width: "48%", zIndex: 5 }}>
+                                    <h3 style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif', fontSize: 16, fontWeight: 800, color: "#FFFFFF", margin: 0, lineHeight: 1.3, letterSpacing: "-0.01em" }}>
                                         Bookmarked Quotes
                                     </h3>
-                                    <p style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', fontSize: 11.5, color: "rgba(255, 255, 255, 0.85)", margin: "2px 0 0 0", fontWeight: 500 }}>
+                                    <p style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', fontSize: 11.5, color: "rgba(255, 255, 255, 0.85)", margin: "4px 0 0 0", fontWeight: 500 }}>
                                         Saved Favorites • {savedQuotes.length} Items
                                     </p>
                                 </div>
 
-                                {/* MAIN BODY CONTENT: HEADLINE & WHITE RETRO PIXEL CURSOR ARROW */}
-                                <div style={{ position: "absolute", bottom: 28, left: 24, right: 24, display: "flex", alignItems: "center", justifyContent: "space-between", zIndex: 5 }}>
-                                    <span style={{ fontFamily: "'Outfit', sans-serif", fontSize: "clamp(20px, 2.2vw, 26px)", fontWeight: 900, color: "#FFFFFF", letterSpacing: "0.02em" }}>
+                                <div style={{ position: "absolute", bottom: 28, left: 24, right: 24, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, zIndex: 5 }}>
+                                    <span style={{ fontFamily: "'Outfit', sans-serif", fontSize: "clamp(18px, 2vw, 24px)", fontWeight: 900, color: "#FFFFFF", letterSpacing: "0.02em" }}>
                                         LEVEL UP YOUR MIND
                                     </span>
 
-                                    {/* WHITE RETRO PIXEL CURSOR ARROW */}
                                     <div
                                         onClick={() => setIsPaperOpened(true)}
                                         title="Click to Open Paper Document"
-                                        style={{ cursor: "pointer", transform: "rotate(-25deg)", filter: "drop-shadow(0 4px 8px rgba(0,0,0,0.3))", transition: "transform 0.2s ease" }}
+                                        style={{ cursor: "pointer", transform: "rotate(-25deg)", filter: "drop-shadow(0 4px 8px rgba(0,0,0,0.3))", transition: "transform 0.2s ease", flexShrink: 0 }}
                                         onMouseEnter={(e) => (e.currentTarget.style.transform = "rotate(-25deg) scale(1.15)")}
                                         onMouseLeave={(e) => (e.currentTarget.style.transform = "rotate(-25deg) scale(1)")}
                                     >
@@ -954,14 +948,13 @@ export default function QuotesHub() {
                             width: "100%",
                             background: "linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 100%)",
                             borderRadius: 24,
-                            padding: "42px 46px",
+                            padding: "clamp(28px, 4vw, 42px) clamp(28px, 4.5vw, 46px)",
                             boxShadow: "0 40px 100px rgba(0, 0, 0, 0.65), inset 0 2px 2px rgba(255, 255, 255, 1)",
                             border: "1px solid #E2E8F0",
                             transform: "perspective(1200px) rotateX(0deg)",
                             animation: "paperUnfoldModal 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
                         }}
                     >
-                        {/* FOLD CREASE LINE IN CENTER OF OPENED PAPER */}
                         <div
                             style={{
                                 position: "absolute",
@@ -975,7 +968,6 @@ export default function QuotesHub() {
                             }}
                         />
 
-                        {/* CLOSE / FOLD BACK BUTTON AT TOP RIGHT */}
                         <button
                             onClick={() => setIsPaperOpened(false)}
                             style={{
@@ -999,7 +991,6 @@ export default function QuotesHub() {
                             <X size={18} />
                         </button>
 
-                        {/* OPENED PAPER HEADER */}
                         <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24, borderBottom: "2px solid #0F172A", paddingBottom: 16 }}>
                             <div style={{ width: 36, height: 36, borderRadius: 10, background: "#3B82F6", display: "flex", alignItems: "center", justifyContent: "center", color: "#FFFFFF" }}>
                                 <FileText size={20} />
@@ -1014,10 +1005,9 @@ export default function QuotesHub() {
                             </div>
                         </div>
 
-                        {/* PAPER QUOTE BODY */}
                         <div style={{ padding: "10px 0 24px 0" }}>
                             <p style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic", fontSize: "clamp(26px, 3.2vw, 34px)", lineHeight: 1.3, color: "#0F172A", margin: "0 0 20px 0" }}>
-                                “{activeSavedQuote.quote}”
+                                "{activeSavedQuote.quote}"
                             </p>
                             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                                 <span style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 16, fontWeight: 800, color: "#3B82F6" }}>
@@ -1029,7 +1019,6 @@ export default function QuotesHub() {
                             </div>
                         </div>
 
-                        {/* FOOTER ACTIONS */}
                         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: 20, borderTop: "1px solid #E2E8F0" }}>
                             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                                 <button

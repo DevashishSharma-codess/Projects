@@ -137,15 +137,17 @@ export default function Landing() {
               #CFE4EF 100%
             );
 
-          padding: 22px 28px 0 28px;
-          margin: 14px;
+          padding: 16px 24px 0 24px;
+          margin: 12px;
           border-radius: 28px;
           box-shadow: 0 20px 48px rgba(15, 23, 42, 0.12);
           overflow: hidden;
-          min-height: calc(100vh - 28px);
+          height: calc(100vh - 24px);
+          min-height: 540px;
           box-sizing: border-box;
           display: flex;
           flex-direction: column;
+          justify-content: space-between;
         }
 
         .star-field { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
@@ -175,6 +177,7 @@ export default function Landing() {
           gap: 4px;
           transition: opacity 0.2s ease;
           cursor: pointer;
+          white-space: nowrap;
         }
         .nav-link:hover { opacity: 0.75; }
 
@@ -189,6 +192,7 @@ export default function Landing() {
           cursor: pointer;
           transition: all 0.2s ease;
           box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+          white-space: nowrap;
         }
         .cta-btn-white:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12); }
 
@@ -196,42 +200,63 @@ export default function Landing() {
           background: #0F172A;
           color: #FFFFFF;
           border: none;
-          padding: 13px 26px;
+          padding: 12px 24px;
           border-radius: 9999px;
           font-weight: 700;
-          font-size: 15px;
+          font-size: 14.5px;
           cursor: pointer;
           transition: all 0.2s ease;
           display: inline-flex;
           align-items: center;
           gap: 8px;
           box-shadow: 0 12px 28px rgba(15, 23, 42, 0.28);
+          white-space: nowrap;
         }
         .cta-btn-dark:hover { transform: translateY(-2px); background: #1E293B; box-shadow: 0 16px 34px rgba(15, 23, 42, 0.38); }
+
+        .hero-cta-row {
+          display: flex;
+          justify-content: center;
+          gap: 14px;
+          flex-wrap: wrap;
+          margin-top: 16px;
+        }
+
+        .hero-text-block {
+          position: relative;
+          z-index: 10;
+          text-align: center;
+          max-width: 740px;
+          margin: 10px auto 0 auto;
+          padding: 0 16px;
+          flex-shrink: 0;
+        }
 
         .hero-scene {
           position: relative;
           width: 100%;
-          max-width: 900px;
+          max-width: 860px;
           margin: 0 auto;
-          flex-grow: 1;
+          flex: 1;
           display: flex;
           justify-content: center;
           align-items: flex-end;
-          transform: scale(0.85);
+          transform: scale(0.82);
           transform-origin: bottom center;
+          z-index: 2;
+          min-height: 220px;
         }
 
         .fanned-paper-stack {
           position: absolute;
-          bottom: 54px;
+          bottom: 40px;
           display: flex;
           gap: 8px;
           z-index: 2;
         }
         .fanned-sheet {
-          width: 118px;
-          height: 158px;
+          width: 110px;
+          height: 145px;
           background: #FFFFFF;
           border-radius: 10px;
           border: 1px solid rgba(226, 232, 240, 0.95);
@@ -247,7 +272,7 @@ export default function Landing() {
           position: absolute;
           background: #FFFFFF;
           border-radius: 16px;
-          padding: 20px;
+          padding: 18px;
           box-shadow: 0 20px 40px rgba(15, 23, 42, 0.16), 0 2px 6px rgba(15, 23, 42, 0.05);
           border: 1px solid rgba(226, 232, 240, 0.95);
           transition: transform 0.3s ease;
@@ -255,18 +280,18 @@ export default function Landing() {
         }
         .card-left {
           left: 18%;
-          bottom: 86px;
-          width: 248px;
-          height: 258px;
+          bottom: 60px;
+          width: 230px;
+          height: 235px;
           transform: rotate(-6deg);
           transform-origin: bottom right;
         }
         .card-left:hover { transform: rotate(-3deg) translateY(-6px); }
         .card-right {
           right: 18%;
-          bottom: 90px;
-          width: 252px;
-          height: 266px;
+          bottom: 64px;
+          width: 235px;
+          height: 240px;
           transform: rotate(3deg);
           transform-origin: bottom left;
         }
@@ -293,7 +318,7 @@ export default function Landing() {
           left: 50%;
           transform: translateX(-50%);
           width: 640px;
-          height: 400px;
+          height: 360px;
           z-index: 1;
         }
         .folder-tab-back {
@@ -320,7 +345,7 @@ export default function Landing() {
           left: 50%;
           transform: translateX(-50%);
           width: 660px;
-          height: 126px;
+          height: 115px;
           z-index: 4;
           background: linear-gradient(180deg, #FFE28E 0%, #FFC736 42%, #F0A61C 100%);
           border-radius: 40px 40px 22px 22px;
@@ -330,18 +355,75 @@ export default function Landing() {
             inset 0 -8px 14px rgba(120, 65, 0, 0.10);
         }
 
-        @media (max-width: 900px) {
+        .mobile-menu-btn {
+          display: none;
+          align-items: center;
+          justify-content: center;
+          background: rgba(255, 255, 255, 0.25);
+          border: 1px solid rgba(255, 255, 255, 0.5);
+          color: #FFFFFF;
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          cursor: pointer;
+          flex-shrink: 0;
+        }
+
+        .mobile-drawer-overlay {
+          position: fixed;
+          inset: 0;
+          background: rgba(15, 23, 42, 0.85);
+          backdrop-filter: blur(24px);
+          -webkit-backdrop-filter: blur(24px);
+          z-index: 999;
+          display: flex;
+          flex-direction: column;
+          padding: 24px;
+          animation: fadeIn 0.25s ease;
+        }
+
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(-10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── Height-based & Width-based Responsive Adjustments for 1-Screen Fit ── */
+        @media (max-height: 820px) {
+          .hero-text-block { margin-top: 4px !important; }
+          .hero-text-block h1 { font-size: clamp(30px, 4.8vw, 54px) !important; }
+          .hero-text-block p { font-size: 14px !important; margin-top: 10px !important; }
+          .hero-scene { transform: scale(0.72) !important; }
+        }
+
+        @media (max-height: 700px) {
+          .hero-text-block h1 { font-size: clamp(26px, 4vw, 42px) !important; }
+          .hero-text-block p { font-size: 13px !important; margin-top: 6px !important; }
+          .hero-cta-row { margin-top: 10px !important; }
+          .hero-scene { transform: scale(0.60) !important; }
+        }
+
+        /* ── Tablet landscape (900px – 1199px) ── */
+        @media (max-width: 1100px) {
           .hero-section {
-            padding: 16px 16px 0 16px !important;
-            margin: 8px !important;
-            border-radius: 20px !important;
-            min-height: auto !important;
+            padding: 16px 20px 0 20px !important;
+            margin: 10px !important;
+            border-radius: 24px !important;
           }
           .hero-scene {
-            transform: scale(0.52) !important;
-            transform-origin: bottom center !important;
-            height: 320px !important;
-            margin-top: -20px !important;
+            transform: scale(0.70) !important;
+          }
+          .nav-center { gap: 20px !important; }
+        }
+
+        /* ── Tablet portrait (768px – 899px) ── */
+        @media (max-width: 900px) {
+          .hero-section {
+            padding: 14px 16px 0 16px !important;
+            margin: 8px !important;
+            border-radius: 20px !important;
+          }
+          .hero-scene {
+            transform: scale(0.55) !important;
           }
           .nav-center { display: none !important; }
           .mobile-menu-btn { display: flex !important; }
@@ -363,50 +445,40 @@ export default function Landing() {
           }
         }
 
+        /* ── Mobile (≤ 640px) ── */
         @media (max-width: 640px) {
+          .hero-section {
+            margin: 6px !important;
+            padding: 12px 10px 0 10px !important;
+            border-radius: 18px !important;
+            height: auto !important;
+            min-height: calc(100vh - 12px) !important;
+          }
           .hero-scene {
             transform: scale(0.42) !important;
-            height: 270px !important;
+            min-height: 180px !important;
           }
-          .card-left { left: 5% !important; bottom: 40px !important; }
-          .card-right { right: 5% !important; bottom: 40px !important; }
+          .hero-cta-row {
+            flex-direction: column !important;
+            align-items: center !important;
+            gap: 10px !important;
+          }
+          .hero-cta-row button {
+            width: 100% !important;
+            max-width: 320px !important;
+            justify-content: center !important;
+          }
+          .card-left { left: 5% !important; bottom: 30px !important; }
+          .card-right { right: 5% !important; bottom: 30px !important; }
           .folder-3d-container { width: 90vw !important; max-width: 500px !important; }
           .folder-front-flap { width: 92vw !important; max-width: 520px !important; }
           .footer-grid-links {
             grid-template-columns: 1fr !important;
             gap: 24px !important;
           }
-        }
-
-        .mobile-menu-btn {
-          display: none;
-          align-items: center;
-          justify-content: center;
-          background: rgba(255, 255, 255, 0.25);
-          border: 1px solid rgba(255, 255, 255, 0.5);
-          color: #FFFFFF;
-          width: 40px;
-          height: 40px;
-          border-radius: 50%;
-          cursor: pointer;
-        }
-
-        .mobile-drawer-overlay {
-          position: fixed;
-          inset: 0;
-          background: rgba(15, 23, 42, 0.85);
-          backdrop-filter: blur(24px);
-          -webkit-backdrop-filter: blur(24px);
-          z-index: 999;
-          display: flex;
-          flex-direction: column;
-          padding: 24px;
-          animation: fadeIn 0.25s ease;
-        }
-
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(-10px); }
-          to { opacity: 1; transform: translateY(0); }
+          .footer-grid-main {
+            padding: 20px 16px 0 16px !important;
+          }
         }
       `}</style>
 
@@ -548,7 +620,7 @@ export default function Landing() {
                     </header>
 
                     {/* HERO HEADLINE & TEXT */}
-                    <div style={{ position: "relative", zIndex: 10, textAlign: "center", maxWidth: 740, margin: "5vh auto 2vh auto", flexShrink: 0 }}>
+                    <div className="hero-text-block">
                         <h1 style={{ fontFamily: "'Outfit', 'Plus Jakarta Sans', sans-serif", fontWeight: 700, fontSize: "clamp(38px, 5.5vw, 68px)", lineHeight: 1.05, color: "#FFFFFF", letterSpacing: "-0.025em" }}>
                             Days, <span style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic", fontWeight: 400, opacity: 0.95 }}>not</span><br />
                             blank <span style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic", fontWeight: 400, fontSize: "1.08em" }}>pages.</span>
@@ -557,11 +629,11 @@ export default function Landing() {
                             Write it down <span style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic", fontSize: "1.22em", fontWeight: 400 }}>before it fades.</span><br />
                             Get <b>structured desktop folders</b>, daily mood trend charts, and inspirational sparks.
                         </p>
-                        <div style={{ marginTop: 24, display: "flex", justifyContent: "center", gap: 14 }}>
+                        <div className="hero-cta-row">
                             <button onClick={() => scrollToSection("folder-explorer", "folders")} className="cta-btn-dark">
                                 Open Journal Folders <Folder size={16} />
                             </button>
-                            <button onClick={() => scrollToSection("journal-studio", "editor")} style={{ background: "rgba(255,255,255,0.2)", color: "#FFFFFF", border: "1px solid rgba(255,255,255,0.5)", padding: "13px 26px", borderRadius: 9999, fontWeight: 700, fontSize: 15, cursor: "pointer" }}>
+                            <button onClick={() => scrollToSection("journal-studio", "editor")} style={{ background: "rgba(255,255,255,0.2)", color: "#FFFFFF", border: "1px solid rgba(255,255,255,0.5)", padding: "13px 26px", borderRadius: 9999, fontWeight: 700, fontSize: 15, cursor: "pointer", whiteSpace: "nowrap" }}>
                                 Open Editor Studio
                             </button>
                         </div>

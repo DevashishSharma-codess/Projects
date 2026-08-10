@@ -23,15 +23,18 @@ export interface JournalFolder {
 
 export interface MoodLog {
     id: string;
-    day: string;
+    day: string; // "YYYY-MM-DD" e.g., "2026-08-10"
+    time: string; // "HH:mm" e.g., "09:00"
+    hourSlot: string; // "YYYY-MM-DD-HH" e.g., "2026-08-10-09"
+    timestamp: number; // Unix timestamp in ms
     moodKey: string;
     moodLabel: string;
     icon: string;
     score: number;
     color: string;
     note: string;
-    time?: string;
 }
+
 
 
 export interface QuoteItem {
