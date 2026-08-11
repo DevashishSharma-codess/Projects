@@ -3,7 +3,7 @@
 @theme {
   --color-ink: #17130f;
   --color-paper: #fdfbf9;
-  --color-peach: #c2612b;
+  --color-peach: #c0612d;
   --font-outfit: "Outfit", "Inter", sans-serif;
   --font-playfair: "Playfair Display", Georgia, serif;
 }
@@ -15,27 +15,6 @@ html, body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-}
-
-/* Lenis Smooth Scroll Engine Styles */
-html.lenis, html.lenis body {
-  height: auto;
-}
-
-.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
-}
-
-.lenis.lenis-smooth [data-lenis-prevent] {
-  overscroll-behavior: contain;
-}
-
-.lenis.lenis-stopped {
-  overflow: hidden;
-}
-
-.lenis.lenis-scrolling iframe {
-  pointer-events: none;
 }
 
 /* Custom Sleek Scrollbar */
@@ -56,6 +35,24 @@ html.lenis, html.lenis body {
   background: rgba(23, 19, 15, 0.45);
 }
 
+/* Thin macOS Glass Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 9999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
 @keyframes spin-slow {
   from {
     transform: rotate(0deg);
@@ -68,3 +65,126 @@ html.lenis, html.lenis body {
 .animate-spin-slow {
   animation: spin-slow 14s linear infinite;
 }
+
+@keyframes border-shimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-shimmer-border {
+  background-size: 250% 250%;
+  animation: border-shimmer 3.5s ease infinite;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 35s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Ultra-smooth hardware-accelerated SVG dash animations (Compositor thread offloaded) */
+@keyframes hero-svg-dash {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: -1;
+  }
+}
+
+.animate-hero-dash {
+  stroke-dasharray: 0.2 0.8;
+  stroke-dashoffset: 0;
+  animation: hero-svg-dash 2.2s linear infinite;
+  will-change: stroke-dashoffset;
+  transform: translateZ(0);
+}
+
+.animate-line-dash {
+  stroke-dasharray: 0.1 0.9;
+  stroke-dashoffset: 0;
+  animation: hero-svg-dash 2.5s linear infinite;
+  will-change: stroke-dashoffset;
+  transform: translateZ(0);
+}
+
+/* Hardware layer isolation for SVG stages and backdrop filters */
+.gpu-layer {
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* Valley AI Style Glowing Active Underline Progress Line */
+@keyframes underline-glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(194, 97, 43, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 16px rgba(194, 97, 43, 0.85);
+  }
+}
+
+.animate-underline-glow {
+  animation: underline-glow-pulse 2.2s ease-in-out infinite;
+}
+
+/* GPU-Accelerated SVG TextPath Marquee Animations (60-120 FPS Buttery-Smooth) */
+@keyframes svg-textpath-marquee-desktop {
+  0% {
+    startOffset: -2000px;
+  }
+  100% {
+    startOffset: 0px;
+  }
+}
+
+@keyframes svg-textpath-marquee-mobile {
+  0% {
+    startOffset: -1200px;
+  }
+  100% {
+    startOffset: 0px;
+  }
+}
+
+.animate-textpath-desktop {
+  animation: svg-textpath-marquee-desktop 25s linear infinite;
+  will-change: startOffset;
+  transform: translateZ(0);
+}
+
+.animate-textpath-mobile {
+  animation: svg-textpath-marquee-mobile 20s linear infinite;
+  will-change: startOffset;
+  transform: translateZ(0);
+}
+
+.marquee-textpath-paused {
+  animation-play-state: paused !important;
+}
+
+
+
+
+
