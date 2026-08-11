@@ -1,0 +1,249 @@
+# ☕ Maple & Bean Coffee Co. - Web Documentation
+
+> A modern, responsive, and feature-rich single-page web application for **Maple & Bean Coffee Co.** Built with pure **HTML5**, **Vanilla CSS3**, and **ES6 JavaScript Modules**, featuring a vintage aesthetic, interactive ordering system, video background hero, inspectable photo carousel, lightbox gallery, and robust client-side interactivity.
+
+---
+
+## 📋 Table of Contents
+
+- [Overview](#-overview)
+- [Key Features](#-key-features)
+- [Project Architecture & File Structure](#-project-architecture--file-structure)
+- [Detailed Component & Module Breakdown](#-detailed-component--module-breakdown)
+  - [1. Preloader (`preloader.js` & `preloader.css`)](#1-preloader-preloaderjs--preloadercss)
+  - [2. Navigation & Scroll Spy (`navigation.js` & `header.css`)](#2-navigation--scroll-spy-navigationjs--headercss)
+  - [3. Hero Section & Video Background (`hero.js` & `hero.css`)](#3-hero-section--video-background-herojs--herocss)
+  - [4. Guest Check Menu & Cart/Order System (`menu.js`, `menu.css`, `order-bar.css`, `modal.css`)](#4-guest-check-menu--cartorder-system-menujs-menucss-order-barcss-modalcss)
+  - [5. Inspectable Photo Carousel (`carousel.js` & `carousel.css`)](#5-inspectable-photo-carousel-carouseljs--carouselcss)
+  - [6. Photo Gallery & Lightbox Viewer (`lightbox.js`, `gallery.css`, `lightbox.css`)](#6-photo-gallery--lightbox-viewer-lightboxjs-gallerycss-lightboxcss)
+  - [7. Customer Testimonials (`testimonials.css`)](#7-customer-testimonials-testimonialscss)
+  - [8. FAQ Accordion (`accordion.js` & `faq.css`)](#8-faq-accordion-accordionjs--faqcss)
+  - [9. Contact Form & Anti-Spam Honeypot (`contact.js` & `contact.css`)](#9-contact-form--anti-spam-honeypot-contactjs--contactcss)
+  - [10. Back to Top Button (`back-to-top.js` & `back-to-top.css`)](#10-back-to-top-button-back-to-topjs--back-to-topcss)
+- [Design System & Styling Guide](#-design-system--styling-guide)
+- [Technologies & Libraries Used](#-technologies--libraries-used)
+- [How to Run & Deploy](#-how-to-run--deploy)
+- [Browser Compatibility & Performance](#-browser-compatibility--performance)
+- [License & Credits](#-license--credits)
+
+---
+
+## ☕ Overview
+
+**Maple & Bean Coffee Co.** is a handcrafted web experience designed to showcase an artisanal cafe and roastery. The application blends modern web standards with classic cafe aesthetics—featuring receipt-styled menu items ("Guest Checks"), smooth Lottie animations, full-bleed video backgrounds, custom photo lightboxes, and a live client-side cart checkout drawer.
+
+---
+
+## ✨ Key Features
+
+- 🎬 **Full-Bleed Video Background**: Embedded ambient video hero section with smooth scroll prompts.
+- 📜 **Guest Check Menu Design**: Unique receipt-style interactive item cards with category tab filtering (Coffee, Pastries, Extras).
+- 🛒 **Interactive Order System**: Real-time quantity selectors, item selection, floating bottom total bar, and modal order breakdown with toast notification alerts.
+- 🖼️ **Multi-Item Photo Carousel**: Touch-enabled carousel supporting customizable items-per-slide, auto-play rotation, and dynamic responsive updates.
+- 🔍 **Fullscreen Lightbox**: Keyboard-navigable and touch-swipe enabled image inspector for photo gallery and carousel images.
+- 💬 **Interactive Testimonials**: Custom paper-clip coffee cup review cards anchored across an organic wave thread graphic.
+- ❓ **Accessible FAQ Accordion**: Expandable FAQ module built with full ARIA state tracking and dynamic height calculations.
+- 🛡️ **Contact Form with Honeypot Security**: Form validation for name, email, and message, reinforced with a hidden honeypot field to block automated spam bots.
+- ⚡ **Zero-Dependency Core**: Lightweight architecture using standard ES modules and CSS imports—no heavy frameworks required.
+
+---
+
+## 📁 Project Architecture & File Structure
+
+```text
+coffee-website/
+├── index.html                  # Core HTML structure & semantic layout
+├── README.md                   # Technical documentation (markdown)
+├── .readme                     # Technical documentation
+├── assets/                     # Media & asset repository
+│   ├── CoffeeTea.lottie        # Custom Lottie animation for preloader
+│   ├── bg.mp4                  # Hero background video asset
+│   ├── last.mp4                # Secondary promo video asset
+│   ├── morevid.mp4             # Additional video clip
+│   ├── newvid.mp4              # Cafe clip
+│   ├── po.mp4                  # Pour-over demonstration clip
+│   ├── your-video.mp4          # High-definition video clip
+│   ├── image.jpg               # Coffee showcase image
+│   └── image2.jpg              # Pastry showcase image
+├── css/                        # Modular CSS Design System
+│   ├── style.css               # Main CSS entry point (@import aggregator)
+│   ├── base.css                # Global CSS variables, typography, reset rules
+│   ├── header.css              # Navigation bar, brand logo, mobile menu
+│   ├── hero.css                # Hero section, video container, call-to-actions
+│   ├── menu.css                # Guest Check card layout, category tabs, item controls
+│   ├── order-bar.css           # Floating bottom order drawer bar
+│   ├── modal.css               # Order summary checkout modal dialog
+│   ├── carousel.css            # Photo carousel layout, track transforms, navigation dots
+│   ├── gallery.css             # Polaroid image gallery grid
+│   ├── lightbox.css            # Fullscreen lightbox overlay styles
+│   ├── testimonials.css        # Coffee cup testimonial cards & thread SVG
+│   ├── faq.css                 # Accordion question/answer styles
+│   ├── contact.css             # Form styling, error states, honeypot field, map container
+│   ├── footer.css              # Multi-column footer layout, hours, socials, copyright
+│   ├── preloader.css           # Page loading overlay screen
+│   └── back-to-top.css         # Floating scroll-to-top button
+└── src/                        # ES6 Modular JavaScript Modules
+    ├── script.js               # Application entry point (imports & initializes all modules)
+    ├── preloader.js            # Preloader animation & dismiss controller
+    ├── navigation.js           # Header scroll listener, hamburger toggle & active scroll spy
+    ├── hero.js                 # Autoplay video fallback controller
+    ├── menu.js                 # Category tabs, card selection, total calculation & modal checkout
+    ├── carousel.js             # Touch swipe carousel controller & MutationObserver
+    ├── lightbox.js             # Fullscreen image viewer modal & keyboard listener
+    ├── accordion.js            # FAQ collapse/expand behavior with ARIA tracking
+    ├── contact.js              # Real-time form validator & honeypot anti-spam check
+    └── back-to-top.js          # Dynamic scroll detector & smooth top-scroll trigger
+```
+
+---
+
+## 🛠️ Detailed Component & Module Breakdown
+
+### 1. Preloader (`preloader.js` & `preloader.css`)
+- **Purpose**: Displays a welcoming screen while assets and fonts load.
+- **Implementation**:
+  - Uses `@dotlottie/player-component` to render `assets/CoffeeTea.lottie`.
+  - Automatically fades out when `document.readyState === 'complete'` or after a maximum 2.5s safety timeout.
+  - Removes the DOM overlay smoothly via CSS opacity transition.
+
+### 2. Navigation & Scroll Spy (`navigation.js` & `header.css`)
+- **Purpose**: Provides fixed navigation, mobile hamburger drawer, and current section highlighting.
+- **Key Functions**:
+  - **Sticky Header**: Toggles `.scrolled` class on standard window scroll (> 40px).
+  - **Mobile Menu**: Handles mobile breakpoint nav toggle (`#menuToggle`) with click-outside auto-close.
+  - **Scroll Spy**: Utilizes an `IntersectionObserver` configured with root margin `-20% 0px -50% 0px` to automatically apply `.active` class to the current navigation link.
+
+### 3. Hero Section & Video Background (`hero.js` & `hero.css`)
+- **Purpose**: Engages visitors with high-impact video branding.
+- **Key Features**:
+  - Full-screen container with CSS `object-fit: cover` video background (`bg.mp4`).
+  - Muted autoplay fallback handler in `hero.js` to ensure reliable autoplay across mobile browser power-saving restrictions.
+
+### 4. Guest Check Menu & Cart/Order System (`menu.js`, `menu.css`, `order-bar.css`, `modal.css`)
+- **Purpose**: Interactive menu styled like vintage dining guest checks.
+- **Key Functionality**:
+  - **Category Tabs**: Filters items (`data-cat="coffee"`, `data-cat="pastries"`, `data-cat="extras"`) dynamically.
+  - **Item Selection**: Clicking an item toggles its `.selected` state and displays custom quantity controls (`+` / `-`).
+  - **Floating Order Bar**: Shows real-time count of selected items and calculated total sum. Automatically animates into view when items > 0.
+  - **Checkout Modal**: Opening the order summary renders an itemized list with individual subtotals. Placed orders trigger a feedback Toast Notification (`#toastNotification`).
+
+### 5. Inspectable Photo Carousel (`carousel.js` & `carousel.css`)
+- **Purpose**: Showcases high-quality images of cafe life and beverages.
+- **Key Technical Details**:
+  - Responsive items per slide driven by CSS variables (`--items-per-slide`) or HTML data attributes (`data-items-per-slide`).
+  - Touch swipe support (`touchstart` / `touchend` with threshold calculation).
+  - Autoplay timer (5000ms) with automatic pause on mouse hover (`mouseenter` / `mouseleave`).
+  - Uses `MutationObserver` to re-calculate slide widths and dot pagination if layout configuration changes.
+
+### 6. Photo Gallery & Lightbox Viewer (`lightbox.js`, `gallery.css`, `lightbox.css`)
+- **Purpose**: Displays polaroid-style photos with an interactive modal light box.
+- **Key Features**:
+  - Targets images in `#galleryGrid` and `#carouselTrack`.
+  - Full keyboard accessibility: **Escape** key closes modal, **Left Arrow** and **Right Arrow** keys navigate photos.
+  - Touch-swipe gesture controls on mobile devices.
+  - Traps background document scroll (`overflow: hidden`) when modal is active.
+
+### 7. Customer Testimonials (`testimonials.css`)
+- **Purpose**: Presents customer reviews in a unique visual format.
+- **Design Structure**:
+  - Styled as coffee cups with lids, body contours, avatars, customer names, and rotated clip pins (`.tilt-1` through `.tilt-4`).
+  - Rendered over a custom SVG wave thread graphic (`.thread-line`).
+
+### 8. FAQ Accordion (`accordion.js` & `faq.css`)
+- **Purpose**: Answers common customer questions regarding parking, reservations, and dietary options.
+- **Behavior**:
+  - Single-expand accordion behavior (opening one item closes previously opened items).
+  - Uses `aria-expanded` attributes for accessibility.
+  - Dynamically calculates `scrollHeight` for CSS smooth height transition.
+
+### 9. Contact Form & Anti-Spam Honeypot (`contact.js` & `contact.css`)
+- **Purpose**: Enables visitors to reach out or book group reservations.
+- **Validation & Security**:
+  - Real-time client-side validation for Name, Email (Regex: `/^[^\s@]+@[^\s@]+\.[^\s@]+$/`), and Message.
+  - **Honeypot Anti-Spam Trap**: Hidden field `#website` (`tabindex="-1"`, `aria-hidden="true"`). If filled out by automated web crawlers/bots, the form simulates fake success without processing spam.
+  - Includes an embedded responsive Google Maps iframe pointing to EnactOn Technologies, Surat.
+
+### 10. Back to Top Button (`back-to-top.js` & `back-to-top.css`)
+- **Purpose**: Provides quick navigation back to the top of the page.
+- **Mechanism**:
+  - Appends floating `#backToTopBtn` to the body automatically.
+  - Monitors window scroll position (> 400px) to toggle `.show` class.
+  - Executes `window.scrollTo({ top: 0, behavior: 'smooth' })`.
+
+---
+
+## 🎨 Design System & Styling Guide
+
+The styling is built entirely on custom CSS Custom Properties (Variables) defined in `css/base.css`:
+
+| Token Name | Value | Description |
+| :--- | :--- | :--- |
+| `--bg-main` | `#FFF9F4` | Soft warm cream background |
+| `--bg-card` | `#FDFBF7` | Guest check paper card background |
+| `--primary-brown` | `#7F5539` | Core brand coffee brown |
+| `--dark-brown` | `#3C2A21` | High-contrast text & headings |
+| `--accent-maple` | `#B08968` | Subtle warm brown accent |
+| `--cream-light` | `#EDE0D4` | Soft border & divider color |
+| `--gold-accent` | `#D4A373` | Highlight and hover state gold |
+| `--font-heading` | `'Instrument Serif', serif` | Elegant vintage display headings |
+| `--font-body` | `'Plus Jakarta Sans', sans-serif` | Clean modern UI body text |
+| `--font-handwritten` | `'Kalam', cursive` | Guest check handwritten note accent |
+
+---
+
+## ⚡ Technologies & Libraries Used
+
+- **HTML5**: Semantic tags (`<header>`, `<nav>`, `<section>`, `<article>`, `<footer>`).
+- **CSS3**: Flexbox, CSS Grid, Custom Properties, `@import` modularization, Keyframe Animations.
+- **JavaScript (ES6+)**: ES Modules (`import`/`export`), DOM API, `IntersectionObserver`, `MutationObserver`, Event Listeners.
+- **DotLottie Player**: `@dotlottie/player-component@2.7.12` for lightweight vector animations.
+- **Google Fonts**: *Instrument Serif*, *Plus Jakarta Sans*, *Permanent Marker*, *Kalam*, *Marck Script*.
+- **Google Maps Embed API**: Interactive location map integration.
+
+---
+
+## 🚀 How to Run & Deploy
+
+### Running Locally
+
+1. **Clone or Download** the repository to your local computer:
+   ```bash
+   git clone https://github.com/enacton-interns/Devashish-Repo.git
+   cd coffee-website
+   ```
+
+2. **Serve the Application**:
+   Since the codebase uses standard native **ES6 Modules** (`import` / `export`), open the project using a local web server (e.g. VS Code Live Server, Vite, or Python HTTP Server):
+
+   *Using Python*:
+   ```bash
+   python -m http.server 8000
+   ```
+   *Using Node `serve`*:
+   ```bash
+   npx serve .
+   ```
+
+3. **View in Browser**:
+   Open `http://localhost:8000` (or `http://localhost:3000`) in any modern web browser.
+
+---
+
+## 🌐 Browser Compatibility & Performance
+
+- **Supported Browsers**: Chrome (latest), Firefox (latest), Safari (latest), Edge (latest).
+- **Mobile Support**: Fully responsive across smartphones, tablets, laptops, and desktop screens (tested down to 320px screen width).
+- **Performance Optimizations**:
+  - Preloaded Lottie animation assets (`<link rel="preload">`).
+  - Deferred video background loading with inline play safety.
+  - Native image lazy loading (`loading="lazy"`) for map iframe.
+  - Zero third-party JS runtime overhead.
+
+---
+
+## 📜 License & Credits
+
+- **Owner**: **Maple & Bean Coffee Co.**
+- **Developer / Maintainer**: **EnactOn Technologies Private Limited**
+- **Location**: 605, Luxuria Business Hub, Surat, Gujarat 395007, India.
+- **Copyright**: &copy; 2026 Maple & Bean Coffee Co. All rights reserved.
