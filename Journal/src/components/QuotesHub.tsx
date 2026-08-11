@@ -1,212 +1,12 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { useQuotes } from "../hooks/useQuotes";
-import { Copy, Check, Bookmark, ArrowRight, ArrowLeft, RefreshCw, Trash2, MousePointer, Sparkles, ChevronRight, ChevronLeft, X, FileText, CornerDownLeft } from "lucide-react";
+import { Copy, Check, Bookmark, Trash2, MousePointer, ChevronRight, ChevronLeft } from "lucide-react";
 import type { QuoteItem } from "../types/journal";
-export type { QuoteItem };
-
-interface FolderQuoteItem {
-    id: string;
-    tabLabel: string;
-    bgColor: string;
-    textColor: string;
-    quote: string;
-    author: string;
-    handle: string;
-    codeRef?: string;
-    dateStr?: string;
-    tabLeftOffset: number;
-}
-
-const ALL_QUOTE_SETS: FolderQuoteItem[][] = [
-    [
-        {
-            id: "q1",
-            tabLabel: "Claude",
-            bgColor: "#F472B6",
-            textColor: "#111827",
-            quote: "Happiness is not something readymade. It comes from your own actions.",
-            author: "Dalai Lama",
-            handle: "@dalailama",
-            codeRef: "16B",
-            dateStr: "Dec 13, 1956",
-            tabLeftOffset: 0,
-        },
-        {
-            id: "q2",
-            tabLabel: "Aiko",
-            bgColor: "#818CF8",
-            textColor: "#FFFFFF",
-            quote: "Write it on your heart that every day is the best day in the year.",
-            author: "Ralph Waldo Emerson",
-            handle: "@emerson",
-            codeRef: "18E",
-            dateStr: "Jan 24, 1962",
-            tabLeftOffset: 70,
-        },
-        {
-            id: "q3",
-            tabLabel: "Perplexity",
-            bgColor: "#FFFFFF",
-            textColor: "#0F172A",
-            quote: "You have power over your mind - not outside events. Realize this, and you will find strength.",
-            author: "Marcus Aurelius",
-            handle: "@aurelius",
-            codeRef: "04A",
-            dateStr: "Nov 09, 1974",
-            tabLeftOffset: 170,
-        },
-        {
-            id: "q4",
-            tabLabel: "Limitless",
-            bgColor: "#3B82F6",
-            textColor: "#FFFFFF",
-            quote: "What you do today can improve all your tomorrows.",
-            author: "Ralph Marston",
-            handle: "@marston",
-            codeRef: "22D",
-            dateStr: "Apr 15, 1988",
-            tabLeftOffset: 250,
-        },
-        {
-            id: "q5",
-            tabLabel: "ChatGPT",
-            bgColor: "#D4FE00",
-            textColor: "#111827",
-            quote: "Design should dominate things, not dominate people.",
-            author: "Dieter Rams",
-            handle: "@dieterrams",
-            codeRef: "15C",
-            dateStr: "Mar 18, 1966",
-            tabLeftOffset: 0,
-        },
-    ],
-    [
-        {
-            id: "q6",
-            tabLabel: "Claude",
-            bgColor: "#F472B6",
-            textColor: "#111827",
-            quote: "Design is not just what it looks like and feels like. Design is how it works.",
-            author: "Steve Jobs",
-            handle: "@stevejobs",
-            codeRef: "08F",
-            dateStr: "Oct 05, 1997",
-            tabLeftOffset: 0,
-        },
-        {
-            id: "q7",
-            tabLabel: "Aiko",
-            bgColor: "#818CF8",
-            textColor: "#FFFFFF",
-            quote: "You can't use up creativity. The more you use, the more you have.",
-            author: "Maya Angelou",
-            handle: "@angelou",
-            codeRef: "11A",
-            dateStr: "May 20, 1978",
-            tabLeftOffset: 70,
-        },
-        {
-            id: "q8",
-            tabLabel: "Perplexity",
-            bgColor: "#FFFFFF",
-            textColor: "#0F172A",
-            quote: "Turn your wounds into wisdom.",
-            author: "Oprah Winfrey",
-            handle: "@oprah",
-            codeRef: "09C",
-            dateStr: "Sep 12, 1985",
-            tabLeftOffset: 170,
-        },
-        {
-            id: "q9",
-            tabLabel: "Limitless",
-            bgColor: "#3B82F6",
-            textColor: "#FFFFFF",
-            quote: "In the middle of difficulty lies opportunity.",
-            author: "Albert Einstein",
-            handle: "@einstein",
-            codeRef: "21B",
-            dateStr: "Jul 04, 1945",
-            tabLeftOffset: 250,
-        },
-        {
-            id: "q10",
-            tabLabel: "ChatGPT",
-            bgColor: "#D4FE00",
-            textColor: "#111827",
-            quote: "Simplicity is the ultimate sophistication.",
-            author: "Leonardo da Vinci",
-            handle: "@davinci",
-            codeRef: "03E",
-            dateStr: "Feb 14, 1968",
-            tabLeftOffset: 0,
-        },
-    ],
-    [
-        {
-            id: "q11",
-            tabLabel: "Claude",
-            bgColor: "#F472B6",
-            textColor: "#111827",
-            quote: "Peace comes from within. Do not seek it without.",
-            author: "Buddha",
-            handle: "@buddha",
-            codeRef: "30A",
-            dateStr: "Jun 30, 1950",
-            tabLeftOffset: 0,
-        },
-        {
-            id: "q12",
-            tabLabel: "Aiko",
-            bgColor: "#818CF8",
-            textColor: "#FFFFFF",
-            quote: "The secret of getting ahead is getting started.",
-            author: "Mark Twain",
-            handle: "@marktwain",
-            codeRef: "07D",
-            dateStr: "Aug 19, 1910",
-            tabLeftOffset: 70,
-        },
-        {
-            id: "q13",
-            tabLabel: "Perplexity",
-            bgColor: "#FFFFFF",
-            textColor: "#0F172A",
-            quote: "A journey of a thousand miles begins with a single step.",
-            author: "Lao Tzu",
-            handle: "@laotzu",
-            codeRef: "19K",
-            dateStr: "Dec 01, 1972",
-            tabLeftOffset: 170,
-        },
-        {
-            id: "q14",
-            tabLabel: "Limitless",
-            bgColor: "#3B82F6",
-            textColor: "#FFFFFF",
-            quote: "Luck is what happens when preparation meets opportunity.",
-            author: "Seneca",
-            handle: "@seneca",
-            codeRef: "14X",
-            dateStr: "Mar 23, 1960",
-            tabLeftOffset: 250,
-        },
-        {
-            id: "q15",
-            tabLabel: "ChatGPT",
-            bgColor: "#D4FE00",
-            textColor: "#111827",
-            quote: "We are what we repeatedly do. Excellence, then, is not an act, but a habit.",
-            author: "Aristotle",
-            handle: "@aristotle",
-            codeRef: "27N",
-            dateStr: "Oct 18, 1982",
-            tabLeftOffset: 0,
-        },
-    ],
-];
-
 import { useJournal } from "../context/JournalContext";
+import { ALL_QUOTE_SETS, type FolderQuoteItem } from "./quotes/quotesData";
+import { UnfoldedPaperModal } from "./quotes/UnfoldedPaperModal";
+
+export type { QuoteItem };
 
 export default function QuotesHub() {
     const {
@@ -230,7 +30,7 @@ export default function QuotesHub() {
     const [paperOpening, setPaperOpening] = useState(false);
 
     // ── React Query: fetch quotes from API ──
-    const { data: apiQuotes, isLoading, isError, refetch } = useQuotes(setIndex);
+    const { data: apiQuotes } = useQuotes(setIndex);
 
     // Use API-fetched quotes when available, fall back to hardcoded data
     const folderQuotes = apiQuotes && apiQuotes.length > 0
@@ -245,7 +45,6 @@ export default function QuotesHub() {
         const nextSetIdx = setIndex + 1;
         setSetIndex(nextSetIdx);
         setActiveIndex(4);
-        // The useQuotes hook will automatically refetch with the new page index
         setTimeout(() => setReloading(false), 350);
     }, [setIndex, setSetIndex, setActiveIndex, setReloading]);
 
@@ -930,170 +729,15 @@ export default function QuotesHub() {
                 </div>
             </div>
 
-            {/* FULL 3D UNFOLDED PAPER SHEET DOCUMENT MODAL OVERLAY */}
-            {isPaperOpened && (
-                <div
-                    onClick={() => setIsPaperOpened(false)}
-                    style={{
-                        position: "fixed",
-                        inset: 0,
-                        zIndex: 999,
-                        background: "rgba(15, 23, 42, 0.78)",
-                        backdropFilter: "blur(16px)",
-                        WebkitBackdropFilter: "blur(16px)",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        padding: 24,
-                    }}
-                >
-                    <div
-                        onClick={(e) => e.stopPropagation()}
-                        style={{
-                            position: "relative",
-                            maxWidth: 640,
-                            width: "100%",
-                            background: "linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 100%)",
-                            borderRadius: 24,
-                            padding: "clamp(28px, 4vw, 42px) clamp(28px, 4.5vw, 46px)",
-                            boxShadow: "0 40px 100px rgba(0, 0, 0, 0.65), inset 0 2px 2px rgba(255, 255, 255, 1)",
-                            border: "1px solid #E2E8F0",
-                            transform: "perspective(1200px) rotateX(0deg)",
-                            animation: "paperUnfoldModal 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
-                        }}
-                    >
-                        <div
-                            style={{
-                                position: "absolute",
-                                top: "50%",
-                                left: 0,
-                                right: 0,
-                                height: 1,
-                                background: "linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.08) 20%, rgba(0,0,0,0.08) 80%, transparent 100%)",
-                                borderTop: "1px dashed rgba(0, 0, 0, 0.14)",
-                                pointerEvents: "none",
-                            }}
-                        />
-
-                        <button
-                            onClick={() => setIsPaperOpened(false)}
-                            style={{
-                                position: "absolute",
-                                top: 20,
-                                right: 20,
-                                border: "1px solid #E2E8F0",
-                                background: "#F8FAFC",
-                                color: "#0F172A",
-                                width: 34,
-                                height: 34,
-                                borderRadius: "50%",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                cursor: "pointer",
-                                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.08)",
-                                transition: "all 0.2s ease",
-                            }}
-                        >
-                            <X size={18} />
-                        </button>
-
-                        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24, borderBottom: "2px solid #0F172A", paddingBottom: 16 }}>
-                            <div style={{ width: 36, height: 36, borderRadius: 10, background: "#3B82F6", display: "flex", alignItems: "center", justifyContent: "center", color: "#FFFFFF" }}>
-                                <FileText size={20} />
-                            </div>
-                            <div>
-                                <span style={{ fontFamily: "'Outfit', sans-serif", fontSize: 13, fontWeight: 800, color: "#3B82F6", letterSpacing: "0.08em" }}>
-                                    DOGEAR MINDFUL PAPER SHEET • N° 0{safeSavedIdx + 1}
-                                </span>
-                                <h3 style={{ fontFamily: "'Outfit', sans-serif", fontSize: 22, fontWeight: 900, color: "#0F172A", margin: "2px 0 0 0" }}>
-                                    Unfolded Quote Document
-                                </h3>
-                            </div>
-                        </div>
-
-                        <div style={{ padding: "10px 0 24px 0" }}>
-                            <p style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic", fontSize: "clamp(26px, 3.2vw, 34px)", lineHeight: 1.3, color: "#0F172A", margin: "0 0 20px 0" }}>
-                                "{activeSavedQuote.quote}"
-                            </p>
-                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                                <span style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 16, fontWeight: 800, color: "#3B82F6" }}>
-                                    — {activeSavedQuote.author} <span style={{ color: "#64748B", fontWeight: 600 }}>({activeSavedQuote.handle})</span>
-                                </span>
-                                <span style={{ background: "#F1F5F9", color: "#0F172A", padding: "4px 14px", borderRadius: 9999, fontSize: 12, fontWeight: 700 }}>
-                                    {activeSavedQuote.tabLabel}
-                                </span>
-                            </div>
-                        </div>
-
-                        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: 20, borderTop: "1px solid #E2E8F0" }}>
-                            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                                <button
-                                    onClick={(e) => copyQuote(activeSavedQuote, e)}
-                                    style={{
-                                        border: "none",
-                                        background: "#0F172A",
-                                        color: "#FFFFFF",
-                                        padding: "8px 20px",
-                                        borderRadius: 9999,
-                                        fontSize: 13,
-                                        fontWeight: 700,
-                                        cursor: "pointer",
-                                        display: "inline-flex",
-                                        alignItems: "center",
-                                        gap: 6,
-                                        boxShadow: "0 4px 14px rgba(15, 23, 42, 0.2)",
-                                    }}
-                                >
-                                    {copiedId === activeSavedQuote.id ? <Check size={14} /> : <Copy size={14} />}
-                                    {copiedId === activeSavedQuote.id ? "Copied to Clipboard!" : "Copy Quote"}
-                                </button>
-
-                                <button
-                                    onClick={(e) => removeSavedQuote(activeSavedQuote, e)}
-                                    style={{
-                                        border: "none",
-                                        background: "#FEE2E2",
-                                        color: "#DC2626",
-                                        padding: "8px 18px",
-                                        borderRadius: 9999,
-                                        fontSize: 13,
-                                        fontWeight: 700,
-                                        cursor: "pointer",
-                                        display: "inline-flex",
-                                        alignItems: "center",
-                                        gap: 6,
-                                        boxShadow: "0 4px 12px rgba(220, 38, 38, 0.15)",
-                                    }}
-                                >
-                                    <Trash2 size={14} />
-                                    Remove Bookmark
-                                </button>
-                            </div>
-
-                            <button
-                                onClick={() => setIsPaperOpened(false)}
-                                style={{
-                                    border: "1px solid #CBD5E1",
-                                    background: "#F8FAFC",
-                                    color: "#334155",
-                                    padding: "8px 20px",
-                                    borderRadius: 9999,
-                                    fontSize: 13,
-                                    fontWeight: 700,
-                                    cursor: "pointer",
-                                    display: "inline-flex",
-                                    alignItems: "center",
-                                    gap: 6,
-                                }}
-                            >
-                                <CornerDownLeft size={14} />
-                                Fold Paper Back
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
+            <UnfoldedPaperModal
+                isPaperOpened={isPaperOpened}
+                setIsPaperOpened={setIsPaperOpened}
+                activeSavedQuote={activeSavedQuote}
+                safeSavedIdx={safeSavedIdx}
+                copiedId={copiedId}
+                copyQuote={copyQuote}
+                removeSavedQuote={removeSavedQuote}
+            />
         </section>
     );
 }

@@ -63,6 +63,8 @@ const SEED_MOOD_LOGS: Record<string, MoodLog> = {
     "2026-08-08-16": { id: "s14", day: "2026-08-08", time: "16:00", hourSlot: "2026-08-08-16", timestamp: new Date("2026-08-08T16:00:00").getTime(), moodKey: "peaceful", moodLabel: "Peaceful", icon: "Heart", score: 4.5, color: "#3B82F6", note: "Weekend reading." },
     "2026-08-09-11": { id: "s15", day: "2026-08-09", time: "11:00", hourSlot: "2026-08-09-11", timestamp: new Date("2026-08-09T11:00:00").getTime(), moodKey: "radiant", moodLabel: "Radiant", icon: "Sparkles", score: 5.0, color: "#F59E0B", note: "Sunny afternoon." },
     "2026-08-10-09": { id: "s16", day: "2026-08-10", time: "09:00", hourSlot: "2026-08-10-09", timestamp: new Date("2026-08-10T09:00:00").getTime(), moodKey: "focused", moodLabel: "Focused", icon: "Compass", score: 4.0, color: "#A855F7", note: "Morning planning." },
+    [`${new Date().toISOString().slice(0, 10)}-09`]: { id: "s-today-1", day: new Date().toISOString().slice(0, 10), time: "09:33", hourSlot: `${new Date().toISOString().slice(0, 10)}-09`, timestamp: new Date(`${new Date().toISOString().slice(0, 10)}T09:33:00`).getTime(), moodKey: "peaceful", moodLabel: "Peaceful", icon: "Heart", score: 4.5, color: "#3B82F6", note: "Morning peaceful reflection." },
+    [`${new Date().toISOString().slice(0, 10)}-10`]: { id: "s-today-2", day: new Date().toISOString().slice(0, 10), time: "10:45", hourSlot: `${new Date().toISOString().slice(0, 10)}-10`, timestamp: new Date(`${new Date().toISOString().slice(0, 10)}T10:45:00`).getTime(), moodKey: "energetic", moodLabel: "Energetic", icon: "Zap", score: 4.2, color: "#10B981", note: "Mid-morning boost!" },
 };
 
 export type ActiveTabType = "hero" | "folders" | "editor" | "mood" | "quotes" | "bento";

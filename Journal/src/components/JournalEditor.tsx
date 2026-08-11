@@ -1,22 +1,10 @@
 import React, { useState, useEffect } from "react";
-import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
-import {
-    Edit3,
-    Tag,
-    Save,
-    Sparkles,
-    CheckCircle2,
-    Calendar,
-    Trash2,
-    BookOpen,
-    Folder,
-    Plus,
-    X,
-} from "lucide-react";
-import { DoodleBadge } from "./DoodleIllustrations";
-import type { JournalEntry, JournalFolder } from "../types/journal";
-import { getSavedFolders, addEntryToFolder, deleteEntryFromFolder } from "../utils/folderStorage";
+import { Folder, Sparkles } from "lucide-react";
+import type { JournalEntry } from "../types/journal";
+import { useJournal } from "../context/JournalContext";
+import { EditorSidebar } from "./editor/EditorSidebar";
+import { EditorCanvas } from "./editor/EditorCanvas";
 
 export type { JournalEntry };
 
@@ -66,13 +54,10 @@ const QUILL_FORMATS = [
     "clean",
 ];
 
-import { useJournal } from "../context/JournalContext";
-
 export default function JournalEditor({ onEntrySaved }: { onEntrySaved?: (entry: JournalEntry) => void }) {
     const {
         folders,
         editingEntry,
-        setEditingEntry,
         saveJournalEntry,
         deleteEntryFromFolder,
     } = useJournal();
@@ -86,17 +71,14 @@ export default function JournalEditor({ onEntrySaved }: { onEntrySaved?: (entry:
     const [entries, setEntries] = useState<JournalEntry[]>([]);
     const [activePrompt, setActivePrompt] = useState(PROMPT_IDEAS[0]);
     const [savedNotification, setSavedNotification] = useState(false);
-    const [filterTag, setFilterTag] = useState<string | null>(null);
     const [selectedFolderId, setSelectedFolderId] = useState<string>("");
 
-    // Set default selected folder
     useEffect(() => {
         if (folders.length > 0 && !selectedFolderId) {
             setSelectedFolderId(folders[0].id);
         }
     }, [folders, selectedFolderId]);
 
-    // Handle editing entry from context
     useEffect(() => {
         if (editingEntry) {
             handleSelectEntryForEdit(editingEntry);
@@ -113,7 +95,6 @@ export default function JournalEditor({ onEntrySaved }: { onEntrySaved?: (entry:
 
         window.addEventListener("dogear_open_entry_in_editor", handleOpenEntryEvent);
 
-        // Load entries from all folders for display list
         const allEntries = folders.flatMap((f) => f.entries || []);
         if (allEntries.length > 0) {
             setEntries(allEntries);
@@ -123,7 +104,6 @@ export default function JournalEditor({ onEntrySaved }: { onEntrySaved?: (entry:
             window.removeEventListener("dogear_open_entry_in_editor", handleOpenEntryEvent);
         };
     }, [folders]);
-
 
     const toggleTag = (tagName: string) => {
         setSelectedTags((prev) =>
@@ -179,7 +159,6 @@ export default function JournalEditor({ onEntrySaved }: { onEntrySaved?: (entry:
         }
     };
 
-
     const applyPrompt = () => {
         setContent((prev) => (prev ? `${prev}\n\nPrompt: ${activePrompt}\n` : `Prompt: ${activePrompt}\n\n`));
     };
@@ -191,8 +170,6 @@ export default function JournalEditor({ onEntrySaved }: { onEntrySaved?: (entry:
 
     const wordCount = content.trim() ? content.trim().split(/\s+/).length : 0;
     const charCount = content.length;
-
-    const filteredEntries = filterTag ? entries.filter((e) => e.tags.includes(filterTag)) : entries;
 
     return (
         <section
@@ -401,315 +378,33 @@ export default function JournalEditor({ onEntrySaved }: { onEntrySaved?: (entry:
                                 </div>
                             </div>
 
-                            {/* PROPER SECTION 1: ENTRY TITLE SECTION */}
-                            <div
-                                style={{
-                                    background: "rgba(255, 255, 255, 0.75)",
-                                    backdropFilter: "blur(16px)",
-                                    borderRadius: 18,
-                                    border: "1.5px solid rgba(255, 255, 255, 0.9)",
-                                    padding: "16px 20px",
-                                    marginBottom: 20,
-                                    boxShadow: "0 4px 16px rgba(15, 23, 42, 0.04), inset 0 1px 2px rgba(255, 255, 255, 0.8)",
-                                    transition: "all 0.2s ease",
-                                }}
-                            >
-                                <label style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11.5, fontWeight: 800, color: "#64748B", letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 8 }}>
-                                    <Edit3 size={13} color="#2563EB" /> ENTRY TITLE
-                                </label>
-                                <input
-                                    type="text"
-                                    placeholder="Give your journal entry a title (e.g. Quiet Morning Coffee)..."
-                                    value={title}
-                                    onChange={(e) => setTitle(e.target.value)}
-                                    style={{
-                                        width: "100%",
-                                        border: "none",
-                                        outline: "none",
-                                        fontFamily: fontStyle === "serif" ? "'Fraunces', serif" : fontStyle === "handwriting" ? "'Caveat', cursive" : "'Outfit', sans-serif",
-                                        fontSize: fontStyle === "handwriting" ? 28 : 22,
-                                        fontWeight: 700,
-                                        color: "#0F172A",
-                                        background: "transparent",
-                                    }}
-                                />
-                            </div>
-
-                            {/* PROPER SECTION 2: JOURNAL REFLECTION CANVAS SECTION WITH QUILL RICH TEXT EDITOR */}
-                            <div
-                                style={{
-                                    background: "rgba(255, 255, 255, 0.85)",
-                                    backdropFilter: "blur(20px)",
-                                    borderRadius: 22,
-                                    border: "1.5px solid rgba(255, 255, 255, 0.95)",
-                                    padding: "18px 22px",
-                                    boxShadow: "0 10px 30px rgba(15, 23, 42, 0.06), inset 0 1.5px 2px rgba(255, 255, 255, 1)",
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    minHeight: 340,
-                                    maxWidth: "100%",
-                                    overflow: "hidden",
-                                    boxSizing: "border-box",
-                                }}
-                            >
-                                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12, paddingBottom: 10, borderBottom: "1px solid rgba(226, 232, 240, 0.8)" }}>
-                                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                                        {/* macOS Window Controls */}
-                                        <div style={{ display: "flex", gap: 6, marginRight: 4 }}>
-                                            <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#EF4444" }} />
-                                            <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#F59E0B" }} />
-                                            <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#10B981" }} />
-                                        </div>
-                                        <label style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11.5, fontWeight: 800, color: "#64748B", letterSpacing: "0.06em", textTransform: "uppercase" }}>
-                                            <BookOpen size={13} color="#2563EB" /> JOURNAL REFLECTION CANVAS
-                                        </label>
-                                        {editingEntryId && (
-                                            <span style={{ background: "#FEF3C7", color: "#B45309", padding: "2px 10px", borderRadius: 9999, fontSize: 11, fontWeight: 800, border: "1px solid #FDE68A" }}>
-                                                ✏️ Editing Past Entry
-                                            </span>
-                                        )}
-                                    </div>
-                                    
-                                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                                        <span style={{ fontSize: 11, fontWeight: 700, color: "#94A3B8", fontFamily: "'JetBrains Mono', monospace" }}>
-                                            {wordCount} words
-                                        </span>
-                                        {editingEntryId && (
-                                            <button
-                                                onClick={handleCancelEdit}
-                                                style={{ border: "1px solid #CBD5E1", background: "#FFFFFF", color: "#64748B", padding: "3px 10px", borderRadius: 9999, fontSize: 11, fontWeight: 700, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 4 }}
-                                            >
-                                                <X size={12} /> Cancel Edit
-                                            </button>
-                                        )}
-                                    </div>
-                                </div>
-
-                                <div
-                                    style={{
-                                        fontFamily: fontStyle === "handwriting" ? "'Caveat', cursive" : fontStyle === "serif" ? "'Instrument Serif', serif" : "'Plus Jakarta Sans', sans-serif",
-                                        fontSize: fontStyle === "handwriting" ? 20 : fontStyle === "serif" ? 18 : 15,
-                                    }}
-                                >
-                                    <ReactQuill
-                                        theme="snow"
-                                        value={content}
-                                        onChange={setContent}
-                                        modules={QUILL_MODULES}
-                                        formats={QUILL_FORMATS}
-                                        placeholder="Write your rich formatted daily thoughts, ideas, and reflections here..."
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Categorization Tags Section */}
-                            <div style={{ marginTop: 24, paddingTop: 18, borderTop: "1px solid rgba(255, 255, 255, 0.4)" }}>
-                                <label style={{ display: "block", fontSize: 12, fontWeight: 700, color: "#64748B", marginBottom: 10, letterSpacing: "0.05em" }}>
-                                    CATEGORIZATION TAGS
-                                </label>
-                                <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                                    {AVAILABLE_TAGS.map((tag) => {
-                                        const isSelected = selectedTags.includes(tag.name);
-                                        return (
-                                            <button
-                                                key={tag.name}
-                                                onClick={() => toggleTag(tag.name)}
-                                                style={{
-                                                    border: isSelected ? `2px solid ${tag.color}` : "1px solid rgba(255,255,255,0.8)",
-                                                    background: isSelected ? tag.bg : "rgba(255, 255, 255, 0.6)",
-                                                    color: isSelected ? tag.color : "#475569",
-                                                    padding: "6px 14px",
-                                                    borderRadius: 9999,
-                                                    fontWeight: 700,
-                                                    fontSize: 12.5,
-                                                    cursor: "pointer",
-                                                    display: "inline-flex",
-                                                    alignItems: "center",
-                                                    gap: 4,
-                                                    transition: "all 0.2s ease",
-                                                    backdropFilter: "blur(6px)",
-                                                }}
-                                            >
-                                                <Tag size={12} />
-                                                {tag.name}
-                                            </button>
-                                        );
-                                    })}
-                                </div>
-                            </div>
-
-                            {/* Save Action Footer */}
-                            <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 16, marginTop: 24, paddingTop: 18, borderTop: "1px solid rgba(255, 255, 255, 0.4)" }}>
-                                <div style={{ display: "flex", alignItems: "center", gap: 14, fontSize: 13, color: "#475569", fontWeight: 600 }}>
-                                    <span>{wordCount} words</span>
-                                    <span>•</span>
-                                    <span>{charCount} chars</span>
-                                </div>
-
-                                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                                    {editingEntryId && (
-                                        <button
-                                            onClick={handleCancelEdit}
-                                            style={{
-                                                background: "rgba(255, 255, 255, 0.8)",
-                                                color: "#475569",
-                                                border: "1px solid #CBD5E1",
-                                                padding: "11px 18px",
-                                                borderRadius: 9999,
-                                                fontWeight: 700,
-                                                fontSize: 13.5,
-                                                cursor: "pointer",
-                                            }}
-                                        >
-                                            Cancel
-                                        </button>
-                                    )}
-
-                                    {savedNotification && (
-                                        <span style={{ color: "#10B981", fontSize: 13, fontWeight: 700, display: "flex", alignItems: "center", gap: 4 }}>
-                                            <CheckCircle2 size={16} /> {editingEntryId ? "Entry Updated!" : "Saved to Folder!"}
-                                        </span>
-                                    )}
-                                    <button
-                                        onClick={handleSaveEntry}
-                                        disabled={!content.replace(/<[^>]*>/g, "").trim()}
-                                        style={{
-                                            background: content.replace(/<[^>]*>/g, "").trim() ? (editingEntryId ? "#2563EB" : "#0F172A") : "rgba(148, 163, 184, 0.4)",
-                                            color: "#FFFFFF",
-                                            border: "none",
-                                            padding: "11px 24px",
-                                            borderRadius: 9999,
-                                            fontWeight: 700,
-                                            fontSize: 14,
-                                            cursor: content.replace(/<[^>]*>/g, "").trim() ? "pointer" : "not-allowed",
-                                            display: "inline-flex",
-                                            alignItems: "center",
-                                            gap: 8,
-                                            boxShadow: content.replace(/<[^>]*>/g, "").trim() ? "0 10px 24px rgba(37,99,235,0.25)" : "none",
-                                            transition: "all 0.2s ease",
-                                        }}
-                                    >
-                                        <Save size={15} /> {editingEntryId ? "Update Entry" : "Save Journal Entry"}
-                                    </button>
-                                </div>
-                            </div>
+                            <EditorCanvas
+                                title={title}
+                                setTitle={setTitle}
+                                content={content}
+                                setContent={setContent}
+                                fontStyle={fontStyle}
+                                editingEntryId={editingEntryId}
+                                wordCount={wordCount}
+                                charCount={charCount}
+                                handleCancelEdit={handleCancelEdit}
+                                availableTags={AVAILABLE_TAGS}
+                                selectedTags={selectedTags}
+                                toggleTag={toggleTag}
+                                savedNotification={savedNotification}
+                                handleSaveEntry={handleSaveEntry}
+                                quillModules={QUILL_MODULES}
+                                quillFormats={QUILL_FORMATS}
+                            />
                         </div>
 
                         {/* RIGHT macOS SIDEBAR: PAST REFLECTIONS */}
-                        <div className="journal-sidebar-right" style={{ background: "rgba(255, 255, 255, 0.2)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)", display: "flex", flexDirection: "column" }}>
-                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
-                                <h3 style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'Outfit', sans-serif", fontSize: 17, fontWeight: 700, color: "#0F172A", margin: 0, display: "flex", alignItems: "center", gap: 8 }}>
-                                    <BookOpen size={17} color="#2597D0" /> Past Reflections
-                                </h3>
-                                <span style={{ fontSize: 12, fontWeight: 700, background: "rgba(255, 255, 255, 0.7)", padding: "3px 10px", borderRadius: 9999, color: "#334155", border: "1px solid rgba(255,255,255,0.8)" }}>
-                                    {entries.length} Entries
-                                </span>
-                            </div>
-
-                            {/* Entry Cards List */}
-                            <div style={{ display: "flex", flexDirection: "column", gap: 14, maxHeight: 520, overflowY: "auto", paddingRight: 4, flexGrow: 1 }}>
-                                {entries.length === 0 ? (
-                                    <div style={{ textAlign: "center", padding: 30, color: "#64748B", fontSize: 14 }}>
-                                        No entries found. Start writing on the left!
-                                    </div>
-                                ) : (
-                                    entries.map((entry) => {
-                                        const cleanText = entry.content
-                                            ? entry.content
-                                                .replace(/<br\s*\/?>/gi, "\n")
-                                                .replace(/<\/p>/gi, "\n")
-                                                .replace(/<\/div>/gi, "\n")
-                                                .replace(/<[^>]*>/g, "")
-                                                .replace(/&nbsp;/g, " ")
-                                                .replace(/&amp;/g, "&")
-                                                .replace(/&lt;/g, "<")
-                                                .replace(/&gt;/g, ">")
-                                                .replace(/&quot;/g, '"')
-                                                .replace(/&#39;/g, "'")
-                                                .trim()
-                                            : "";
-                                        const isEditing = editingEntryId === entry.id;
-                                        return (
-                                            <div
-                                                key={entry.id}
-                                                onClick={() => handleSelectEntryForEdit(entry)}
-                                                title="Click to Edit this Journal Entry ✏️"
-                                                style={{
-                                                    background: isEditing ? "#EFF6FF" : "rgba(255, 255, 255, 0.75)",
-                                                    backdropFilter: "blur(12px)",
-                                                    WebkitBackdropFilter: "blur(12px)",
-                                                    borderRadius: 16,
-                                                    padding: 16,
-                                                    border: isEditing ? "2px solid #2563EB" : "1px solid rgba(255, 255, 255, 0.8)",
-                                                    boxShadow: isEditing ? "0 8px 20px rgba(37,99,235,0.2)" : "0 4px 14px rgba(15,23,42,0.04)",
-                                                    position: "relative",
-                                                    cursor: "pointer",
-                                                    transition: "all 0.2s ease",
-                                                }}
-                                            >
-                                                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
-                                                    <span style={{ fontSize: 11.5, fontWeight: 700, color: "#64748B", display: "flex", alignItems: "center", gap: 4 }}>
-                                                        <Calendar size={12} /> {entry.date}
-                                                    </span>
-                                                    <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                                                        <button
-                                                            onClick={(e) => { e.stopPropagation(); handleSelectEntryForEdit(entry); }}
-                                                            style={{ border: "none", background: "rgba(37,99,235,0.1)", color: "#2563EB", padding: "2px 8px", borderRadius: 9999, fontSize: 11, fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", gap: 3 }}
-                                                            title="Edit entry"
-                                                        >
-                                                            <Edit3 size={11} /> Edit
-                                                        </button>
-                                                        <button
-                                                            onClick={(e) => { e.stopPropagation(); handleDeleteEntry(entry.id); }}
-                                                            style={{ border: "none", background: "transparent", color: "#94A3B8", cursor: "pointer", padding: 2 }}
-                                                            title="Delete entry"
-                                                        >
-                                                            <Trash2 size={14} />
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                                <h4 style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'Outfit', sans-serif", fontSize: 15, fontWeight: 700, color: "#0F172A", margin: "0 0 6px 0" }}>
-                                                    {entry.title}
-                                                </h4>
-                                                <p
-                                                    style={{
-                                                        fontFamily: entry.fontStyle === "handwriting" ? "'Caveat', cursive" : "'Plus Jakarta Sans', sans-serif",
-                                                        fontSize: entry.fontStyle === "handwriting" ? 17 : 13.5,
-                                                        color: "#475569",
-                                                        lineHeight: 1.45,
-                                                        margin: "0 0 10px 0",
-                                                        display: "-webkit-box",
-                                                        WebkitLineClamp: 3,
-                                                        WebkitBoxOrient: "vertical",
-                                                        overflow: "hidden",
-                                                    }}
-                                                >
-                                                    {cleanText}
-                                                </p>
-                                                <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
-                                                    {entry.tags.map((tg) => (
-                                                        <span
-                                                            key={tg}
-                                                            style={{
-                                                                fontSize: 10.5,
-                                                                fontWeight: 700,
-                                                                background: "rgba(255, 255, 255, 0.8)",
-                                                                color: "#334155",
-                                                                padding: "2px 8px",
-                                                                borderRadius: 9999,
-                                                                border: "1px solid rgba(255, 255, 255, 0.9)",
-                                                            }}
-                                                        >
-                                                            #{tg}
-                                                        </span>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        );
-                                    })
-                                )}
-                            </div>
-                        </div>
+                        <EditorSidebar
+                            entries={entries}
+                            editingEntryId={editingEntryId}
+                            handleSelectEntryForEdit={handleSelectEntryForEdit}
+                            handleDeleteEntry={handleDeleteEntry}
+                        />
                     </div>
                 </div>
             </div>

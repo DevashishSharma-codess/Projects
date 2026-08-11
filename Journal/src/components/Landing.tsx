@@ -1,31 +1,14 @@
-import React, { useState, useEffect } from "react";
-import {
-    BookOpen,
-    Smile,
-    Heart,
-    Moon,
-    Sparkles,
-    Compass,
-    ArrowRight,
-    Edit3,
-    ChevronDown,
-    Folder,
-    TrendingUp,
-    Quote as QuoteIcon,
-    Layers,
-    Menu,
-    X,
-} from "lucide-react";
+import React, { useEffect } from "react";
+import { BookOpen, Smile, Heart, Moon, Compass, Folder } from "lucide-react";
 import FolderExplorer from "./FolderExplorer";
 import JournalEditor from "./JournalEditor";
 import MoodTracker from "./MoodTracker";
 import QuotesHub from "./QuotesHub";
 import BentoArchive from "./BentoArchive";
-import { DoodleCrowd } from "./DoodleIllustrations";
+import { useJournal } from "../context/JournalContext";
+import { LandingHeader } from "./landing/LandingHeader";
+import { LandingFooter } from "./landing/LandingFooter";
 
-/* ---------------------------------------------------------------
-   JOURNAL ENTRY TYPES & DATA
---------------------------------------------------------------- */
 const MODES = [
     { label: "Morning Pages", icon: BookOpen, color: "#FF6B4A" },
     { label: "Track a Mood", icon: Smile, color: "#E8A93A" },
@@ -43,33 +26,6 @@ const STAR_PARTICLES = Array.from({ length: 42 }, (_, i) => ({
     drift: -20 + Math.random() * 40,
     opacity: 0.35 + Math.random() * 0.5,
 }));
-
-function DogearWhiteLogo({ size = 30, color = "#FFFFFF" }: { size?: number | string; color?: string }) {
-    return (
-        <svg
-            width={size}
-            height={size}
-            viewBox="0 0 32 32"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            style={{ flexShrink: 0, display: "inline-block" }}
-        >
-            {/* 8-Dot Diamond Logo */}
-            <circle cx="16" cy="3.5" r="2.8" fill={color} />
-            <circle cx="22.5" cy="10" r="2.8" fill={color} />
-            <circle cx="28.5" cy="16.5" r="2.8" fill={color} />
-            <circle cx="22.5" cy="23" r="2.8" fill={color} />
-            <circle cx="16" cy="29.5" r="2.8" fill={color} />
-            <circle cx="9.5" cy="23" r="2.8" fill={color} />
-            <circle cx="3.5" cy="16.5" r="2.8" fill={color} />
-            <circle cx="9.5" cy="10" r="2.8" fill={color} />
-        </svg>
-    );
-}
-
-
-
-import { useJournal } from "../context/JournalContext";
 
 export default function Landing() {
     const {
@@ -103,7 +59,6 @@ export default function Landing() {
     }, [setActiveModeIndex]);
 
     const activeMode = MODES[activeModeIndex];
-
 
     return (
         <div style={{ background: "#FFFFFF", minHeight: "100vh", fontFamily: "'Plus Jakarta Sans', 'Inter', sans-serif", color: "#1E293B" }}>
@@ -387,7 +342,6 @@ export default function Landing() {
           to { opacity: 1; transform: translateY(0); }
         }
 
-        /* ── Height-based & Width-based Responsive Adjustments for 1-Screen Fit ── */
         @media (max-height: 820px) {
           .hero-text-block { margin-top: 4px !important; }
           .hero-text-block h1 { font-size: clamp(30px, 4.8vw, 54px) !important; }
@@ -402,7 +356,6 @@ export default function Landing() {
           .hero-scene { transform: scale(0.60) !important; }
         }
 
-        /* ── Tablet landscape (900px – 1199px) ── */
         @media (max-width: 1100px) {
           .hero-section {
             padding: 16px 20px 0 20px !important;
@@ -415,7 +368,6 @@ export default function Landing() {
           .nav-center { gap: 20px !important; }
         }
 
-        /* ── Tablet portrait (768px – 899px) ── */
         @media (max-width: 900px) {
           .hero-section {
             padding: 14px 16px 0 16px !important;
@@ -445,7 +397,6 @@ export default function Landing() {
           }
         }
 
-        /* ── Mobile (≤ 640px) ── */
         @media (max-width: 640px) {
           .hero-section {
             margin: 6px !important;
@@ -504,120 +455,12 @@ export default function Landing() {
                         ))}
                     </div>
 
-                    {/* MOBILE MENU DRAWER OVERLAY */}
-                    {mobileMenuOpen && (
-                        <div className="mobile-drawer-overlay">
-                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 32 }}>
-                                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                                    <DogearWhiteLogo size={32} />
-                                    <span style={{ fontFamily: "'Helvetica Neue', sans-serif", fontWeight: 700, fontSize: 24, color: "#FFFFFF" }}>
-                                        Dogear
-                                    </span>
-                                </div>
-                                <button onClick={() => setMobileMenuOpen(false)} style={{ background: "rgba(255,255,255,0.2)", border: "none", color: "#FFFFFF", width: 40, height: 40, borderRadius: "50%", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                                    <X size={22} />
-                                </button>
-                            </div>
-
-                            <nav style={{ display: "flex", flexDirection: "column", gap: 20, marginBottom: 40 }}>
-                                <a onClick={() => scrollToSection("folder-explorer", "folders")} style={{ color: "#FFFFFF", fontSize: 20, fontWeight: 700, textDecoration: "none", display: "flex", alignItems: "center", gap: 12 }}>
-                                    📁 Folders Directory
-                                </a>
-                                <a onClick={() => scrollToSection("journal-studio", "editor")} style={{ color: "#FFFFFF", fontSize: 20, fontWeight: 700, textDecoration: "none", display: "flex", alignItems: "center", gap: 12 }}>
-                                    ✏️ Daily Studio Editor
-                                </a>
-                                <a onClick={() => scrollToSection("mood-tracker", "mood")} style={{ color: "#FFFFFF", fontSize: 20, fontWeight: 700, textDecoration: "none", display: "flex", alignItems: "center", gap: 12 }}>
-                                    📊 Mood Analytics
-                                </a>
-                                <a onClick={() => scrollToSection("inspirational-quotes", "quotes")} style={{ color: "#FFFFFF", fontSize: 20, fontWeight: 700, textDecoration: "none", display: "flex", alignItems: "center", gap: 12 }}>
-                                    💡 Daily Quotes Hub
-                                </a>
-                                <a onClick={() => scrollToSection("bento-archive", "bento")} style={{ color: "#FFFFFF", fontSize: 20, fontWeight: 700, textDecoration: "none", display: "flex", alignItems: "center", gap: 12 }}>
-                                    🔮 Bento Memory Vault
-                                </a>
-                            </nav>
-
-                            <div style={{ marginTop: "auto", display: "flex", flexDirection: "column", gap: 12 }}>
-                                <button
-                                    onClick={() => scrollToSection("journal-studio", "editor")}
-                                    className="cta-btn-white"
-                                    style={{ width: "100%", padding: "14px", fontSize: 16 }}
-                                >
-                                    Open Journal Studio
-                                </button>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* STICKY FLOATING PILL NAVBAR ON SCROLL */}
-                    <header
-                        style={{
-                            position: scrolled ? "fixed" : "relative",
-                            top: scrolled ? 16 : 0,
-                            left: scrolled ? "50%" : "auto",
-                            transform: scrolled ? "translateX(-50%)" : "none",
-                            width: scrolled ? "calc(100% - 32px)" : "100%",
-                            maxWidth: scrolled ? 1040 : "100%",
-                            zIndex: 100,
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "space-between",
-                            padding: scrolled ? "10px 20px" : "0px",
-                            borderRadius: scrolled ? 9999 : 0,
-                            background: scrolled
-                                ? "rgba(15, 23, 42, 0.75)"
-                                : "transparent",
-                            backdropFilter: scrolled ? "blur(20px)" : "none",
-                            WebkitBackdropFilter: scrolled ? "blur(20px)" : "none",
-                            border: scrolled
-                                ? "1px solid rgba(255, 255, 255, 0.25)"
-                                : "1px solid transparent",
-                            boxShadow: scrolled
-                                ? "0 16px 36px rgba(15, 23, 42, 0.25)"
-                                : "none",
-                            transition: "all 0.35s cubic-bezier(0.16, 1, 0.3, 1)",
-                            boxSizing: "border-box",
-                        }}
-                    >
-                        <div style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer" }} onClick={() => scrollToSection("hero", "hero")}>
-                            <DogearWhiteLogo size={scrolled ? 26 : 34} />
-                            <span style={{ fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif", fontWeight: 700, fontSize: scrolled ? 20 : 24, color: "#FFFFFF", letterSpacing: "-0.035em" }}>
-                                Dogear
-                            </span>
-                        </div>
-
-                        {/* Navigation Links */}
-                        <nav className="nav-center" style={{ display: "flex", alignItems: "center", gap: scrolled ? 24 : 32 }}>
-                            <a className="nav-link" href="#folder-explorer">Folders</a>
-                            <a className="nav-link" href="#journal-studio">Daily Studio</a>
-                            <a className="nav-link" href="#mood-tracker">Mood Analytics</a>
-                            <a className="nav-link" href="#inspirational-quotes">Quotes</a>
-                            <a className="nav-link" href="#bento-archive">Community</a>
-                        </nav>
-
-                        {/* Desktop Auth Links */}
-                        <div className="nav-auth-actions" style={{ display: "flex", alignItems: "center", gap: scrolled ? 14 : 20 }}>
-                            <a href="#journal-studio" style={{ color: "#FFFFFF", textDecoration: "none", fontWeight: 600, fontSize: 14, opacity: 0.95 }}>Log in</a>
-                            <button
-                                className="cta-btn-white"
-                                onClick={() => {
-                                    const el = document.getElementById("journal-studio");
-                                    if (el) el.scrollIntoView({ behavior: "smooth" });
-                                }}
-                                style={{
-                                    padding: scrolled ? "7px 18px" : "10px 22px",
-                                    fontSize: scrolled ? 13.5 : 14.5,
-                                }}
-                            >
-                                Sign up
-                            </button>
-                        </div>
-
-                        {/* Mobile Hamburger Button */}
-                        <button className="mobile-menu-btn" onClick={() => setMobileMenuOpen(true)}>
-                            <Menu size={20} />
-                        </button>
-                    </header>
+                    <LandingHeader
+                        scrolled={scrolled}
+                        mobileMenuOpen={mobileMenuOpen}
+                        setMobileMenuOpen={setMobileMenuOpen}
+                        scrollToSection={scrollToSection}
+                    />
 
                     {/* HERO HEADLINE & TEXT */}
                     <div className="hero-text-block">
@@ -730,231 +573,7 @@ export default function Landing() {
                     <BentoArchive />
 
                     {/* FLOATING CURVED FOOTER CARD WITH FULL LANDSCAPE IMAGE BACKGROUND */}
-                    <footer
-                        style={{
-                            position: "relative",
-                            width: "calc(100% - 28px)",
-                            margin: "32px 14px 14px 14px",
-                            borderRadius: 28,
-                            overflow: "hidden",
-                            boxShadow: "0 20px 48px rgba(15, 23, 42, 0.08)",
-                            fontFamily: "'Outfit', sans-serif",
-                            minHeight: 620,
-                            display: "flex",
-                            flexDirection: "column",
-                            justifyContent: "space-between",
-                            boxSizing: "border-box",
-                            background: "#CFE4EF",
-                        }}
-                    >
-                        {/* FULL LOCAL BACKGROUND IMAGE - UNZOOMED ORIGINAL ASPECT RATIO */}
-                        <img
-                            src="https://framerusercontent.com/images/AWpFQZVt9LgBCWegzj8BjzNbFMI.webp?scale-down-to=2048&width=3109&height=1696"
-                            alt="Footer Landscape Background"
-                            style={{
-                                position: "absolute",
-                                bottom: 0,
-                                left: 0,
-                                width: "100%",
-                                height: "100%",
-                                objectFit: "contain",
-                                objectPosition: "bottom center",
-                                display: "block",
-                                zIndex: 1,
-                            }}
-                        />
-
-                        {/* UPPER DETAILS SECTION ("all the details upwards") */}
-                        <div
-                            className="footer-grid-main"
-                            style={{
-                                position: "relative",
-                                zIndex: 10,
-                                maxWidth: 1280,
-                                width: "100%",
-                                margin: "0 auto",
-                                padding: "44px 36px 0 36px",
-                                display: "grid",
-                                gridTemplateColumns: "1.2fr 2fr",
-                                gap: 48,
-                                boxSizing: "border-box",
-                            }}
-                        >
-                            {/* LEFT COLUMN: BRAND LOGO & DESCRIPTION */}
-                            <div>
-                                <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
-                                    <div
-                                        style={{
-                                            width: 40,
-                                            height: 40,
-                                            borderRadius: 10,
-                                            background: "#FFFFFF",
-                                            display: "flex",
-                                            alignItems: "center",
-                                            justifyContent: "center",
-                                            boxShadow: "0 4px 12px rgba(15, 23, 42, 0.1)",
-                                        }}
-                                    >
-                                        <DogearWhiteLogo size={24} color="#0F172A" />
-                                    </div>
-                                    <span
-                                        style={{
-                                            fontFamily: "'Outfit', sans-serif",
-                                            fontSize: 32,
-                                            fontWeight: 800,
-                                            color: "#0F172A",
-                                            letterSpacing: "-0.03em",
-                                        }}
-                                    >
-                                        Dog<span style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic", fontWeight: 400, color: "#1D4ED8" }}>ear</span>
-                                    </span>
-                                </div>
-
-                                <p
-                                    style={{
-                                        fontFamily: "'Plus Jakarta Sans', sans-serif",
-                                        fontSize: 14.5,
-                                        lineHeight: 1.65,
-                                        color: "#1E293B",
-                                        fontWeight: 600,
-                                        maxWidth: 380,
-                                        margin: 0,
-                                    }}
-                                >
-                                    Dogear helps individuals cultivate mindful daily reflection, organize thoughts in folders, track moods, and elevate emotional wellbeing—all in a peaceful space.
-                                </p>
-                            </div>
-
-                            {/* RIGHT COLUMNS: PRODUCT, RESOURCES, COMPANY */}
-                            <div className="footer-grid-links" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 36 }}>
-                                {/* Col 1: Product */}
-                                <div>
-                                    <h4 style={{ fontSize: 16, fontWeight: 800, color: "#0F172A", margin: "0 0 16px 0", letterSpacing: "0.01em" }}>
-                                        Product
-                                    </h4>
-                                    <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 11, fontSize: 14, fontWeight: 700 }}>
-                                        <li><a href="#folder-explorer" style={{ color: "#1E293B", textDecoration: "none" }}>Folder Explorer</a></li>
-                                        <li><a href="#journal-studio" style={{ color: "#1E293B", textDecoration: "none" }}>Journal Editor</a></li>
-                                        <li><a href="#mood-tracker" style={{ color: "#1E293B", textDecoration: "none" }}>Mood Analytics</a></li>
-                                        <li><a href="#inspirational-quotes" style={{ color: "#1E293B", textDecoration: "none" }}>Quotes Hub</a></li>
-                                        <li><a href="#bento-archive" style={{ color: "#1E293B", textDecoration: "none" }}>Bento Memory Vault</a></li>
-                                    </ul>
-                                </div>
-
-                                {/* Col 2: Resources */}
-                                <div>
-                                    <h4 style={{ fontSize: 16, fontWeight: 800, color: "#0F172A", margin: "0 0 16px 0", letterSpacing: "0.01em" }}>
-                                        Resources
-                                    </h4>
-                                    <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 11, fontSize: 14, fontWeight: 700 }}>
-                                        <li><a href="#journal-studio" style={{ color: "#1E293B", textDecoration: "none" }}>Documentation</a></li>
-                                        <li><a href="#mood-tracker" style={{ color: "#1E293B", textDecoration: "none" }}>Mindfulness Guides</a></li>
-                                        <li><a href="#bento-archive" style={{ color: "#1E293B", textDecoration: "none" }}>Daily Prompts</a></li>
-                                        <li><a href="#inspirational-quotes" style={{ color: "#1E293B", textDecoration: "none" }}>Inspiration Library</a></li>
-                                        <li><a href="#folder-explorer" style={{ color: "#1E293B", textDecoration: "none" }}>Community & Support</a></li>
-                                    </ul>
-                                </div>
-
-                                {/* Col 3: Company */}
-                                <div>
-                                    <h4 style={{ fontSize: 16, fontWeight: 800, color: "#0F172A", margin: "0 0 16px 0", letterSpacing: "0.01em" }}>
-                                        Company
-                                    </h4>
-                                    <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 11, fontSize: 14, fontWeight: 700 }}>
-                                        <li><a href="#folder-explorer" style={{ color: "#1E293B", textDecoration: "none" }}>About Us</a></li>
-                                        <li><a href="#journal-studio" style={{ color: "#1E293B", textDecoration: "none" }}>Philosophy</a></li>
-                                        <li><a href="#bento-archive" style={{ color: "#1E293B", textDecoration: "none" }}>Changelog</a></li>
-                                        <li><a href="#mood-tracker" style={{ color: "#1E293B", textDecoration: "none" }}>Privacy Policy</a></li>
-                                        <li><a href="#inspirational-quotes" style={{ color: "#1E293B", textDecoration: "none" }}>Terms of Service</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* GIANT BRAND TITLE & COPYRIGHT AT THE BOTTOM OVER GREEN GROUND */}
-                        <div
-                            style={{
-                                position: "relative",
-                                zIndex: 10,
-                                width: "100%",
-                                display: "flex",
-                                flexDirection: "column",
-                                alignItems: "center",
-                                justifyContent: "flex-end",
-                                paddingBottom: 16,
-                                marginTop: 60,
-                            }}
-                        >
-                            {/* PROCESSED FOLDER HELPERS ILLUSTRATION (NO BG, NO TEXT) */}
-                            <div style={{ display: "flex", justifyContent: "center", marginBottom: -24, zIndex: 12, position: "relative" }}>
-                                <img
-                                    src="/folder_helpers_transparent.png"
-                                    alt="Folder Carrying Helpers"
-                                    style={{
-                                        height: "clamp(100px, 14vw, 230px)",
-                                        width: "auto",
-                                        filter: "drop-shadow(0 12px 24px rgba(15, 46, 34, 0.18))",
-                                        pointerEvents: "none",
-                                        transition: "transform 0.3s ease",
-                                    }}
-                                />
-                            </div>
-
-                            {/* MASSIVE BRAND TEXT AT THE BOTTOM WITH LOGO AS 'O' */}
-                            <h1
-                                style={{
-                                    margin: 0,
-                                    padding: 0,
-                                    fontSize: "clamp(2.4rem, 13.5vw, 15rem)",
-                                    fontWeight: 900,
-                                    fontFamily: "'Outfit', 'Plus Jakarta Sans', sans-serif",
-                                    letterSpacing: "-0.04em",
-                                    lineHeight: 0.82,
-                                    color: "#0F2E22",
-                                    textTransform: "uppercase",
-                                    textAlign: "center",
-                                    whiteSpace: "nowrap",
-                                    userSelect: "none",
-                                    textShadow: "0 2px 12px rgba(255, 255, 255, 0.4)",
-                                    display: "inline-flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    maxWidth: "100%",
-                                }}
-                            >
-                                D
-                                <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: "0.75em", height: "0.75em", margin: "0 0.02em" }}>
-                                    <DogearWhiteLogo size="100%" color="#0F2E22" />
-                                </span>
-                                GEAR
-                            </h1>
-
-                            {/* COPYRIGHT & LEGAL BAR AT VERY BOTTOM */}
-                            <div
-                                className="footer-legal-bar"
-                                style={{
-                                    width: "100%",
-                                    maxWidth: 1280,
-                                    margin: "12px auto 0 auto",
-                                    padding: "0 36px",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "space-between",
-                                    color: "#0F2E22",
-                                    fontSize: 13,
-                                    fontWeight: 800,
-                                    boxSizing: "border-box",
-                                }}
-                            >
-                                <span>© 2026 DOGEAR. All rights reserved. Crafted with care for daily reflection.</span>
-                                <div style={{ display: "flex", gap: 24 }}>
-                                    <a href="#terms" style={{ color: "#0F2E22", textDecoration: "underline" }}>Terms of Service</a>
-                                    <a href="#privacy" style={{ color: "#0F2E22", textDecoration: "underline" }}>Privacy Policy</a>
-                                    <a href="#security" style={{ color: "#0F2E22", textDecoration: "underline" }}>Security</a>
-                                </div>
-                            </div>
-                        </div>
-                    </footer>
+                    <LandingFooter />
                 </div>
             </div>
         </div>
