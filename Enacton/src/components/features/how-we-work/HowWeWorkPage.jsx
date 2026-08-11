@@ -4,6 +4,7 @@ import { Navbar } from "../../layout/Navbar";
 const Footer = lazy(() => import("../../layout/Footer"));
 const About = lazy(() => import("../about/About"));
 const HowWeWork = lazy(() => import("./HowWeWork"));
+const ArchitectureGrid = lazy(() => import("./HowWeWork").then(m => ({ default: m.ArchitectureGrid })));
 
 export const HowWeWorkPage = () => {
   useEffect(() => {
@@ -16,12 +17,16 @@ export const HowWeWorkPage = () => {
 
       <main className="relative z-10 pt-20 sm:pt-24 pb-16 select-none">
         <Suspense fallback={null}>
-          <section id="about" className="mb-12 sm:mb-16">
+          <section id="how-we-work">
+            <HowWeWork />
+          </section>
+
+          <section id="about">
             <About />
           </section>
 
-          <section id="how-we-work">
-            <HowWeWork />
+          <section id="architecture">
+            <ArchitectureGrid />
           </section>
         </Suspense>
       </main>

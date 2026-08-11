@@ -189,28 +189,34 @@ export const About = () => {
     <section
       id="about"
       data-testid="about-section"
-      className="relative z-30 w-full min-h-[100dvh] lg:h-[100dvh] bg-[#0c0a08] text-paper p-3 sm:p-5 lg:p-6 xl:p-8 flex flex-col justify-between select-none border-t border-white/10"
+      className="relative z-30 w-full bg-[#0c0a08] text-paper py-8 sm:py-12 lg:py-14 px-3 sm:px-5 lg:px-6 xl:px-8 flex flex-col justify-between select-none border-t border-white/10"
     >
       {/* High-Tech Radial Glow Overlay */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_32%,rgba(255,255,255,0.06),transparent_60%)] pointer-events-none z-0" />
-
-      {/* Precision SVG Geometry Laser Starburst Grid */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_32%,rgba(255,255,255,0.06),transparent_60%)] pointer-events-none z-0" />      {/* Precision SVG Geometry Laser Starburst Grid */}
       <svg
-        className="absolute inset-0 w-full h-full pointer-events-none opacity-25 z-0"
+        className="absolute inset-0 w-full h-full pointer-events-none opacity-20 z-0"
         viewBox="0 0 1200 650"
-        preserveAspectRatio="xMidYMid slice"
+        preserveAspectRatio="none"
         fill="none"
       >
-        <line x1="740" y1="200" x2="0" y2="0" stroke="white" strokeWidth="1" />
-        <line x1="740" y1="200" x2="1200" y2="0" stroke="white" strokeWidth="1" />
-        <line x1="740" y1="200" x2="0" y2="650" stroke="white" strokeWidth="1" />
-        <line x1="740" y1="200" x2="1200" y2="650" stroke="white" strokeWidth="1" />
-        <line x1="740" y1="200" x2="0" y2="200" stroke="white" strokeWidth="1" strokeDasharray="4 4" />
-        <line x1="740" y1="200" x2="740" y2="0" stroke="white" strokeWidth="1" strokeDasharray="4 4" />
-        <line x1="740" y1="200" x2="740" y2="650" stroke="white" strokeWidth="1" strokeDasharray="4 4" />
-        <line x1="740" y1="200" x2="1200" y2="200" stroke="white" strokeWidth="1" strokeDasharray="4 4" />
-        <circle cx="740" cy="200" r="26" stroke="white" strokeWidth="1" strokeDasharray="3 3" />
-        <circle cx="740" cy="200" r="3.5" fill="white" />
+        {/* Symmetrical Container Corner Diagonals */}
+        <line x1="600" y1="240" x2="60" y2="35" stroke="white" strokeWidth="1" opacity="0.7" />
+        <line x1="600" y1="240" x2="1140" y2="35" stroke="white" strokeWidth="1" opacity="0.7" />
+        <line x1="600" y1="240" x2="60" y2="610" stroke="white" strokeWidth="1" opacity="0.7" />
+        <line x1="600" y1="240" x2="1140" y2="610" stroke="white" strokeWidth="1" opacity="0.7" />
+
+        {/* Outer Side Vertical Dotted Lines (Left & Right Container Margins) */}
+        <line x1="60" y1="0" x2="60" y2="650" stroke="white" strokeWidth="1" strokeDasharray="4 4" opacity="0.4" />
+        <line x1="1140" y1="0" x2="1140" y2="650" stroke="white" strokeWidth="1" strokeDasharray="4 4" opacity="0.4" />
+
+        {/* Clean Horizontal Guideline Between Title and Animation Frame */}
+        <line x1="60" y1="240" x2="1140" y2="240" stroke="white" strokeWidth="1" strokeDasharray="4 4" opacity="0.5" />
+
+        {/* Focal Center & Outer Side Node Indicators */}
+        <circle cx="600" cy="240" r="20" stroke="white" strokeWidth="1" strokeDasharray="3 3" opacity="0.6" />
+        <circle cx="600" cy="240" r="3" fill="white" opacity="0.9" />
+        <circle cx="60" cy="240" r="2.5" fill="white" opacity="0.7" />
+        <circle cx="1140" cy="240" r="2.5" fill="white" opacity="0.7" />
       </svg>
 
       {/* Single-Screen Responsive Layout Container */}
@@ -232,19 +238,19 @@ export const About = () => {
           </span>
         </div>
 
-        {/* Main Headline & Leadership Grid with Lighter Font Weight */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 lg:gap-6 items-center my-auto py-1 relative">
+        {/* Main Headline & Leadership Container (Centered) */}
+        <div className="flex flex-col md:flex-row items-center justify-between gap-3 lg:gap-6 my-auto py-2 relative">
           <motion.div
             initial={{ opacity: 0, y: 14 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="lg:col-span-7"
+            className="w-full text-center"
           >
-            <span className="font-mono text-[9px] sm:text-xs uppercase tracking-widest text-paper/50 block mb-1 font-light">
+            <span className="font-mono text-[9px] sm:text-xs uppercase tracking-widest text-paper/50 block mb-1 font-light text-center">
               PROGRAM STATEMENT / 01
             </span>
-            <h2 className="font-outfit text-lg sm:text-2xl lg:text-3xl xl:text-4xl font-light uppercase tracking-tight text-paper/90 leading-[1.06]">
+            <h2 className="font-outfit text-lg sm:text-2xl lg:text-3xl xl:text-4xl font-light uppercase tracking-tight text-paper/90 leading-[1.06] text-center max-w-4xl mx-auto">
               ENGINEERING HIGH-FREQUENCY DIGITAL SYSTEMS FOR MODERN BUILDERS
             </h2>
           </motion.div>
@@ -255,20 +261,20 @@ export const About = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="lg:col-span-5 flex items-center justify-start lg:justify-end relative"
+            className="flex items-center justify-center shrink-0 relative"
           >
             <div
               ref={pillRef}
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
-              className="relative group cursor-pointer py-2"
+              className="relative group cursor-pointer py-1"
             >
               {/* Outer Moving Transparent Outline Without Drop Shadow Glow */}
               <div className="relative p-[1.5px] rounded-full bg-gradient-to-r from-white/35 via-white/10 to-white/35 animate-shimmer-border">
                 <div className="flex items-center gap-2.5 bg-[#0c0a08]/90 backdrop-blur-xl p-1.5 px-3.5 rounded-full">
                   <div className="flex overflow-hidden shrink-0">
                     <img
-                      className="inline-block h-10 w-10 sm:h-12 sm:w-12 rounded-full ring-2 ring-[#0c0a08] object-cover border border-white/50 shadow-md group-hover:scale-105 transition-transform"
+                      className="inline-block h-9 w-9 sm:h-10 sm:w-10 rounded-full ring-2 ring-[#0c0a08] object-cover border border-white/50 shadow-md group-hover:scale-105 transition-transform"
                       src={OWNER_PHOTO}
                       alt="Ovesh Dhanga - EnactOn Founder & CEO"
                     />
@@ -285,182 +291,186 @@ export const About = () => {
           </motion.div>
         </div>
 
-        {/* 3 Manifesto Chapter Cards with Lighter Font Weight Titles */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 my-auto">
-          {CHAPTERS.map((c, i) => (
-            <motion.div
-              key={c.no}
-              initial={{ opacity: 0, y: 14 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: i * 0.08 }}
-              data-testid={`about-chapter-${i + 1}`}
-              className="group relative rounded-xl bg-white/[0.04] p-3.5 sm:p-4.5 border border-white/15 hover:border-white/35 backdrop-blur-xl transition-all duration-300 flex flex-col justify-between"
-            >
-              <div>
-                <div className="flex items-center justify-between font-mono text-[9px] sm:text-[10px] text-paper/40 mb-1.5 pb-1 border-b border-white/10 font-light">
-                  <span>CHAPTER / {c.no}</span>
-                  <span className="h-1.5 w-1.5 rounded-full bg-white/40 group-hover:bg-white transition-colors" />
-                </div>
-                <h3 className="font-outfit text-sm sm:text-base lg:text-lg font-light tracking-tight text-paper mb-1">
-                  {c.title}
-                </h3>
-                <p className="font-outfit text-[11px] sm:text-xs text-paper/70 font-light leading-relaxed line-clamp-2 sm:line-clamp-3">
-                  {c.body}
-                </p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-
         {/* Manifesto Performance Architecture Table (3 Columns) - Sharp Edges & Vivid Background Frame */}
-        <div className="my-6 relative overflow-hidden border border-white/20 shadow-2xl p-6 sm:p-10 md:p-14 rounded-none">
-          {/* Framed Impressionist Painting Backdrop (Full Vibrancy, No Mask) */}
+        <div className="my-3 sm:my-4 relative overflow-hidden border border-white/20 shadow-2xl rounded-none flex items-center justify-center">
+          {/* Framed Impressionist Painting Backdrop */}
           <img
             src={BACKGROUND_ART}
             alt="Manifesto background texture"
             className="absolute inset-0 w-full h-full object-cover z-0 scale-105"
           />
 
-          {/* Center Table Container with Sharp Zero-Radius Edges */}
-          <div className="relative z-10 w-full bg-[#121214] border border-white/20 rounded-none overflow-hidden shadow-2xl">
-            <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/10">
-              
-              {/* Column 1: Attribution Yield (Code Graph) */}
-              <div className="p-4 sm:p-6 flex flex-col justify-between h-[310px] sm:h-[350px] text-left bg-[#121214]">
-                <div className="relative h-[190px] sm:h-[210px] w-full rounded-none bg-[#0a0a0c] border border-white/10 p-3.5 flex flex-col justify-between overflow-hidden">
-                  <div
-                    className="absolute inset-0 opacity-20 pointer-events-none"
-                    style={{
-                      backgroundImage: `radial-gradient(rgba(132, 204, 22, 0.4) 1px, transparent 1px)`,
-                      backgroundSize: "12px 12px",
-                    }}
-                  />
-                  <div className="relative z-10 w-fit">
-                    <div className="border border-[#84cc16]/50 bg-[#09090b] px-2.5 py-1 rounded-none border-l-2 border-l-[#84cc16]">
-                      <span className="font-mono text-[8px] uppercase tracking-widest text-paper/60 block">
-                        with EnactOn
-                      </span>
-                      <span className="font-mono text-xs sm:text-sm font-light text-[#84cc16] tracking-tight">
-                        84%~92% Speed Boost
-                      </span>
+          {/* Center Table Container */}
+          <div className="relative z-10 w-full p-3 sm:p-5 md:p-6">
+            <div className="w-full bg-[#121214] border border-white/20 rounded-none overflow-hidden shadow-2xl">
+              <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/10">
+                
+                {/* Column 1: Attribution Yield (Code Graph) */}
+                <div className="p-3.5 sm:p-5 flex flex-col justify-between h-[270px] sm:h-[310px] text-left bg-[#121214]">
+                  <div className="relative h-[165px] sm:h-[190px] w-full rounded-none bg-[#0a0a0c] border border-white/10 p-3 flex flex-col justify-between overflow-hidden">
+                    <div
+                      className="absolute inset-0 opacity-20 pointer-events-none"
+                      style={{
+                        backgroundImage: `radial-gradient(rgba(132, 204, 22, 0.4) 1px, transparent 1px)`,
+                        backgroundSize: "12px 12px",
+                      }}
+                    />
+                    <div className="relative z-10 w-fit">
+                      <div className="border border-[#84cc16]/50 bg-[#09090b] px-2.5 py-1 rounded-none border-l-2 border-l-[#84cc16]">
+                        <span className="font-mono text-[8px] uppercase tracking-widest text-paper/60 block">
+                          with EnactOn
+                        </span>
+                        <span className="font-mono text-xs sm:text-sm font-light text-[#84cc16] tracking-tight">
+                          84%~92% Speed Boost
+                        </span>
+                      </div>
+                    </div>
+                    <div className="relative z-10 w-fit mt-1">
+                      <div className="bg-[#1c1c20] border border-white/15 px-2 py-0.5 rounded-none">
+                        <span className="font-mono text-[7px] uppercase tracking-widest text-paper/40 block">
+                          before
+                        </span>
+                        <span className="font-mono text-[11px] font-light text-paper/80">
+                          67% ~ 71%
+                        </span>
+                      </div>
+                    </div>
+                    <div className="absolute inset-x-0 bottom-4 h-20 px-2 pointer-events-none">
+                      <svg viewBox="0 0 300 90" className="w-full h-full overflow-visible">
+                        <path d="M 10 70 Q 90 65, 160 55 T 290 40" fill="none" stroke="#ef4444" strokeWidth="1.5" />
+                        <path d="M 10 70 Q 90 60, 170 38 T 290 26" fill="none" stroke="#3b82f6" strokeWidth="1.5" />
+                        <path d="M 10 70 Q 80 50, 160 28 T 290 18" fill="none" stroke="#eab308" strokeWidth="1.5" />
+                        <path d="M 10 70 Q 75 55, 135 25 T 290 8" fill="none" stroke="#84cc16" strokeWidth="2.5" strokeLinecap="square" />
+                        <circle cx="290" cy="8" r="3" fill="#84cc16" />
+                      </svg>
+                    </div>
+                    <div className="relative z-10 flex items-center justify-between font-mono text-[8px] text-paper/40 tracking-wider font-light">
+                      <span>phase 1</span>
+                      <span>phase 10</span>
                     </div>
                   </div>
-                  <div className="relative z-10 w-fit mt-1">
-                    <div className="bg-[#1c1c20] border border-white/15 px-2 py-0.5 rounded-none">
-                      <span className="font-mono text-[7px] uppercase tracking-widest text-paper/40 block">
-                        before
-                      </span>
-                      <span className="font-mono text-[11px] font-light text-paper/80">
-                        67% ~ 71%
-                      </span>
+
+                  <div className="pt-2">
+                    <h3 className="font-outfit text-base sm:text-lg font-light text-paper tracking-tight mb-0.5">
+                      Performance & Scale
+                    </h3>
+                    <p className="font-outfit text-[11px] sm:text-xs font-light text-paper/70 leading-relaxed">
+                      Accelerates application load speed, reduces server latency, and optimizes high-scale platform throughput.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Column 2: Custom Platform Builds (2 Sliding Rows) */}
+                <div className="p-3.5 sm:p-5 flex flex-col justify-between h-[270px] sm:h-[310px] text-left bg-[#121214]">
+                  <div className="relative h-[165px] sm:h-[190px] w-full rounded-none bg-[#0a0a0c] border border-white/10 overflow-hidden flex flex-col justify-center gap-2 py-2">
+                    <div className="absolute inset-y-0 left-0 w-5 bg-gradient-to-r from-[#0a0a0c] to-transparent z-20 pointer-events-none" />
+                    <div className="absolute inset-y-0 right-0 w-5 bg-gradient-to-l from-[#0a0a0c] to-transparent z-20 pointer-events-none" />
+
+                    <div className="flex overflow-hidden w-full relative z-10">
+                      <motion.div
+                        animate={{ x: [0, -320] }}
+                        transition={{ duration: 16, repeat: Infinity, ease: "linear" }}
+                        className="flex items-center gap-2 shrink-0"
+                      >
+                        {[...TOP_SLIDE_DEALS, ...TOP_SLIDE_DEALS].map((deal, idx) => (
+                          <div key={idx} className="w-38 bg-[#18181c] border border-white/10 rounded-none p-1.5 flex items-center gap-2 shrink-0">
+                            <img src={deal.img} alt={deal.store} className="w-7 h-7 rounded-none object-cover border border-white/10 shrink-0" />
+                            <div className="font-outfit min-w-0 flex-1">
+                              <span className="font-light text-[10px] text-paper truncate block">{deal.store}</span>
+                              <span className="text-[8px] text-[#84cc16] font-mono block font-light">{deal.cashback}</span>
+                            </div>
+                          </div>
+                        ))}
+                      </motion.div>
+                    </div>
+
+                    <div className="flex overflow-hidden w-full relative z-10">
+                      <motion.div
+                        animate={{ x: [-320, 0] }}
+                        transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+                        className="flex items-center gap-2 shrink-0"
+                      >
+                        {[...BOTTOM_SLIDE_DEALS, ...BOTTOM_SLIDE_DEALS].map((deal, idx) => (
+                          <div key={idx} className="w-38 bg-[#18181c] border border-white/10 rounded-none p-1.5 flex items-center gap-2 shrink-0">
+                            <img src={deal.img} alt={deal.store} className="w-7 h-7 rounded-none object-cover border border-white/10 shrink-0" />
+                            <div className="font-outfit min-w-0 flex-1">
+                              <span className="font-light text-[10px] text-paper truncate block">{deal.store}</span>
+                              <span className="text-[8px] text-[#38bdf8] font-mono block font-light">{deal.cashback}</span>
+                            </div>
+                          </div>
+                        ))}
+                      </motion.div>
                     </div>
                   </div>
-                  <div className="absolute inset-x-0 bottom-5 h-22 px-2 pointer-events-none">
-                    <svg viewBox="0 0 300 90" className="w-full h-full overflow-visible">
-                      <path d="M 10 70 Q 90 65, 160 55 T 290 40" fill="none" stroke="#ef4444" strokeWidth="1.5" />
-                      <path d="M 10 70 Q 90 60, 170 38 T 290 26" fill="none" stroke="#3b82f6" strokeWidth="1.5" />
-                      <path d="M 10 70 Q 80 50, 160 28 T 290 18" fill="none" stroke="#eab308" strokeWidth="1.5" />
-                      <path d="M 10 70 Q 75 55, 135 25 T 290 8" fill="none" stroke="#84cc16" strokeWidth="2.5" strokeLinecap="square" />
-                      <circle cx="290" cy="8" r="3" fill="#84cc16" />
-                    </svg>
-                  </div>
-                  <div className="relative z-10 flex items-center justify-between font-mono text-[8px] text-paper/40 tracking-wider font-light">
-                    <span>phase 1</span>
-                    <span>phase 10</span>
+
+                  <div className="pt-2">
+                    <h3 className="font-outfit text-base sm:text-lg font-light text-paper tracking-tight mb-0.5">
+                      Custom Platform Builds
+                    </h3>
+                    <p className="font-outfit text-[11px] sm:text-xs font-light text-paper/70 leading-relaxed">
+                      Turnkey cashback, coupon, affiliate, and fintech platforms engineered & delivered to production.
+                    </p>
                   </div>
                 </div>
 
-                <div className="pt-2 sm:pt-3">
-                  <h3 className="font-outfit text-base sm:text-lg font-light text-paper tracking-tight mb-0.5">
-                    Performance & Scale
-                  </h3>
-                  <p className="font-outfit text-[11px] sm:text-xs font-light text-paper/70 leading-relaxed">
-                    Accelerates application load speed, reduces server latency, and optimizes high-scale platform throughput.
-                  </p>
+                {/* Column 3: Third-Party Integrations (Uploaded Image) */}
+                <div className="p-3.5 sm:p-5 flex flex-col justify-between h-[270px] sm:h-[310px] text-left bg-[#121214]">
+                  <div className="relative h-[165px] sm:h-[190px] w-full rounded-none bg-[#0a0a0c] border border-white/10 overflow-hidden">
+                    <img
+                      src="/integrations-grid.jpg"
+                      alt="Integrations grid"
+                      className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#121214]/60 via-transparent to-transparent pointer-events-none" />
+                  </div>
+
+                  <div className="pt-2">
+                    <h3 className="font-outfit text-base sm:text-lg font-light text-paper tracking-tight mb-0.5">
+                      Third-Party Integrations
+                    </h3>
+                    <p className="font-outfit text-[11px] sm:text-xs font-light text-paper/70 leading-relaxed">
+                      Seamlessly connects your custom software with 120+ affiliate networks, payment gateways & open banking APIs.
+                    </p>
+                  </div>
                 </div>
+
               </div>
-
-              {/* Column 2: Custom Platform Builds (2 Sliding Rows) */}
-              <div className="p-4 sm:p-6 flex flex-col justify-between h-[310px] sm:h-[350px] text-left bg-[#121214]">
-                <div className="relative h-[190px] sm:h-[210px] w-full rounded-none bg-[#0a0a0c] border border-white/10 overflow-hidden flex flex-col justify-center gap-2 py-2">
-                  <div className="absolute inset-y-0 left-0 w-5 bg-gradient-to-r from-[#0a0a0c] to-transparent z-20 pointer-events-none" />
-                  <div className="absolute inset-y-0 right-0 w-5 bg-gradient-to-l from-[#0a0a0c] to-transparent z-20 pointer-events-none" />
-
-                  <div className="flex overflow-hidden w-full relative z-10">
-                    <motion.div
-                      animate={{ x: [0, -320] }}
-                      transition={{ duration: 16, repeat: Infinity, ease: "linear" }}
-                      className="flex items-center gap-2 shrink-0"
-                    >
-                      {[...TOP_SLIDE_DEALS, ...TOP_SLIDE_DEALS].map((deal, idx) => (
-                        <div key={idx} className="w-38 bg-[#18181c] border border-white/10 rounded-none p-1.5 flex items-center gap-2 shrink-0">
-                          <img src={deal.img} alt={deal.store} className="w-7 h-7 rounded-none object-cover border border-white/10 shrink-0" />
-                          <div className="font-outfit min-w-0 flex-1">
-                            <span className="font-light text-[10px] text-paper truncate block">{deal.store}</span>
-                            <span className="text-[8px] text-[#84cc16] font-mono block font-light">{deal.cashback}</span>
-                          </div>
-                        </div>
-                      ))}
-                    </motion.div>
-                  </div>
-
-                  <div className="flex overflow-hidden w-full relative z-10">
-                    <motion.div
-                      animate={{ x: [-320, 0] }}
-                      transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
-                      className="flex items-center gap-2 shrink-0"
-                    >
-                      {[...BOTTOM_SLIDE_DEALS, ...BOTTOM_SLIDE_DEALS].map((deal, idx) => (
-                        <div key={idx} className="w-38 bg-[#18181c] border border-white/10 rounded-none p-1.5 flex items-center gap-2 shrink-0">
-                          <img src={deal.img} alt={deal.store} className="w-7 h-7 rounded-none object-cover border border-white/10 shrink-0" />
-                          <div className="font-outfit min-w-0 flex-1">
-                            <span className="font-light text-[10px] text-paper truncate block">{deal.store}</span>
-                            <span className="text-[8px] text-[#38bdf8] font-mono block font-light">{deal.cashback}</span>
-                          </div>
-                        </div>
-                      ))}
-                    </motion.div>
-                  </div>
-                </div>
-
-                <div className="pt-2 sm:pt-3">
-                  <h3 className="font-outfit text-base sm:text-lg font-light text-paper tracking-tight mb-0.5">
-                    Custom Platform Builds
-                  </h3>
-                  <p className="font-outfit text-[11px] sm:text-xs font-light text-paper/70 leading-relaxed">
-                    Turnkey cashback, coupon, affiliate, and fintech platforms engineered & delivered to production.
-                  </p>
-                </div>
-              </div>
-
-              {/* Column 3: Third-Party Integrations (Uploaded Image) */}
-              <div className="p-4 sm:p-6 flex flex-col justify-between h-[310px] sm:h-[350px] text-left bg-[#121214]">
-                <div className="relative h-[190px] sm:h-[210px] w-full rounded-none bg-[#0a0a0c] border border-white/10 overflow-hidden">
-                  <img
-                    src="/integrations-grid.jpg"
-                    alt="Integrations grid"
-                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#121214]/60 via-transparent to-transparent pointer-events-none" />
-                </div>
-
-                <div className="pt-2 sm:pt-3">
-                  <h3 className="font-outfit text-base sm:text-lg font-light text-paper tracking-tight mb-0.5">
-                    Third-Party Integrations
-                  </h3>
-                  <p className="font-outfit text-[11px] sm:text-xs font-light text-paper/70 leading-relaxed">
-                    Seamlessly connects your custom software with 120+ affiliate networks, payment gateways & open banking APIs.
-                  </p>
-                </div>
-              </div>
-
             </div>
           </div>
         </div>
 
-        {/* 4 Key Metrics Bar with Lighter Font Weight Values */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-4 border-t border-white/15 pt-2.5 sm:pt-3.5 pb-3 sm:pb-4 mt-auto">
+        {/* 3 Manifesto Chapter Cards (Original Card Styling - Positioned below animation) */}
+        <div className="px-3 sm:px-5 md:px-6 my-2 sm:my-3">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
+            {CHAPTERS.map((c, i) => (
+              <motion.div
+                key={c.no}
+                initial={{ opacity: 0, y: 14 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: i * 0.08 }}
+                data-testid={`about-chapter-${i + 1}`}
+                className="group relative rounded-xl bg-white/[0.04] p-3.5 sm:p-4.5 border border-white/15 hover:border-white/35 backdrop-blur-xl transition-all duration-300 flex flex-col justify-between"
+              >
+                <div>
+                  <div className="flex items-center justify-between font-mono text-[9px] sm:text-[10px] text-paper/40 mb-1.5 pb-1 border-b border-white/10 font-light">
+                    <span>CHAPTER / {c.no}</span>
+                    <span className="h-1.5 w-1.5 rounded-full bg-white/40 group-hover:bg-white transition-colors" />
+                  </div>
+                  <h3 className="font-outfit text-sm sm:text-base lg:text-lg font-light tracking-tight text-paper mb-1">
+                    {c.title}
+                  </h3>
+                  <p className="font-outfit text-[11px] sm:text-xs text-paper/70 font-light leading-relaxed line-clamp-2 sm:line-clamp-3">
+                    {c.body}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* 4 Key Metrics Bar (4 Equal Columns with Clean Vertical Dividers) */}
+        <div className="grid grid-cols-2 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-white/15 border-t border-white/15 pt-3 pb-3 sm:pb-4 mt-auto w-full">
           {STATS.map(({ value, label }, idx) => (
             <motion.div
               key={label}
@@ -469,11 +479,12 @@ export const About = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: idx * 0.05 }}
               data-testid={`about-stat-${label}`}
+              className="flex flex-col justify-center px-3 sm:px-6 py-2 md:py-0 text-left"
             >
-              <div className="font-outfit text-lg sm:text-xl lg:text-2xl font-light tracking-tight text-paper leading-none">
+              <div className="font-outfit text-xl sm:text-2xl lg:text-3xl font-light tracking-tight text-paper leading-none">
                 {value}
               </div>
-              <div className="mt-1 font-mono text-[8px] sm:text-[9px] lg:text-[10px] text-paper/50 uppercase tracking-wider leading-tight font-light">
+              <div className="mt-1.5 font-mono text-[8px] sm:text-[9px] lg:text-[10px] text-paper/50 uppercase tracking-wider leading-tight font-light">
                 {label}
               </div>
             </motion.div>

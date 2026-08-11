@@ -8,6 +8,7 @@ const MarqueeStrip = lazy(() => import("../components/features/marquees/MarqueeS
 const ProductShowcase = lazy(() => import("../components/features/products/ProductShowcase"));
 const About = lazy(() => import("../components/features/about/About"));
 const HowWeWork = lazy(() => import("../components/features/how-we-work/HowWeWork"));
+const ArchitectureGrid = lazy(() => import("../components/features/how-we-work/HowWeWork").then(m => ({ default: m.ArchitectureGrid })));
 const BookingSection = lazy(() => import("../components/features/booking/BookingSection"));
 const FeaturedTestimonial = lazy(() => import("../components/features/testimonials/FeaturedTestimonial"));
 const Testimonials = lazy(() => import("../components/features/testimonials/Testimonials"));
@@ -25,8 +26,9 @@ export function HomePage() {
           <WhatWeDo />
           <MarqueeStrip />
           <ProductShowcase />
-          <About />
           <HowWeWork />
+          <About />
+          <ArchitectureGrid />
           <BookingSection />
           <FeaturedTestimonial />
           <Testimonials />
