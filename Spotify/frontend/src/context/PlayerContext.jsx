@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useRef, useEffect } from 'r
 
 const PlayerContext = createContext();
 
-const BACKEND_URL = 'http://localhost:3000';
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || (import.meta.env.VITE_BASE_URL ? import.meta.env.VITE_BASE_URL.replace(/\/api\/?$/, '') : 'http://localhost:3000');
 
 export const PlayerProvider = ({ children }) => {
   const audioRef = useRef(new Audio());
