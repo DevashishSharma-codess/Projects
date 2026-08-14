@@ -1,10 +1,17 @@
+require("dotenv").config();
 const ImageKit = require("@imagekit/nodejs");
+const { toFile } = ImageKit;
 
 const imagekit = new ImageKit({
-  publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
-  privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
+  publicKey: process.env.IMAGEKIT_PUBLIC_KEY || "dummy_public_key",
+  privateKey: process.env.IMAGEKIT_PRIVATE_KEY || "dummy_private_key",
   urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT || "https://ik.imagekit.io/spotify_uploads",
 });
+
+// Attach upload alias for backwards compatibility if imagekit.upload is missing
+if (!imagekit.upload && imagekit.files && typeof imagekit.files.upload === "function") {
+  imagekit.upload = imagekit.files.upload.bind(imagekit.files);
+}
 
 /**
  * Upload file to ImageKit
@@ -14,8 +21,27 @@ const imagekit = new ImageKit({
  */
 async function uploadToImageKit(file, fileName) {
   try {
-    const response = await imagekit.upload({
-      file: file,
+    let uploadFile = file;
+
+    // In @imagekit/nodejs v7+, buffers must be converted via toFile helper if available
+    if (Buffer.isBuffer(file)) {
+      if (typeof toFile === "function") {
+        uploadFile = await toFile(file, fileName);
+      } else {
+        uploadFile = file.toString("base64");
+      }
+    }
+
+    const uploadFn = (imagekit.files && typeof imagekit.files.upload === "function")
+      ? imagekit.files.upload.bind(imagekit.files)
+      : (typeof imagekit.upload === "function" ? imagekit.upload.bind(imagekit) : null);
+
+    if (!uploadFn) {
+      throw new Error("ImageKit upload method is not available");
+    }
+
+    const response = await uploadFn({
+      file: uploadFile,
       fileName: fileName,
       folder: "/spotify-music",
     });
