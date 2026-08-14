@@ -2,6 +2,7 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const path = require("path");
+const connectDB = require("./db/db");
 
 const authRoutes = require("./routes/auth.routes");
 const musicRoutes = require("./routes/music.routes");
@@ -18,6 +19,17 @@ app.use(
     credentials: true,
   })
 );
+
+// DB Connection Middleware for Serverless & Standalone deployments
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    console.error('[DB MIDDLEWARE ERROR]', error.message);
+    res.status(500).json({ message: "Database connection error", error: error.message });
+  }
+});
 
 // Log all incoming requests
 app.use((req, res, next) => {
