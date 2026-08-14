@@ -1,9 +1,13 @@
 const jwt = require("jsonwebtoken");
 const musicModel = require("../models/music.model");
+const { uploadToImageKit } = require("../service/imagekit.service");
 
 function normalizeUri(filePath) {
   if (!filePath) return "";
-  // Convert backslashes to forward slashes
+  if (filePath.startsWith("http://") || filePath.startsWith("https://")) {
+    return filePath;
+  }
+  // Fallback for local files
   const cleanPath = filePath.replace(/\\/g, "/");
   return cleanPath.startsWith("uploads/") ? `/${cleanPath}` : `/uploads/${cleanPath}`;
 }
@@ -30,9 +34,13 @@ async function createMusic(req, res) {
 
     const { title } = req.body;
 
+    // Upload audio file buffer to ImageKit
+    const filename = `${Date.now()}-${req.file.originalname}`;
+    const uploadResult = await uploadToImageKit(req.file.buffer, filename);
+
     const music = await musicModel.create({
       title: title || req.file.originalname,
-      uri: req.file.path, // Local file path
+      uri: uploadResult.url,
       artist: decoded.id,
     });
 
@@ -46,9 +54,9 @@ async function createMusic(req, res) {
       },
     });
   } catch (err) {
-    console.error(err);
-    return res.status(401).json({
-      message: err.message,
+    console.error("Upload controller error:", err);
+    return res.status(500).json({
+      message: err.message || "Failed to upload music track",
     });
   }
 }
