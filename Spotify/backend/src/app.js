@@ -8,13 +8,23 @@ const musicRoutes = require("./routes/music.routes");
 
 const app = express();
 
+const corsOrigin = (process.env.FRONTEND_URL || "http://localhost:5173").replace(/\/$/, "");
+console.log('[CORS] Configured origin:', corsOrigin);
+
 // Middleware
 app.use(
   cors({
-  origin: (process.env.FRONTEND_URL || "http://localhost:5173").replace(/\/$/, ""),
+    origin: corsOrigin,
     credentials: true,
   })
 );
+
+// Log all incoming requests
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
+  console.log('[REQUEST] Origin:', req.get('origin'));
+  next();
+});
 
 app.use(express.json());
 app.use(cookieParser());
