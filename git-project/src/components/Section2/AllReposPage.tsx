@@ -4,8 +4,6 @@ import { motion } from 'framer-motion'
 import { ArrowLeft, Search, Star, GitFork, ExternalLink, Sparkles, Filter, Code, ChevronLeft, ChevronRight } from 'lucide-react'
 import AuraGlassButton from '../common/AuraGlassButton'
 import { useRepos } from '../../hooks/useRepos'
-import type { GitHubRepo } from '../../api/fetchRepos'
-
 
 
 const LANGUAGE_COLORS: Record<string, string> = {
