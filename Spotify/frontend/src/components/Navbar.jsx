@@ -1,23 +1,41 @@
 import React, { useState } from 'react';
-import { Search, User, LogOut, Upload, PlusCircle, Headphones, Mic2 } from 'lucide-react';
+import { Search, User, LogOut, Upload, PlusCircle, Headphones, Mic2, Menu } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
-export const Navbar = ({ searchQuery, setSearchQuery, activeTab, setActiveTab, onOpenCreatePlaylistModal }) => {
+export const Navbar = ({
+  searchQuery,
+  setSearchQuery,
+  activeTab,
+  setActiveTab,
+  onOpenCreatePlaylistModal,
+  onToggleSidebar,
+}) => {
   const { user, isArtist, openAuth, logout } = useAuth();
   const [showDropdown, setShowDropdown] = useState(false);
 
   return (
     <header className="spotify-navbar">
-      {/* Search Input Container */}
-      <div className="search-container">
-        <Search size={18} className="search-icon" />
-        <input
-          type="text"
-          placeholder="What do you want to listen to?"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="search-input"
-        />
+      <div className="navbar-left-group">
+        {/* Mobile Hamburger Menu Toggle Button */}
+        <button
+          className="mobile-sidebar-toggle-btn"
+          onClick={onToggleSidebar}
+          title="Toggle Navigation Menu"
+        >
+          <Menu size={20} />
+        </button>
+
+        {/* Search Input Container */}
+        <div className="search-container">
+          <Search size={18} className="search-icon" />
+          <input
+            type="text"
+            placeholder="What do you want to listen to?"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="search-input"
+          />
+        </div>
       </div>
 
       {/* User Actions Right Section */}
@@ -29,7 +47,7 @@ export const Navbar = ({ searchQuery, setSearchQuery, activeTab, setActiveTab, o
           title="Create New Playlist"
         >
           <PlusCircle size={16} className="create-playlist-icon" />
-          <span>Create Playlist</span>
+          <span className="btn-label-text">Create Playlist</span>
         </button>
 
         {user ? (
@@ -40,7 +58,7 @@ export const Navbar = ({ searchQuery, setSearchQuery, activeTab, setActiveTab, o
                 onClick={() => setActiveTab('studio')}
               >
                 <Upload size={15} />
-                <span>Upload Music</span>
+                <span className="btn-label-text">Upload Music</span>
               </button>
             )}
 

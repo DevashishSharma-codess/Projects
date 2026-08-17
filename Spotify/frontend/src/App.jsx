@@ -19,6 +19,7 @@ function AppContent() {
   const [userPlaylists, setUserPlaylists] = useState([]);
   const [activePlaylistId, setActivePlaylistId] = useState(null);
   const [isPlaylistModalOpen, setIsPlaylistModalOpen] = useState(false);
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   // Load custom user playlists from localStorage on mount
   useEffect(() => {
@@ -102,6 +103,8 @@ function AppContent() {
         activePlaylistId={activePlaylistId}
         setActivePlaylistId={setActivePlaylistId}
         onOpenCreatePlaylistModal={() => setIsPlaylistModalOpen(true)}
+        mobileOpen={mobileSidebarOpen}
+        onCloseMobileSidebar={() => setMobileSidebarOpen(false)}
       />
 
       {/* Main Content Pane */}
@@ -112,6 +115,7 @@ function AppContent() {
           activeTab={activeTab}
           setActiveTab={setActiveTab}
           onOpenCreatePlaylistModal={() => setIsPlaylistModalOpen(true)}
+          onToggleSidebar={() => setMobileSidebarOpen(!mobileSidebarOpen)}
         />
 
         {/* Journal Artist Upload Banner */}

@@ -1827,4 +1827,326 @@ body {
   color: var(--spotify-green);
 }
 
+/* ==========================================================================
+   RESPONSIVE DESIGN SYSTEM (ALL SCREENS & MONITORS)
+   ========================================================================== */
+
+.mobile-sidebar-toggle-btn, .mobile-sidebar-close-btn, .mobile-sidebar-overlay {
+  display: none;
+}
+
+.brand-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.navbar-left-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* 1. Large Monitors & Ultra-Wide Displays (>= 1400px) */
+@media (min-width: 1400px) {
+  .music-cards-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 24px;
+  }
+
+  .scrollable-body {
+    padding: 32px;
+  }
+}
+
+/* 2. Standard Laptops & Desktops (1024px - 1399px) */
+@media (min-width: 1024px) and (max-width: 1399px) {
+  .music-cards-grid {
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 18px;
+  }
+}
+
+/* 3. Small Laptops & Tablets Landscape (768px - 1023px) */
+@media (max-width: 1023px) {
+  :root {
+    --sidebar-width: 220px;
+  }
+
+  .search-container {
+    width: 240px;
+  }
+
+  .journal-artist-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 16px 20px;
+  }
+
+  .banner-actions {
+    width: 100%;
+    justify-content: flex-start;
+    margin-top: 10px;
+  }
+
+  .music-cards-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 14px;
+  }
+
+  .player-track-info {
+    width: 35%;
+  }
+
+  .player-volume-right {
+    width: 25%;
+  }
+}
+
+/* 4. Mobile Devices & Tablets Portrait (<= 767px) */
+@media (max-width: 767px) {
+  .spotify-app-layout {
+    flex-direction: column;
+    padding-bottom: 76px;
+  }
+
+  .main-content-area {
+    margin: 0;
+    border-radius: 0;
+    height: 100vh;
+  }
+
+  .mobile-sidebar-toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    color: #FFFFFF;
+    cursor: pointer;
+    padding: 6px;
+  }
+
+  .mobile-sidebar-close-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    color: #FFFFFF;
+    cursor: pointer;
+    padding: 4px;
+  }
+
+  .mobile-sidebar-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    z-index: 250;
+  }
+
+  /* Drawer Sidebar on Mobile */
+  .spotify-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 280px;
+    z-index: 260;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.8);
+    background: #121212;
+  }
+
+  .spotify-sidebar.mobile-open {
+    transform: translateX(0);
+  }
+
+  .spotify-navbar {
+    padding: 0 14px;
+    height: 56px;
+  }
+
+  .search-container {
+    width: 160px;
+    padding: 6px 10px;
+  }
+
+  .search-input {
+    font-size: 12.5px;
+  }
+
+  .nav-create-playlist-btn .btn-label-text,
+  .quick-upload-btn .btn-label-text {
+    display: none;
+  }
+
+  .nav-create-playlist-btn, .quick-upload-btn {
+    padding: 8px;
+    border-radius: 50%;
+  }
+
+  .scrollable-body {
+    padding: 14px;
+  }
+
+  .journal-artist-banner {
+    margin: 8px 0;
+    padding: 14px;
+    border-radius: 12px;
+  }
+
+  .banner-title {
+    font-size: 16px;
+  }
+
+  .banner-desc {
+    font-size: 12px;
+  }
+
+  .mood-chips-row {
+    padding: 0;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    margin-bottom: 16px;
+  }
+
+  .mood-chips-row::-webkit-scrollbar {
+    display: none;
+  }
+
+  .mood-chip {
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .playlist-header-hero {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 18px;
+    margin: 0 0 16px 0;
+    border-radius: 14px;
+    gap: 14px;
+  }
+
+  .hero-cover-img, .hero-artwork {
+    width: 90px;
+    height: 90px;
+    border-radius: 12px;
+  }
+
+  .hero-title {
+    font-size: 20px;
+  }
+
+  .music-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .music-card {
+    padding: 10px;
+  }
+
+  .card-song-title {
+    font-size: 13px;
+  }
+
+  /* Table View on Mobile */
+  .th-num, .td-num, .th-duration, .td-duration {
+    display: none;
+  }
+
+  .spotify-track-table th, .spotify-track-table td {
+    padding: 8px 6px;
+  }
+
+  /* Mobile Bottom Player Bar */
+  .spotify-player-bar {
+    height: 72px;
+    padding: 0 12px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100vw;
+  }
+
+  .player-track-info {
+    width: 60%;
+    gap: 8px;
+  }
+
+  .track-cover-art {
+    width: 42px;
+    height: 42px;
+  }
+
+  .track-title {
+    font-size: 12.5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 140px;
+  }
+
+  .track-artist {
+    font-size: 11px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 140px;
+  }
+
+  .player-controls-center {
+    width: auto;
+  }
+
+  .time-scrubber-row {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+  }
+
+  .time-label {
+    display: none;
+  }
+
+  .progress-bar-wrapper {
+    height: 3px;
+  }
+
+  .seek-slider {
+    height: 3px;
+  }
+
+  .player-volume-right {
+    display: none;
+  }
+}
+
+/* 5. Very Small Screen Mobile Phones (<= 380px) */
+@media (max-width: 380px) {
+  .search-container {
+    width: 130px;
+  }
+
+  .music-cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .track-title, .track-artist {
+    max-width: 100px;
+  }
+}
+
+
 
