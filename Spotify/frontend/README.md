@@ -1,16 +1,38 @@
-# React + Vite
+# 🎵 Spotify Frontend – Web Client
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+[![Live Web Application](https://img.shields.io/badge/Live_App-spotify--fe--weld.vercel.app-1DB954?style=for-the-badge&logo=vercel)](https://spotify-fe-weld.vercel.app/)
 
-Currently, two official plugins are available:
+Official Frontend URL: **[https://spotify-fe-weld.vercel.app/](https://spotify-fe-weld.vercel.app/)**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## 🎧 Overview
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+The frontend web client for the Spotify Clone, built with **React 19**, **Vite 8**, **Axios**, and **Lucide Icons**. Designed with a modern dark glassmorphic Apple UI interface.
 
-## Expanding the Oxlint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+## 🌐 Live Deployments & Cross-Project Links
+
+- 🎵 **Spotify Frontend**: [https://spotify-fe-weld.vercel.app/](https://spotify-fe-weld.vercel.app/)
+- ⚙️ **Spotify Backend API**: [https://spotify-be-seven.vercel.app/](https://spotify-be-seven.vercel.app/)
+- 📓 **Dogear Journal Web App**: [https://dogear-theta.vercel.app/](https://dogear-theta.vercel.app/)
+
+---
+
+## ✨ Features
+
+- ➕ **Top Navigation & Sidebar Playlist Creator**: Create custom playlists with mood tags and track selection.
+- 🎵 **Persistent Audio Player**: Play, pause, skip, seek, and adjust volume across all pages.
+- 🌿 **Curated Mood Playlists**: Pre-seeded soundscapes matching Journal moods.
+- 🎙️ **Artist Studio**: Upload interface for registered artist accounts.
+- 🎨 **Dark Glassmorphic UI**: High-end aesthetic with dark translucent panels and SVG iconography.
+
+---
+
+## 🚀 Local Development
+
+```bash
+npm install
+npm run dev
+```

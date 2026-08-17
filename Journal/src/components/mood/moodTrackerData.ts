@@ -37,8 +37,7 @@ export interface MoodSong {
 }
 
 export function getSpotifyAppUrl(moodKey?: string, songTitle?: string): string {
-    // Hardcoded deployed Spotify application URL
-    const spotifyBase = "https://spotify-fe-weld.vercel.app";
+    const spotifyBase = (import.meta as any).env?.VITE_SPOTIFY_APP_URL || "https://spotify-fe-weld.vercel.app";
     const params = new URLSearchParams({ from: "journal", notice: "artist" });
     if (moodKey) params.set("mood", moodKey);
     if (songTitle) params.set("song", songTitle);

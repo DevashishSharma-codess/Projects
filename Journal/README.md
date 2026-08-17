@@ -1,280 +1,94 @@
-# 📔 Dogear Journal – Technical Documentation & Developer Guide
+# 📔 Dogear Journal – Technical Documentation
 
-> **"Capture, reflect, and grow – right from your browser, with a sleek macOS-inspired studio UI."**
+[![Live Production App](https://img.shields.io/badge/Live_App-dogear--theta.vercel.app-10B981?style=for-the-badge&logo=vercel)](https://dogear-theta.vercel.app/)
+[![Spotify Soundscapes](https://img.shields.io/badge/Spotify_Integration-spotify--fe--weld.vercel.app-1DB954?style=for-the-badge&logo=spotify)](https://spotify-fe-weld.vercel.app/)
 
-A state-of-the-art, client-side web journaling application built with **React 19**, **TypeScript 6**, **Vite 8**, **TanStack React Query v5**, **Recharts**, **Lucide Icons**, and **React Quill New**. Features a glassmorphic macOS desktop design, interactive folder hierarchy, rich-text studio editor, comprehensive mood tracker analytics, dynamic quotes portal, and a bento grid archive.
+> **"Capture, reflect, and grow – right from your browser with a sleek macOS-inspired glassmorphic UI."**
+
+Official Production URL: **[https://dogear-theta.vercel.app/](https://dogear-theta.vercel.app/)**
 
 ---
 
 ## 📋 Table of Contents
 
+- [Live Deployments & Integration](#-live-deployments--integration)
 - [Overview](#-overview)
 - [Key Features](#-key-features)
-- [Tech Stack & Dependencies](#-tech-stack--dependencies)
-- [Project Architecture & Directory Structure](#-project-architecture--directory-structure)
-- [State Architecture & Data Flow](#-state-architecture--data-flow)
-  - [1. Centralized Journal Context (`JournalContext.tsx`)](#1-centralized-journal-context-journalcontexttsx)
-  - [2. Storage Layer & Event Dispatcher (`folderStorage.ts`)](#2-storage-layer--event-dispatcher-folderstoragets)
-  - [3. React Query Integration (`quotesApi.ts` & `useQuotes.ts`)](#3-react-query-integration-quotesapits--usequotests)
-- [Detailed Component Breakdown](#-detailed-component-breakdown)
-  - [1. Root Shell (`App.tsx` & `Landing.tsx`)](#1-root-shell-apptsx--landingtsx)
-  - [2. Folder Explorer (`FolderExplorer.tsx`)](#2-folder-explorer-folderexplorertsx)
-  - [3. Journal Studio Editor (`JournalEditor.tsx`)](#3-journal-studio-editor-journaleditortsx)
-  - [4. Mood & Wellness Studio (`MoodTracker.tsx`)](#4-mood--wellness-studio-moodtrackertsx)
-  - [5. Quotes Hub (`QuotesHub.tsx`)](#5-quotes-hub-quoteshubtsx)
-  - [6. Bento Archive (`BentoArchive.tsx`)](#6-bento-archive-bentoarchivetsx)
-  - [7. Micro-Decorations & Doodles (`DoodleIllustrations.tsx`)](#7-micro-decorations--doodles-doodleillustrationstsx)
-- [Design System & Aesthetics](#-design-system--aesthetics)
+- [Tech Stack & Architecture](#-tech-stack--architecture)
+- [Mood Soundscapes & Spotify Redirection](#-mood-soundscapes--spotify-redirection)
 - [Getting Started & Development](#-getting-started--development)
-- [Data Model & Type Definitions](#-data-model--type-definitions)
-- [License & Credits](#-license--credits)
+
+---
+
+## 🌐 Live Deployments & Integration
+
+- 📔 **Dogear Journal Web App**: [https://dogear-theta.vercel.app/](https://dogear-theta.vercel.app/)
+- 🎧 **Spotify Web App Integration**: [https://spotify-fe-weld.vercel.app/](https://spotify-fe-weld.vercel.app/)
 
 ---
 
 ## ☕ Overview
 
-**Dogear Journal** brings a native desktop app aesthetic to the modern web browser. Inspired by macOS UI design, it blends glassmorphism, dynamic multi-stop gradients, micro-interactions, and custom typography (*Outfit*, *Plus Jakarta Sans*, *Caveat*) to create an inspiring space for daily writing, emotional tracking, and personal reflection.
-
-All core user data (folders, entries, mood logs, bookmarked quotes) is persisted locally in `localStorage` with real-time reactive event listeners, making the app 100% private, instant-loading, and functional without requiring a backend account.
+**Dogear Journal** is a client-side journaling application featuring a macOS desktop glassmorphic design. Built with **React 19**, **TypeScript 6**, **Vite 8**, **TanStack React Query**, **Recharts**, and **Lucide Icons**, it provides personal writing, emotional tracking, and reflection tools.
 
 ---
 
 ## ✨ Key Features
 
-- 📁 **macOS-Style Folder Explorer**: Visual folder cards with customizable gradient themes, custom icons, search filters, and grid/list view toggles.
-- ✍️ **Rich-Text Journal Studio**: Powered by `react-quill-new` with custom toolbars, multiple typography styles (*Sans*, *Handwriting*, *Serif*), tag pickers, mood chips, auto-save status indicators, and character/word counter metrics.
-- 📊 **Mood & Wellness Tracker**: Interactive calendar heatmaps, hourly slotting, Recharts mood trends visualizer, mood-filtered glass blogs/articles, and a built-in box breathing exercise modal.
-- 💬 **Dynamic Quotes Portal**: Integrated with **TanStack React Query** fetching real-time inspirational quotes from DummyJSON API, featuring typewriter animations, favoriting, clipboard copying, and custom quote creation.
-- 🍱 **Bento Grid Archive**: Mac OS Bento Grid archive interface showcasing lifetime stats, recent entry timelines, folder breakdown charts, tag clouds, and entry detail inspection modals.
-- ⚡ **Real-Time Client Sync**: Reactive state sync powered by React Context and custom `window` event dispatchers (`dogear_folders_updated`, `dogear_open_entry_in_editor`).
+- 📁 **macOS-Style Folder Explorer**: Customizable folder cards, gradient themes, search filtering, and list/grid layouts.
+- ✍️ **Rich-Text Studio Editor**: Built with `react-quill-new` featuring custom toolbars, typography options (Sans, Handwriting, Serif), mood chips, auto-save status, and character/word counters.
+- 📊 **Mood & Wellness Tracker**: Calendar heatmaps, hourly slotting, Recharts analytics, and integrated box breathing exercises.
+- 🎵 **Mood Soundscapes & Spotify Redirection**: Recommends tunes based on your mood (Radiant, Peaceful, Focused, Energetic, Stressed, Low Energy) and redirects directly to Our Spotify web app ([`https://spotify-fe-weld.vercel.app/`](https://spotify-fe-weld.vercel.app/)).
+- 💬 **Quotes Portal**: Powered by React Query, fetching inspirational quotes with typewriter animations and local bookmarking.
+- 🍱 **Bento Archive Grid**: Modern bento layout displaying stats, folder breakdowns, timelines, and tag clouds.
 
 ---
 
-## 🛠️ Tech Stack & Dependencies
+## 🛠️ Tech Stack & Architecture
 
-### Core Frameworks
-- **React 19 (`react` ^19.2.8 / `react-dom` ^19.2.8)**: Component-based UI engine.
-- **TypeScript 6 (`typescript` ~6.0.2)**: Strict type checking and interface safety.
-- **Vite 8 (`vite` ^8.2.0)**: High-performance frontend build tool and dev server.
-
-### Libraries & Utilities
-- **@tanstack/react-query (^5.101.4)**: Asynchronous data fetching, caching, and state management for API integration.
-- **react-quill-new (^3.8.3)**: Advanced rich-text editor for entry authoring.
-- **recharts (^3.10.1)**: Responsive chart library for mood trends and analytics graphs.
-- **lucide-react (^1.28.0)**: Clean, customizable SVG icon library.
-- **jimp (^1.6.1) / pngjs (^7.0.0)**: Image manipulation helpers.
+- **Frontend Core**: React 19, TypeScript 6, Vite 8
+- **State & Data**: React Context API, TanStack React Query v5, LocalStorage reactive sync
+- **Styling**: Vanilla CSS, Glassmorphism, Tailwind CSS, Lucide Icons
+- **Analytics & Visuals**: Recharts, Canvas Confetti
 
 ---
 
-## 📁 Project Architecture & Directory Structure
+## 🎵 Mood Soundscapes & Spotify Redirection
 
-```text
-Journal/
-├── index.html                  # HTML entry point with web font imports
-├── package.json                # Project dependencies and script definitions
-├── tsconfig.json               # TypeScript base configuration
-├── tsconfig.app.json           # Application TypeScript config
-├── vite.config.ts              # Vite server & bundler configuration
-├── README.md                   # Detailed technical documentation
-├── .readme                     # Technical documentation copy
-├── public/                     # Static public assets
-└── src/                        # Main React application source code
-    ├── App.tsx                 # Root React component wrapped in JournalProvider
-    ├── main.tsx                # React DOM render entry point with QueryClientProvider
-    ├── App.css                 # Application layout styles
-    ├── index.css               # Global CSS variables, resets, and glassmorphism utilities
-    ├── api/                    # Remote API Integration
-    │   └── quotesApi.ts        # DummyJSON quotes API client and data mappers
-    ├── hooks/                  # Custom React Hooks
-    │   └── useQuotes.ts        # TanStack React Query hooks (useQuotes, useRandomQuote)
-    ├── context/                # Global State Management
-    │   └── JournalContext.tsx  # Centralized React Context for folders, entries, mood & navigation
-    ├── types/                  # TypeScript Interface Definitions
-    │   └── journal.ts          # JournalEntry, JournalFolder, MoodLog, QuoteItem types
-    ├── utils/                  # Utility Functions & Local Storage
-    │   └── folderStorage.ts    # localStorage CRUD layer and custom DOM event dispatchers
-    └── components/             # UI Components
-        ├── Landing.tsx         # macOS top bar, mode selector, navigation shell
-        ├── FolderExplorer.tsx  # Folder grid, creation modal, entry inspector
-        ├── JournalEditor.tsx   # Quill rich-text editor studio component
-        ├── MoodTracker.tsx     # Calendar heatmap, Recharts analytics, breathing modal
-        ├── QuotesHub.tsx       # Quotes repository, typewriter display, creation modal
-        ├── BentoArchive.tsx    # Bento grid analytics, lifetime stats, tag cloud
-        └── DoodleIllustrations.tsx # SVG decorative doodle assets
-```
+Selecting a mood in the *Mood Music & Soundscapes* widget dynamically generates direct links to **Our Spotify Project** (`https://spotify-fe-weld.vercel.app/?mood=...&from=journal&notice=artist`).
 
----
-
-## 🔄 State Architecture & Data Flow
-
-```mermaid
-flowchart TD
-    LS[(localStorage)] <--> FS[folderStorage.ts]
-    FS -- Dispatches Events --> DOM[Window Custom Events]
-    DOM -- 'dogear_folders_updated' --> JC[JournalContext.tsx]
-    
-    API[DummyJSON API] <--> QA[quotesApi.ts]
-    QA <--> RQ[useQuotes Hook via React Query]
-    
-    JC <--> Landing[Landing Shell]
-    JC <--> FE[FolderExplorer Component]
-    JC <--> JE[JournalEditor Component]
-    JC <--> MT[MoodTracker Component]
-    JC <--> BA[BentoArchive Component]
-    RQ <--> QH[QuotesHub Component]
-```
-
-### 1. Centralized Journal Context (`JournalContext.tsx`)
-Acts as the single source of truth for application state:
-- **Navigation State**: `activeTab`, `scrolled`, `mobileMenuOpen`, `scrollToSection()`.
-- **Folder & Entry State**: `folders`, `activeFolderId`, `selectedEntry`, `editingEntry`, `searchQuery`, `viewMode`.
-- **Actions**: `createFolder`, `deleteFolder`, `addEntryToFolder`, `deleteEntryFromFolder`, `saveJournalEntry`.
-- **Mood Tracker State**: `moodLogs`, `calYear`, `calMonth`, `timeframe`, `showMoodModal`, `isBreathing`.
-
-### 2. Storage Layer & Event Dispatcher (`folderStorage.ts`)
-- Encapsulates `localStorage` keys: `dogear_journal_folders` and `dogear_journal_entries`.
-- Automatically dispatches custom DOM event `dogear_folders_updated` whenever folders or entries are updated, keeping decoupled components in sync.
-
-### 3. React Query Integration (`quotesApi.ts` & `useQuotes.ts`)
-- Fetches inspirational quotes from `https://dummyjson.com/quotes`.
-- Uses `@tanstack/react-query` with a 2-minute stale time and 5-minute garbage collection time for optimal performance and caching.
-
----
-
-## 🧩 Detailed Component Breakdown
-
-### 1. Root Shell (`App.tsx` & `Landing.tsx`)
-- Provides the macOS glassmorphic top menu bar, view mode pills, and mobile drawer.
-- Renders page sections with smooth anchor scrolling (`#hero`, `#folders`, `#editor`, `#mood`, `#quotes`, `#bento`).
-
-### 2. Folder Explorer (`FolderExplorer.tsx`)
-- Visual tiles with customizable color themes (`#3B82F6`, `#8B5CF6`, `#EC4899`, etc.).
-- Folder creation popup modal with custom gradient picker.
-- Entry detail modal with quick action to open directly inside the **Journal Studio Editor**.
-
-### 3. Journal Studio Editor (`JournalEditor.tsx`)
-- Rich-text editor powered by `react-quill-new`.
-- Font family toggles (*Sans*, *Handwriting*, *Serif*).
-- Tag management chips and mood selector.
-- Live character counter, word counter, and auto-save indicator.
-
-### 4. Mood & Wellness Studio (`MoodTracker.tsx`)
-- Visual calendar heatmap grid with month and year selectors.
-- Hourly time slotting for logging moods (*Radiant*, *Peaceful*, *Energetic*, *Focused*, *Stressed*).
-- **Recharts** integration showing mood distribution trends over time.
-- Integrated **Box Breathing Exercise** popup modal for mindfulness.
-
-### 5. Quotes Hub (`QuotesHub.tsx`)
-- Interactive quote tab browser powered by React Query.
-- Typewriter animation effect for daily featured quote.
-- Favoriting system with clipboard copy and custom quote authoring modal.
-
-### 6. Bento Archive (`BentoArchive.tsx`)
-- macOS Bento Grid overview displaying overall writing statistics.
-- Folder distribution metrics and interactive tag cloud filtering.
-- Quick entry inspection drawer.
-
-### 7. Micro-Decorations & Doodles (`DoodleIllustrations.tsx`)
-- Custom vector SVG icons and decorative doodle accents enhancing the UI presentation.
-
----
-
-## 🎨 Design System & Aesthetics
-
-| Design Element | Specification |
-| :--- | :--- |
-| **Primary Typography** | `Outfit` (Headings, buttons, UI labels) |
-| **Body Typography** | `Plus Jakarta Sans` (Body text, input controls) |
-| **Handwritten Font** | `Caveat` (Personal journal entry text) |
-| **Glassmorphism** | `background: rgba(15, 23, 42, 0.65)`, `backdrop-filter: blur(24px)` |
-| **Color Palette** | Dark slate `#0F172A`, Indigo `#6366F1`, Violet `#8B5CF6`, Amber `#F59E0B`, Emerald `#10B981` |
-| **Micro-Animations** | Hover scale transforms, glass glow reflections, smooth scroll behavior |
+When redirected to Spotify:
+1. The corresponding mood playlist automatically opens.
+2. Users can play soundscapes or create custom playlists.
+3. Sound designers and creators are invited to **Sign Up as an Artist** to upload their own tracks.
 
 ---
 
 ## 🚀 Getting Started & Development
 
-### Prerequisites
-- **Node.js**: v18.0.0 or higher
-- **npm**: v9.0.0 or higher
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/enacton-interns/Devashish-Repo.git
+   cd Journal
+   ```
 
-### Installation
+2. **Install Dependencies**:
+   ```bash
+   npm install
+   ```
 
-```bash
-# Navigate to the Journal directory
-cd Journal
+3. **Configure Environment Variables**:
+   Create a `.env` file in the root:
+   ```env
+   VITE_SPOTIFY_APP_URL=https://spotify-fe-weld.vercel.app
+   ```
 
-# Install project dependencies
-npm install
-```
+4. **Start Development Server**:
+   ```bash
+   npm run dev
+   ```
 
-### Development Server
-
-```bash
-# Start Vite development server
-npm run dev
-```
-Open `http://localhost:5173` in your browser.
-
-### Building for Production
-
-```bash
-# Compile TypeScript and build production bundle
-npm run build
-
-# Preview production build locally
-npm run preview
-```
-
----
-
-## 📐 Data Model & Type Definitions
-
-Defined in `src/types/journal.ts`:
-
-```typescript
-export interface JournalEntry {
-    id: string;
-    folderId?: string;
-    title: string;
-    content: string;
-    tags: string[];
-    mood: string;
-    date: string;
-    time: string;
-    fontStyle: "sans" | "handwriting" | "serif";
-}
-
-export interface JournalFolder {
-    id: string;
-    name: string;
-    description: string;
-    color: string;
-    gradient: string;
-    iconColor: string;
-    categoryTag: string;
-    entries: JournalEntry[];
-}
-
-export interface MoodLog {
-    id: string;
-    day: string;
-    time: string;
-    hourSlot: string;
-    timestamp: number;
-    moodKey: string;
-    moodLabel: string;
-    icon: string;
-    score: number;
-    color: string;
-    note: string;
-}
-```
-
----
-
-## 📜 License & Credits
-
-- **Application**: **Dogear Journal Studio**
-- **Developer / Maintainer**: **EnactOn Technologies Private Limited**
-- **License**: MIT License
+5. **Build for Production**:
+   ```bash
+   npm run build
+   ```
