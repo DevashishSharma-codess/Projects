@@ -1,6 +1,6 @@
 {
   "name": "enact-on",
-  "version": "3.0.2",
+  "version": "3.0.4",
   "description": "Modular CLI tool featuring LangGraph AI Agent, file compression, string manipulation, and API integrations",
   "bin": {
     "enact-on": "index.js"
@@ -19,6 +19,7 @@
     "commands/",
     "ui/",
     "agent/",
+    ".env.example",
     "LICENSE",
     "README.md"
   ],

@@ -74,7 +74,7 @@ const typingTexts = [
   "  🐱 e-n-a-c...",
   "  🐱 e-n-a-c-t--o-n...",
   "  🐱 E N A C T - O N  C L I",
-  "  🐱 ENACT-ON CLI • Modular Task Utility v3.0.2"
+  "  🐱 ENACT-ON CLI • Modular Task Utility v3.0.4"
 ];
 
 const revealRatios = [0.2, 0.45, 0.7, 0.9, 1.0];
@@ -87,7 +87,7 @@ export function printBigBanner() {
   for (let i = 0; i < 6; i++) {
     console.log(`${catFrames[4][i]} ${c(bannerLines[i])}`);
   }
-  console.log(`\n  ${colors.secondary("🐱 ENACT-ON CLI")} ${colors.muted("• Modular Task Utility v3.0.2")}`);
+  console.log(`\n  ${colors.secondary("🐱 ENACT-ON CLI")} ${colors.muted("• Modular Task Utility v3.0.4")}`);
   console.log(`  ${colors.primary("──────────────────────────────────────────────────────────────────────────")}\n`);
 }
 

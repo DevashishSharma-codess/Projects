@@ -80,6 +80,7 @@ export const app = workflow.compile({
 });
 
 export async function startAgentSession(initialPrompt = null, options = {}) {
+  await new Promise((resolve) => setTimeout(resolve, 50));
   const { showBanner = true } = typeof options === 'object' && options !== null ? options : {};
   if (showBanner) {
     await printAnimatedBanner();
@@ -90,6 +91,7 @@ export async function startAgentSession(initialPrompt = null, options = {}) {
     console.log(colors.warning("⚠️  GEMINI_API_KEY is not set in environment variables or .env file."));
     let apiKey = "";
     try {
+      await new Promise((resolve) => setTimeout(resolve, 50));
       apiKey = await promptInput({ message: colors.accent("Enter your GEMINI_API_KEY to proceed (or press Enter to skip):") });
     } catch {
       apiKey = "";
@@ -100,6 +102,23 @@ export async function startAgentSession(initialPrompt = null, options = {}) {
     } else {
       console.log(colors.error("❌ Cannot proceed without a valid GEMINI_API_KEY. Exiting agent mode.\n"));
       return;
+    }
+  }
+
+  if (!process.env.TAVILY_API_KEY) {
+    console.log(colors.warning("⚠️  TAVILY_API_KEY is not set in environment variables or .env file."));
+    let apiKey = "";
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 50));
+      apiKey = await promptInput({ message: colors.accent("Enter your TAVILY_API_KEY (optional for web search, press Enter to skip):") });
+    } catch {
+      apiKey = "";
+    }
+    if (apiKey.trim()) {
+      process.env.TAVILY_API_KEY = apiKey.trim();
+      console.log(colors.success("✓ Temporary TAVILY_API_KEY configured.\n"));
+    } else {
+      console.log(colors.muted("ℹ️  TAVILY_API_KEY skipped. Web search functionality will be disabled.\n"));
     }
   }
 
@@ -114,6 +133,7 @@ export async function startAgentSession(initialPrompt = null, options = {}) {
       promptToProcess = null; // Clear initial prompt after first loop
     } else {
       try {
+        await new Promise((resolve) => setTimeout(resolve, 50));
         question = await promptInput({ message: colors.primary("You:") });
       } catch {
         break;

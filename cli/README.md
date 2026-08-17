@@ -61,6 +61,13 @@ enact-on agent
 enact-on ai "Explore this directory and summarize the contents"
 ```
 
+> **🔑 Environment Variables**:
+> Configure your API keys in a `.env` file (see `.env.example`):
+> - `GEMINI_API_KEY`: Required for Gemini LLM model execution
+> - `TAVILY_API_KEY`: Required for Tavily real-time web search tool
+> 
+> *If keys are not found in `.env`, the CLI will interactively prompt for them when starting the AI Agent session.*
+
 #### File Compression
 ```bash
 # Compress a file

@@ -12,7 +12,7 @@ const program = new Command();
 program
   .name("enact-on")
   .description("⚡ Modular CLI tool for file compression, string manipulation, API integrations, and AI agent")
-  .version("3.0.2")
+  .version("3.0.4")
   .addHelpText("after", `
 Installation & Execution:
   $ npx enact-on                 Run interactive CLI without installing

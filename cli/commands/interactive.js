@@ -37,8 +37,8 @@ export async function startInteractiveMenu() {
       }
 
       if (choice === "agent") {
-        const prompt = await input({ message: "Enter initial task for AI Agent (optional, press Enter to skip):" });
-        await startAgentSession(prompt.trim() || null, { showBanner: false });
+        await startAgentSession(null, { showBanner: false });
+        await new Promise((resolve) => setTimeout(resolve, 50));
       } else if (choice === "compress") {
         const file = await input({ message: "Enter file path to compress:" });
         if (file) compressFile(file.trim());
