@@ -1,7 +1,7 @@
 {
   "name": "enact-on",
-  "version": "1.0.0",
-  "description": "Modular CLI tool for file compression, string manipulation, and API integrations",
+  "version": "3.0.2",
+  "description": "Modular CLI tool featuring LangGraph AI Agent, file compression, string manipulation, and API integrations",
   "bin": {
     "enact-on": "index.js"
   },
@@ -9,6 +9,8 @@
   "type": "module",
   "scripts": {
     "start": "node index.js",
+    "dev": "node index.js",
+    "agent": "node agent/index.js",
     "test": "node --test",
     "prepublishOnly": "npm test"
   },
@@ -16,6 +18,7 @@
     "index.js",
     "commands/",
     "ui/",
+    "agent/",
     "LICENSE",
     "README.md"
   ],
@@ -28,8 +31,11 @@
   "keywords": [
     "cli",
     "enact-on",
+    "ai-agent",
+    "langchain",
+    "langgraph",
+    "gemini",
     "compression",
-    "zlib",
     "string-manipulation",
     "api-integration",
     "interactive-cli",
@@ -47,9 +53,15 @@
   "homepage": "https://github.com/Devashish-Repo/enact-on#readme",
   "dependencies": {
     "@inquirer/prompts": "^7.8.8",
+    "@langchain/core": "^0.3.40",
+    "@langchain/google-genai": "^0.1.11",
+    "@langchain/langgraph": "^0.2.50",
+    "@langchain/tavily": "^0.1.0",
     "axios": "^1.19.0",
     "chalk": "^5.4.1",
     "commander": "^15.0.0",
-    "dotenv": "^17.4.2"
+    "dotenv": "^17.4.2",
+    "mathjs": "^15.2.0",
+    "zod": "^3.24.2"
   }
 }

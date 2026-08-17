@@ -1,19 +1,23 @@
 import { select, input } from "@inquirer/prompts";
-import { printBigBanner, colors } from "../ui/theme.js";
+import { printAnimatedBanner, colors } from "../ui/theme.js";
 import { compressFile, decompressFile } from "./compress.js";
 import { uppercase, lowercase, wordCount, palindrome } from "./string.js";
 import { fetchJoke, fetchWeather, fetchQuote } from "./api.js";
+import { startAgentSession } from "../agent/index.js";
 
 // Interactive menu mode
 export async function startInteractiveMenu() {
-  printBigBanner();
+  await printAnimatedBanner();
   console.log(colors.secondary("  ⚡ Select an operation below:\n"));
 
   while (true) {
     try {
       const choice = await select({
         message: "Choose an operation:",
+        default: "agent",
+        pageSize: 12,
         choices: [
+          { name: "🤖 Launch AI Agent (Default)", value: "agent" },
           { name: "🗜️  Compress File", value: "compress" },
           { name: "📂 Decompress File", value: "decompress" },
           { name: "🔠 Uppercase Text", value: "upper" },
@@ -32,7 +36,10 @@ export async function startInteractiveMenu() {
         break;
       }
 
-      if (choice === "compress") {
+      if (choice === "agent") {
+        const prompt = await input({ message: "Enter initial task for AI Agent (optional, press Enter to skip):" });
+        await startAgentSession(prompt.trim() || null, { showBanner: false });
+      } else if (choice === "compress") {
         const file = await input({ message: "Enter file path to compress:" });
         if (file) compressFile(file.trim());
       } else if (choice === "decompress") {

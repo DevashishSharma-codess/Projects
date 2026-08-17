@@ -1,1 +1,10 @@
 node_modules
+.env
+.env.*
+!.env.example
+*.log
+test/
+sample.txt
+sample.txt.gz
+.DS_Store
+*.tgz

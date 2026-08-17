@@ -1,4 +1,5 @@
 # 🎧 Spotify Clone – Full-Stack Web Application
+Developed by: dev
 
 [![Live Frontend App](https://img.shields.io/badge/Live_Frontend-spotify--fe--weld.vercel.app-1DB954?style=for-the-badge&logo=vercel)](https://spotify-fe-weld.vercel.app/)
 [![Live Backend API](https://img.shields.io/badge/Live_Backend_API-spotify--be--seven.vercel.app-121212?style=for-the-badge&logo=express)](https://spotify-be-seven.vercel.app/)

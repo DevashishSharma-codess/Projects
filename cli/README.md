@@ -10,11 +10,13 @@
 
 ## 🚀 Features
 
+- 🤖 **AI Agent**: Interactive coding & task assistant powered by LangGraph, Gemini & Tavily.
 - 🗜️ **File Compression**: Fast Gzip compression and decompression for files.
 - 🔠 **String Tools**: Convert case, count words/characters/sentences, check palindromes.
 - 🌐 **API Utilities**: Fetch random jokes, weather updates, and daily tech advice.
 - 🎨 **Interactive TTY Menu**: Terminal UI powered by `@inquirer/prompts` and `chalk`.
 - 💻 **Cross-Platform**: Supports Windows, macOS, and Linux out of the box.
+- 🌟 **Gantic Features**: Advanced automation and enhanced workflow capabilities.
 
 ---
 
@@ -24,6 +26,12 @@ You can run the CLI instantly without installing anything:
 
 ```bash
 npx enact-on
+```
+
+Or launch the AI Agent directly:
+
+```bash
+npx enact-on agent
 ```
 
 ---
@@ -43,6 +51,15 @@ enact-on
 ```
 
 ### 2. Direct CLI Subcommands
+
+#### 🤖 AI Agent
+```bash
+# Launch interactive AI Agent session
+enact-on agent
+
+# Run AI Agent with an initial prompt or question
+enact-on ai "Explore this directory and summarize the contents"
+```
 
 #### File Compression
 ```bash

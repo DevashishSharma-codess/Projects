@@ -5,13 +5,14 @@ import { compressFile, decompressFile } from "./commands/compress.js";
 import { uppercase, lowercase, wordCount, palindrome } from "./commands/string.js";
 import { fetchJoke, fetchWeather, fetchQuote } from "./commands/api.js";
 import { startInteractiveMenu } from "./commands/interactive.js";
+import { startAgentSession } from "./agent/index.js";
 
 const program = new Command();
 
 program
   .name("enact-on")
-  .description("⚡ Modular CLI tool for file compression, string manipulation, and API integrations")
-  .version("1.0.0")
+  .description("⚡ Modular CLI tool for file compression, string manipulation, API integrations, and AI agent")
+  .version("3.0.2")
   .addHelpText("after", `
 Installation & Execution:
   $ npx enact-on                 Run interactive CLI without installing
@@ -19,11 +20,23 @@ Installation & Execution:
   $ enact-on                     Run global interactive CLI
 
 Examples:
+  $ enact-on agent               Launch interactive AI Agent
+  $ enact-on ai "list files"     Run AI Agent with initial prompt
   $ enact-on joke
   $ enact-on weather Tokyo
   $ enact-on compress document.txt
   $ enact-on uppercase "hello world"
 `);
+
+// Subcommand: AI Agent
+program
+  .command("agent [prompt...]")
+  .alias("ai")
+  .description("🤖 Launch interactive AI Agent (LangGraph + Gemini)")
+  .action(async (promptArray) => {
+    const prompt = promptArray && promptArray.length > 0 ? promptArray.join(" ") : null;
+    await startAgentSession(prompt);
+  });
 
 // Subcommand: Interactive Mode
 program
@@ -94,7 +107,10 @@ program
 
 // Default action: launch interactive menu if no subcommands provided
 if (process.argv.length <= 2) {
-  startInteractiveMenu();
+  startInteractiveMenu().catch((err) => {
+    console.error("Error starting interactive menu:", err);
+    process.exit(1);
+  });
 } else {
   program.parse(process.argv);
 }
