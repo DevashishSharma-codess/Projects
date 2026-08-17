@@ -36,6 +36,14 @@ export interface MoodSong {
     youtubeUrl: string;
 }
 
+export function getSpotifyAppUrl(moodKey?: string, songTitle?: string): string {
+    const baseUrl = "http://localhost:5174";
+    const params = new URLSearchParams({ from: "journal", notice: "artist" });
+    if (moodKey) params.set("mood", moodKey);
+    if (songTitle) params.set("song", songTitle);
+    return `${baseUrl}?${params.toString()}`;
+}
+
 export const MOOD_SONGS: Record<string, MoodSong[]> = {
     radiant: [
         {
@@ -45,7 +53,7 @@ export const MOOD_SONGS: Record<string, MoodSong[]> = {
             duration: "3:29",
             coverUrl: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=400&q=80",
             coverGradient: "linear-gradient(135deg, #FDE68A 0%, #F59E0B 100%)",
-            spotifyUrl: "https://open.spotify.com/search/Golden%20Hour%20JVKE",
+            spotifyUrl: getSpotifyAppUrl("radiant", "Golden Hour"),
             youtubeUrl: "https://music.youtube.com/search?q=Golden+Hour+JVKE",
         },
         {
@@ -55,7 +63,7 @@ export const MOOD_SONGS: Record<string, MoodSong[]> = {
             duration: "3:58",
             coverUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=400&q=80",
             coverGradient: "linear-gradient(135deg, #FEF08A 0%, #EAB308 100%)",
-            spotifyUrl: "https://open.spotify.com/search/Walking%20on%20Sunshine",
+            spotifyUrl: getSpotifyAppUrl("radiant", "Walking On Sunshine"),
             youtubeUrl: "https://music.youtube.com/search?q=Walking+on+Sunshine",
         },
         {
@@ -65,7 +73,7 @@ export const MOOD_SONGS: Record<string, MoodSong[]> = {
             duration: "2:43",
             coverUrl: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=400&q=80",
             coverGradient: "linear-gradient(135deg, #FCA5A5 0%, #F59E0B 100%)",
-            spotifyUrl: "https://open.spotify.com/search/Sunroof%20Nicky%20Youre",
+            spotifyUrl: getSpotifyAppUrl("radiant", "Sunroof"),
             youtubeUrl: "https://music.youtube.com/search?q=Sunroof+Nicky+Youre",
         },
     ],
@@ -77,7 +85,7 @@ export const MOOD_SONGS: Record<string, MoodSong[]> = {
             duration: "8:00",
             coverUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=400&q=80",
             coverGradient: "linear-gradient(135deg, #93C5FD 0%, #3B82F6 100%)",
-            spotifyUrl: "https://open.spotify.com/search/Weightless%20Marconi%20Union",
+            spotifyUrl: getSpotifyAppUrl("peaceful", "Weightless"),
             youtubeUrl: "https://music.youtube.com/search?q=Weightless+Marconi+Union",
         },
         {
@@ -87,7 +95,7 @@ export const MOOD_SONGS: Record<string, MoodSong[]> = {
             duration: "3:08",
             coverUrl: "https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?auto=format&fit=crop&w=400&q=80",
             coverGradient: "linear-gradient(135deg, #BFDBFE 0%, #60A5FA 100%)",
-            spotifyUrl: "https://open.spotify.com/search/River%20Flows%20in%20You%20Yiruma",
+            spotifyUrl: getSpotifyAppUrl("peaceful", "River Flows In You"),
             youtubeUrl: "https://music.youtube.com/search?q=River+Flows+in+You+Yiruma",
         },
         {
@@ -97,7 +105,7 @@ export const MOOD_SONGS: Record<string, MoodSong[]> = {
             duration: "3:30",
             coverUrl: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=400&q=80",
             coverGradient: "linear-gradient(135deg, #A5F3FC 0%, #38BDF8 100%)",
-            spotifyUrl: "https://open.spotify.com/search/Erik%20Satie%20Gymnopedie%201",
+            spotifyUrl: getSpotifyAppUrl("peaceful", "Gymnopédie No. 1"),
             youtubeUrl: "https://music.youtube.com/search?q=Erik+Satie+Gymnopedie+1",
         },
     ],
@@ -109,7 +117,7 @@ export const MOOD_SONGS: Record<string, MoodSong[]> = {
             duration: "2:06",
             coverUrl: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=400&q=80",
             coverGradient: "linear-gradient(135deg, #C4B5FD 0%, #A855F7 100%)",
-            spotifyUrl: "https://open.spotify.com/search/Interstellar%20Hans%20Zimmer",
+            spotifyUrl: getSpotifyAppUrl("focused", "Cornfield Chase"),
             youtubeUrl: "https://music.youtube.com/search?q=Interstellar+Hans+Zimmer",
         },
         {
@@ -119,7 +127,7 @@ export const MOOD_SONGS: Record<string, MoodSong[]> = {
             duration: "5:15",
             coverUrl: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=400&q=80",
             coverGradient: "linear-gradient(135deg, #DDD6FE 0%, #8B5CF6 100%)",
-            spotifyUrl: "https://open.spotify.com/search/Ludovico%20Einaudi%20Experience",
+            spotifyUrl: getSpotifyAppUrl("focused", "Experience"),
             youtubeUrl: "https://music.youtube.com/search?q=Ludovico+Einaudi+Experience",
         },
         {
@@ -129,7 +137,7 @@ export const MOOD_SONGS: Record<string, MoodSong[]> = {
             duration: "3:40",
             coverUrl: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=400&q=80",
             coverGradient: "linear-gradient(135deg, #E9D5FF 0%, #7C3AED 100%)",
-            spotifyUrl: "https://open.spotify.com/search/Lofi%20Girl%20Study%20Beats",
+            spotifyUrl: getSpotifyAppUrl("focused", "Lofi Hip Hop Study Beats"),
             youtubeUrl: "https://music.youtube.com/search?q=Lofi+Girl+Study+Beats",
         },
     ],
@@ -141,7 +149,7 @@ export const MOOD_SONGS: Record<string, MoodSong[]> = {
             duration: "3:20",
             coverUrl: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=400&q=80",
             coverGradient: "linear-gradient(135deg, #6EE7B7 0%, #10B981 100%)",
-            spotifyUrl: "https://open.spotify.com/search/Blinding%20Lights%20The%20Weeknd",
+            spotifyUrl: getSpotifyAppUrl("energetic", "Blinding Lights"),
             youtubeUrl: "https://music.youtube.com/search?q=Blinding+Lights+The+Weeknd",
         },
         {
@@ -151,7 +159,7 @@ export const MOOD_SONGS: Record<string, MoodSong[]> = {
             duration: "4:04",
             coverUrl: "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=400&q=80",
             coverGradient: "linear-gradient(135deg, #A7F3D0 0%, #059669 100%)",
-            spotifyUrl: "https://open.spotify.com/search/Eye%20of%20the%20Tiger",
+            spotifyUrl: getSpotifyAppUrl("energetic", "Eye of the Tiger"),
             youtubeUrl: "https://music.youtube.com/search?q=Eye+of+the+Tiger",
         },
         {
@@ -161,7 +169,7 @@ export const MOOD_SONGS: Record<string, MoodSong[]> = {
             duration: "4:18",
             coverUrl: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=400&q=80",
             coverGradient: "linear-gradient(135deg, #34D399 0%, #047857 100%)",
-            spotifyUrl: "https://open.spotify.com/search/Cant%20Hold%20Us%20Macklemore",
+            spotifyUrl: getSpotifyAppUrl("energetic", "Can't Hold Us"),
             youtubeUrl: "https://music.youtube.com/search?q=Cant+Hold+Us+Macklemore",
         },
     ],
@@ -173,7 +181,7 @@ export const MOOD_SONGS: Record<string, MoodSong[]> = {
             duration: "5:03",
             coverUrl: "https://images.unsplash.com/photo-1532767153582-b1a0e5145009?auto=format&fit=crop&w=400&q=80",
             coverGradient: "linear-gradient(135deg, #FCA5A5 0%, #EF4444 100%)",
-            spotifyUrl: "https://open.spotify.com/search/Clair%20de%20Lune%20Debussy",
+            spotifyUrl: getSpotifyAppUrl("stressed", "Clair de Lune"),
             youtubeUrl: "https://music.youtube.com/search?q=Clair+de+Lune+Debussy",
         },
         {
@@ -183,7 +191,7 @@ export const MOOD_SONGS: Record<string, MoodSong[]> = {
             duration: "3:57",
             coverUrl: "https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?auto=format&fit=crop&w=400&q=80",
             coverGradient: "linear-gradient(135deg, #FECACA 0%, #F87171 100%)",
-            spotifyUrl: "https://open.spotify.com/search/Sunset%20Lover%20Petit%20Biscuit",
+            spotifyUrl: getSpotifyAppUrl("stressed", "Sunset Lover"),
             youtubeUrl: "https://music.youtube.com/search?q=Sunset+Lover+Petit+Biscuit",
         },
         {
@@ -193,7 +201,7 @@ export const MOOD_SONGS: Record<string, MoodSong[]> = {
             duration: "3:12",
             coverUrl: "https://images.unsplash.com/photo-1465847899084-d164df4dedc6?auto=format&fit=crop&w=400&q=80",
             coverGradient: "linear-gradient(135deg, #FFE4E6 0%, #FB7185 100%)",
-            spotifyUrl: "https://open.spotify.com/search/Acoustic%20Breeze",
+            spotifyUrl: getSpotifyAppUrl("stressed", "Acoustic Breeze"),
             youtubeUrl: "https://music.youtube.com/search?q=Acoustic+Breeze",
         },
     ],
@@ -205,7 +213,7 @@ export const MOOD_SONGS: Record<string, MoodSong[]> = {
             duration: "3:12",
             coverUrl: "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=400&q=80",
             coverGradient: "linear-gradient(135deg, #CBD5E1 0%, #64748B 100%)",
-            spotifyUrl: "https://open.spotify.com/search/Banana%20Pancakes%20Jack%20Johnson",
+            spotifyUrl: getSpotifyAppUrl("low", "Banana Pancakes"),
             youtubeUrl: "https://music.youtube.com/search?q=Banana+Pancakes+Jack+Johnson",
         },
         {
@@ -215,7 +223,7 @@ export const MOOD_SONGS: Record<string, MoodSong[]> = {
             duration: "3:47",
             coverUrl: "https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?auto=format&fit=crop&w=400&q=80",
             coverGradient: "linear-gradient(135deg, #E2E8F0 0%, #475569 100%)",
-            spotifyUrl: "https://open.spotify.com/search/Sparks%20Coldplay",
+            spotifyUrl: getSpotifyAppUrl("low", "Sparks"),
             youtubeUrl: "https://music.youtube.com/search?q=Sparks+Coldplay",
         },
         {
@@ -225,7 +233,7 @@ export const MOOD_SONGS: Record<string, MoodSong[]> = {
             duration: "3:06",
             coverUrl: "https://images.unsplash.com/photo-1465847899084-d164df4dedc6?auto=format&fit=crop&w=400&q=80",
             coverGradient: "linear-gradient(135deg, #94A3B8 0%, #334155 100%)",
-            spotifyUrl: "https://open.spotify.com/search/Dont%20Know%20Why%20Norah%20Jones",
+            spotifyUrl: getSpotifyAppUrl("low", "Don't Know Why"),
             youtubeUrl: "https://music.youtube.com/search?q=Dont+Know+Why+Norah+Jones",
         },
     ],

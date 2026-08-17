@@ -1,22 +1,54 @@
 import React from 'react';
-import { Home, Search, Library, PlusCircle, Radio, Music, Mic2, Disc, Compass } from 'lucide-react';
+import { Home, Search, Library, PlusCircle, Radio, Music, Mic2, Disc, Sparkles, Heart, Compass, Zap, Activity, Moon } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
-export const Sidebar = ({ activeTab, setActiveTab }) => {
+const MOOD_ICONS = {
+  radiant: Sparkles,
+  peaceful: Heart,
+  focused: Compass,
+  energetic: Zap,
+  stressed: Activity,
+  low: Moon,
+};
+
+export const Sidebar = ({
+  activeTab,
+  setActiveTab,
+  activeMood,
+  setActiveMood,
+  userPlaylists = [],
+  activePlaylistId,
+  setActivePlaylistId,
+  onOpenCreatePlaylistModal,
+}) => {
   const { user, isArtist, openAuth } = useAuth();
 
-  const handleStudioClick = () => {
-    if (!user) {
-      openAuth('login');
-    } else {
-      setActiveTab('studio');
-    }
+  const moodList = [
+    { key: 'all', label: 'All Moods', color: '#1DB954' },
+    { key: 'radiant', label: 'Radiant', color: '#F59E0B' },
+    { key: 'peaceful', label: 'Peaceful', color: '#3B82F6' },
+    { key: 'focused', label: 'Focused', color: '#A855F7' },
+    { key: 'energetic', label: 'Energetic', color: '#10B981' },
+    { key: 'stressed', label: 'Stressed Relief', color: '#EF4444' },
+    { key: 'low', label: 'Low Energy', color: '#64748B' },
+  ];
+
+  const handleSelectMood = (moodKey) => {
+    setActiveMood(moodKey);
+    setActivePlaylistId(null);
+    setActiveTab('home');
+  };
+
+  const handleSelectPlaylist = (playlistId) => {
+    setActivePlaylistId(playlistId);
+    setActiveMood('all');
+    setActiveTab('home');
   };
 
   return (
     <aside className="spotify-sidebar">
       {/* Spotify Brand Header */}
-      <div className="brand-logo" onClick={() => setActiveTab('home')}>
+      <div className="brand-logo" onClick={() => { setActiveTab('home'); setActiveMood('all'); setActivePlaylistId(null); }}>
         <div className="spotify-icon-wrapper">
           <Radio className="spotify-icon" size={28} />
         </div>
@@ -26,8 +58,8 @@ export const Sidebar = ({ activeTab, setActiveTab }) => {
       {/* Primary Navigation */}
       <nav className="nav-group">
         <button
-          className={`nav-item ${activeTab === 'home' ? 'active' : ''}`}
-          onClick={() => setActiveTab('home')}
+          className={`nav-item ${activeTab === 'home' && !activePlaylistId ? 'active' : ''}`}
+          onClick={() => { setActiveTab('home'); setActivePlaylistId(null); }}
         >
           <Home size={22} />
           <span>Home</span>
@@ -80,29 +112,61 @@ export const Sidebar = ({ activeTab, setActiveTab }) => {
         )}
       </div>
 
-      {/* Playlist Quick Links */}
+      {/* Mood Playlists Quick Links */}
       <div className="sidebar-divider"></div>
 
       <div className="playlist-scroll-area">
         <div className="playlist-header">
-          <span>PLAYLISTS</span>
+          <span>JOURNAL MOODS</span>
         </div>
-        <div className="playlist-item active-playlist">
-          <Disc size={16} />
-          <span>Top Hits 2026</span>
+        {moodList.map((m) => {
+          const IconComp = MOOD_ICONS[m.key] || Music;
+          const isSelected = activeMood === m.key && !activePlaylistId;
+          return (
+            <div
+              key={m.key}
+              className={`playlist-item ${isSelected ? 'active-playlist' : ''}`}
+              onClick={() => handleSelectMood(m.key)}
+            >
+              <IconComp size={16} color={m.color} />
+              <span>{m.label}</span>
+            </div>
+          );
+        })}
+
+        {/* User Playlists Section */}
+        <div className="sidebar-divider" style={{ margin: '14px 0 10px 0' }}></div>
+
+        <div className="playlist-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <span>YOUR PLAYLISTS</span>
+          <button
+            className="create-playlist-icon-btn"
+            onClick={onOpenCreatePlaylistModal}
+            title="Create Playlist"
+          >
+            <PlusCircle size={16} />
+          </button>
         </div>
-        <div className="playlist-item">
-          <Music size={16} />
-          <span>Artist Spotlight</span>
-        </div>
-        <div className="playlist-item">
-          <Compass size={16} />
-          <span>Fresh Discoveries</span>
-        </div>
-        <div className="playlist-item">
-          <Radio size={16} />
-          <span>Lofi Study Beats</span>
-        </div>
+
+        <button className="create-playlist-sidebar-link" onClick={onOpenCreatePlaylistModal}>
+          <PlusCircle size={16} />
+          <span>+ Create Playlist</span>
+        </button>
+
+        {userPlaylists.length === 0 ? (
+          <p className="empty-playlists-hint">No custom playlists yet. Click above to create one!</p>
+        ) : (
+          userPlaylists.map((pl) => (
+            <div
+              key={pl.id}
+              className={`playlist-item ${activePlaylistId === pl.id ? 'active-playlist' : ''}`}
+              onClick={() => handleSelectPlaylist(pl.id)}
+            >
+              <Disc size={16} color={pl.color || '#1DB954'} />
+              <span>{pl.title}</span>
+            </div>
+          ))
+        )}
       </div>
     </aside>
   );

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Search, User, LogOut, Upload, ShieldCheck, Headphones, Mic2 } from 'lucide-react';
+import { Search, User, LogOut, Upload, PlusCircle, Headphones, Mic2 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
-export const Navbar = ({ searchQuery, setSearchQuery, activeTab, setActiveTab }) => {
+export const Navbar = ({ searchQuery, setSearchQuery, activeTab, setActiveTab, onOpenCreatePlaylistModal }) => {
   const { user, isArtist, openAuth, logout } = useAuth();
   const [showDropdown, setShowDropdown] = useState(false);
 
@@ -10,7 +10,7 @@ export const Navbar = ({ searchQuery, setSearchQuery, activeTab, setActiveTab })
     <header className="spotify-navbar">
       {/* Search Input Container */}
       <div className="search-container">
-        <Search size={20} className="search-icon" />
+        <Search size={18} className="search-icon" />
         <input
           type="text"
           placeholder="What do you want to listen to?"
@@ -22,6 +22,16 @@ export const Navbar = ({ searchQuery, setSearchQuery, activeTab, setActiveTab })
 
       {/* User Actions Right Section */}
       <div className="navbar-actions">
+        {/* Top Nav Create Playlist Button */}
+        <button
+          className="nav-create-playlist-btn"
+          onClick={onOpenCreatePlaylistModal}
+          title="Create New Playlist"
+        >
+          <PlusCircle size={16} className="create-playlist-icon" />
+          <span>Create Playlist</span>
+        </button>
+
         {user ? (
           <>
             {isArtist && (
@@ -29,7 +39,7 @@ export const Navbar = ({ searchQuery, setSearchQuery, activeTab, setActiveTab })
                 className="quick-upload-btn"
                 onClick={() => setActiveTab('studio')}
               >
-                <Upload size={16} />
+                <Upload size={15} />
                 <span>Upload Music</span>
               </button>
             )}

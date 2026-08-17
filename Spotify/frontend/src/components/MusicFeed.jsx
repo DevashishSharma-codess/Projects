@@ -1,11 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { Play, Pause, Music, Mic2, Disc, Clock, RefreshCw, Flame, Sparkles, AlertCircle } from 'lucide-react';
+import { Play, Pause, Music, Mic2, Disc, RefreshCw, Flame, AlertCircle, PlusCircle, Heart, Sparkles, Compass, Zap, Activity, Moon } from 'lucide-react';
 import api from '../api';
 import { usePlayer } from '../context/PlayerContext';
 import { useAuth } from '../context/AuthContext';
+import { MOOD_PLAYLISTS, ALL_PRESEEDED_TRACKS } from '../data/moodPlaylistsData';
 
-export const MusicFeed = ({ searchQuery }) => {
-  const [musicList, setMusicList] = useState([]);
+const MOOD_ICONS = {
+  radiant: Sparkles,
+  peaceful: Heart,
+  focused: Compass,
+  energetic: Zap,
+  stressed: Activity,
+  low: Moon,
+};
+
+export const MusicFeed = ({ searchQuery, activeMood, setActiveMood, activePlaylist, onAddToPlaylist }) => {
+  const [backendTracks, setBackendTracks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeCategory, setActiveCategory] = useState('all');
@@ -18,11 +28,10 @@ export const MusicFeed = ({ searchQuery }) => {
     try {
       const res = await api.get('/music');
       if (res.data && res.data.music) {
-        setMusicList(res.data.music);
+        setBackendTracks(res.data.music);
       }
     } catch (err) {
-      console.error("Failed to load music", err);
-      setError("Unable to connect to backend music server. Please ensure backend is running.");
+      console.log("Backend offline or unreachable, using mood soundscapes feed.", err);
     } finally {
       setLoading(false);
     }
@@ -32,18 +41,40 @@ export const MusicFeed = ({ searchQuery }) => {
     fetchMusic();
   }, []);
 
-  const filteredMusic = musicList.filter((track) => {
-    const titleMatch = track.title?.toLowerCase().includes(searchQuery.toLowerCase());
-    const artistName = typeof track.artist === 'object' ? track.artist?.username : track.artist;
-    const artistMatch = artistName?.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    if (activeCategory === 'my-tracks' && user) {
-      const isMyTrack = (typeof track.artist === 'object' ? track.artist?._id : track.artist) === user.id;
-      return (titleMatch || artistMatch) && isMyTrack;
+  // Combine backend tracks and pre-seeded mood tracks
+  const combinedTracks = [...ALL_PRESEEDED_TRACKS, ...backendTracks];
+
+  // Determine displayed tracks
+  let displayedTracks = combinedTracks;
+
+  if (activePlaylist) {
+    displayedTracks = activePlaylist.tracks || [];
+  } else {
+    // Filter by mood if activeMood is set (and not 'all')
+    if (activeMood && activeMood !== 'all') {
+      displayedTracks = displayedTracks.filter((t) => t.mood === activeMood || t.genre?.toLowerCase().includes(activeMood));
     }
-    
-    return titleMatch || artistMatch;
-  });
+
+    // Filter by category pill
+    if (activeCategory === 'my-tracks' && user) {
+      displayedTracks = displayedTracks.filter((track) => {
+        const artistId = typeof track.artist === 'object' ? track.artist?._id : track.artist;
+        return artistId === user.id;
+      });
+    }
+
+    // Search query filter
+    if (searchQuery.trim()) {
+      displayedTracks = displayedTracks.filter((track) => {
+        const titleMatch = track.title?.toLowerCase().includes(searchQuery.toLowerCase());
+        const artistName = typeof track.artist === 'object' ? track.artist?.username : track.artist;
+        const artistMatch = artistName?.toLowerCase().includes(searchQuery.toLowerCase());
+        return titleMatch || artistMatch;
+      });
+    }
+  }
+
+  const moodDetails = activeMood && activeMood !== 'all' ? MOOD_PLAYLISTS[activeMood] : null;
 
   const getGreeting = () => {
     const hour = new Date().getHours();
@@ -66,111 +97,144 @@ export const MusicFeed = ({ searchQuery }) => {
 
   return (
     <div className="music-feed-container">
-      {/* Dynamic Header Banner */}
-      <div className="hero-greeting-banner">
-        <div className="greeting-text-box">
-          <span className="greeting-time">{getGreeting()}</span>
-          <h1 className="greeting-title">
-            {user ? `Welcome back, ${user.username}!` : 'Listen without limits'}
-          </h1>
-          <p className="greeting-subtitle">
-            Explore fresh audio tracks uploaded by top community artists.
-          </p>
-        </div>
-
-        {!user && (
-          <div className="hero-cta">
-            <button className="cta-register-btn" onClick={() => openAuth('register')}>
-              Sign Up Free
-            </button>
+      {/* Playlist / Mood Header Banner */}
+      {activePlaylist ? (
+        <div className="playlist-header-hero" style={{ background: activePlaylist.gradient || 'linear-gradient(135deg, #1DB954 0%, #191414 100%)' }}>
+          <div className="hero-artwork">
+            <Disc size={64} className="hero-disc" />
           </div>
-        )}
-      </div>
+          <div className="hero-details">
+            <span className="hero-type">USER PLAYLIST</span>
+            <h1 className="hero-title">{activePlaylist.title}</h1>
+            <p className="hero-desc">{activePlaylist.description}</p>
+            <div className="hero-actions">
+              {displayedTracks.length > 0 && (
+                <button className="play-all-hero-btn" onClick={() => playTrack(displayedTracks[0], displayedTracks, 0)}>
+                  <Play size={18} fill="#000" /> Play Playlist
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      ) : moodDetails ? (
+        <div className="playlist-header-hero" style={{ background: moodDetails.gradient }}>
+          <img src={moodDetails.coverUrl} alt={moodDetails.title} className="hero-cover-img" />
+          <div className="hero-details">
+            <span className="hero-type">JOURNAL MOOD PLAYLIST</span>
+            <h1 className="hero-title">{moodDetails.title}</h1>
+            <p className="hero-desc">{moodDetails.description}</p>
+            <div className="hero-actions">
+              {displayedTracks.length > 0 && (
+                <button className="play-all-hero-btn" onClick={() => playTrack(displayedTracks[0], displayedTracks, 0)}>
+                  <Play size={18} fill="#000" /> Play All Soundscapes
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      ) : (
+        /* Default Greeting Banner */
+        <div className="hero-greeting-banner">
+          <div className="greeting-text-box">
+            <span className="greeting-time">{getGreeting()}</span>
+            <h1 className="greeting-title">
+              {user ? `Welcome back, ${user.username}!` : 'Listen to Mood Soundscapes & Music'}
+            </h1>
+            <p className="greeting-subtitle">
+              Explore curated tunes for every mood or discover community tracks.
+            </p>
+          </div>
 
-      {/* Category Pills & Controls */}
-      <div className="feed-filter-bar">
-        <div className="pills-group">
-          <button
-            className={`category-pill ${activeCategory === 'all' ? 'active' : ''}`}
-            onClick={() => setActiveCategory('all')}
-          >
-            All Tracks
-          </button>
-          <button
-            className={`category-pill ${activeCategory === 'trending' ? 'active' : ''}`}
-            onClick={() => setActiveCategory('trending')}
-          >
-            <Flame size={14} /> Trending
-          </button>
-          {user?.role === 'artist' && (
-            <button
-              className={`category-pill ${activeCategory === 'my-tracks' ? 'active' : ''}`}
-              onClick={() => setActiveCategory('my-tracks')}
-            >
-              <Mic2 size={14} /> My Uploads
-            </button>
+          {!user && (
+            <div className="hero-cta">
+              <button className="cta-register-btn" onClick={() => openAuth('register')}>
+                Sign Up Free
+              </button>
+            </div>
           )}
         </div>
+      )}
 
-        <button className="refresh-feed-btn" onClick={fetchMusic} title="Refresh Feed">
-          <RefreshCw size={16} className={loading ? 'spinning' : ''} />
-          <span>Refresh</span>
-        </button>
-      </div>
+      {/* Mood Quick Pills */}
+      {!activePlaylist && (
+        <div className="mood-chips-row">
+          <button
+            className={`mood-chip ${activeMood === 'all' ? 'active' : ''}`}
+            onClick={() => setActiveMood('all')}
+          >
+            All Tunes
+          </button>
+          {Object.keys(MOOD_PLAYLISTS).map((key) => {
+            const m = MOOD_PLAYLISTS[key];
+            const IconComponent = MOOD_ICONS[key] || Music;
+            const isSelected = activeMood === key;
+            return (
+              <button
+                key={key}
+                className={`mood-chip ${isSelected ? 'active' : ''}`}
+                style={{
+                  borderColor: m.color,
+                  backgroundColor: isSelected ? m.color : 'rgba(255,255,255,0.05)',
+                  color: isSelected ? '#FFFFFF' : m.color,
+                }}
+                onClick={() => setActiveMood(key)}
+              >
+                <IconComponent size={14} />
+                <span>{m.title.split('&')[0]}</span>
+              </button>
+            );
+          })}
+        </div>
+      )}
 
       {/* Main Music Grid */}
       <section className="feed-section">
         <div className="section-header">
           <h2 className="section-title">
-            {searchQuery ? `Search results for "${searchQuery}"` : 'Featured Music Feed'}
+            {activePlaylist
+              ? `Tracks in ${activePlaylist.title}`
+              : searchQuery
+              ? `Search results for "${searchQuery}"`
+              : moodDetails
+              ? `${moodDetails.title} Soundscapes`
+              : 'Featured Mood Tracks & Audio'}
           </h2>
-          <span className="track-count">{filteredMusic.length} Tracks available</span>
+          <span className="track-count">{displayedTracks.length} Tracks available</span>
         </div>
 
-        {error && (
-          <div className="error-banner">
-            <AlertCircle size={20} />
-            <span>{error}</span>
-          </div>
-        )}
-
-        {loading ? (
-          <div className="loading-grid">
-            {[1, 2, 3, 4, 5, 6].map((n) => (
-              <div key={n} className="music-card-skeleton">
-                <div className="skeleton-cover"></div>
-                <div className="skeleton-line title"></div>
-                <div className="skeleton-line artist"></div>
-              </div>
-            ))}
-          </div>
-        ) : filteredMusic.length === 0 ? (
+        {displayedTracks.length === 0 ? (
           <div className="empty-feed-box">
             <Music size={48} className="empty-icon" />
-            <h3>No Music Found</h3>
+            <h3>No Tracks Found</h3>
             <p>
-              {searchQuery
+              {activePlaylist
+                ? 'This playlist has no tracks yet. Add tracks using the "+ Playlist" button on any song!'
+                : searchQuery
                 ? 'Try searching for a different song or artist.'
                 : 'Be the first artist to upload a track to Spotify!'}
             </p>
           </div>
         ) : (
           <div className="music-cards-grid">
-            {filteredMusic.map((track, index) => {
+            {displayedTracks.map((track, index) => {
               const isThisTrackPlaying = currentTrack?._id === track._id && isPlaying;
-              const artistName = typeof track.artist === 'object' ? track.artist?.username : track.artist || 'Unknown Artist';
+              const artistName = typeof track.artist === 'object' ? track.artist?.username : track.artist || 'Artist';
 
               return (
                 <div
                   key={track._id}
                   className={`music-card ${currentTrack?._id === track._id ? 'now-playing' : ''}`}
-                  onClick={() => playTrack(track, filteredMusic, index)}
+                  onClick={() => playTrack(track, displayedTracks, index)}
                 >
                   <div
                     className="card-artwork-box"
-                    style={{ background: getRandomGradient(index) }}
+                    style={{ background: track.coverGradient || getRandomGradient(index) }}
                   >
-                    <Disc className={`card-disc-icon ${isThisTrackPlaying ? 'pulse' : ''}`} size={44} />
+                    {track.coverUrl ? (
+                      <img src={track.coverUrl} alt={track.title} className="card-cover-img" />
+                    ) : (
+                      <Disc className={`card-disc-icon ${isThisTrackPlaying ? 'pulse' : ''}`} size={44} />
+                    )}
                     <button className="card-play-overlay">
                       {isThisTrackPlaying ? (
                         <Pause size={24} className="play-icon-accent" />
@@ -188,6 +252,17 @@ export const MusicFeed = ({ searchQuery }) => {
                       <Mic2 size={12} className="inline-icon" /> {artistName}
                     </p>
                   </div>
+
+                  <div className="card-actions" onClick={(e) => e.stopPropagation()}>
+                    <button
+                      className="add-to-playlist-card-btn"
+                      onClick={() => onAddToPlaylist(track)}
+                      title="Add to Playlist"
+                    >
+                      <PlusCircle size={16} />
+                      <span>+ Playlist</span>
+                    </button>
+                  </div>
                 </div>
               );
             })}
@@ -196,7 +271,7 @@ export const MusicFeed = ({ searchQuery }) => {
       </section>
 
       {/* Detailed Track List Table */}
-      {!loading && filteredMusic.length > 0 && (
+      {displayedTracks.length > 0 && (
         <section className="feed-table-section">
           <div className="section-header">
             <h2 className="section-title">Track List View</h2>
@@ -208,12 +283,13 @@ export const MusicFeed = ({ searchQuery }) => {
                 <tr>
                   <th className="th-num">#</th>
                   <th className="th-title">Title</th>
-                  <th className="th-artist">Artist</th>
-                  <th className="th-play">Action</th>
+                  <th className="th-artist">Artist / Genre</th>
+                  <th className="th-duration">Duration</th>
+                  <th className="th-play">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {filteredMusic.map((track, idx) => {
+                {displayedTracks.map((track, idx) => {
                   const isCurrent = currentTrack?._id === track._id;
                   const isThisPlaying = isCurrent && isPlaying;
                   const artistName = typeof track.artist === 'object' ? track.artist?.username : track.artist || 'Artist';
@@ -222,7 +298,7 @@ export const MusicFeed = ({ searchQuery }) => {
                     <tr
                       key={track._id}
                       className={`table-row ${isCurrent ? 'active-row' : ''}`}
-                      onClick={() => playTrack(track, filteredMusic, idx)}
+                      onClick={() => playTrack(track, displayedTracks, idx)}
                     >
                       <td className="td-num">
                         {isThisPlaying ? (
@@ -237,20 +313,38 @@ export const MusicFeed = ({ searchQuery }) => {
                         <div className="table-track-cell">
                           <div
                             className="table-mini-cover"
-                            style={{ background: getRandomGradient(idx) }}
+                            style={{ background: track.coverGradient || getRandomGradient(idx) }}
                           >
-                            <Music size={16} />
+                            {track.coverUrl ? (
+                              <img src={track.coverUrl} alt={track.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                            ) : (
+                              <Music size={16} />
+                            )}
                           </div>
                           <span className={`table-track-name ${isCurrent ? 'green-text' : ''}`}>
                             {track.title}
                           </span>
                         </div>
                       </td>
-                      <td className="td-artist">{artistName}</td>
-                      <td className="td-play">
-                        <button className="table-play-btn">
-                          {isThisPlaying ? <Pause size={16} /> : <Play size={16} className="play-offset" />}
-                        </button>
+                      <td className="td-artist">{artistName} • <span style={{ opacity: 0.7, fontSize: 12 }}>{track.genre}</span></td>
+                      <td className="td-duration">{track.duration || '3:30'}</td>
+                      <td className="td-play" onClick={(e) => e.stopPropagation()}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                          <button
+                            className="table-play-btn"
+                            onClick={() => playTrack(track, displayedTracks, idx)}
+                          >
+                            {isThisPlaying ? <Pause size={16} /> : <Play size={16} className="play-offset" />}
+                          </button>
+
+                          <button
+                            className="table-add-playlist-btn"
+                            onClick={() => onAddToPlaylist(track)}
+                            title="Add to Playlist"
+                          >
+                            <PlusCircle size={16} />
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   );

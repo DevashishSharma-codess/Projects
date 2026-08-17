@@ -9,16 +9,21 @@ const musicRoutes = require("./routes/music.routes");
 
 const app = express();
 
-const corsOrigin = (process.env.FRONTEND_URL || "http://localhost:5173").replace(/\/$/, "");
-console.log('[CORS] Configured origin:', corsOrigin);
-
-// Middleware
+// Allow ALL origins to access the Spotify API seamlessly
 app.use(
   cors({
-    origin: corsOrigin,
+    origin: function (origin, callback) {
+      // Allow any requesting origin (localhost on any port, staging, production, or server-to-server)
+      return callback(null, true);
+    },
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept"],
   })
 );
+
+// Explicit pre-flight OPTIONS handling
+app.options("*", cors());
 
 // DB Connection Middleware for Serverless & Standalone deployments
 app.use(async (req, res, next) => {
@@ -40,8 +45,6 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 app.use(cookieParser());
-
-// Serve uploaded music static files
 
 // Routes
 app.use("/api/auth", authRoutes);
