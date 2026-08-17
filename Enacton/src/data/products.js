@@ -13,14 +13,27 @@ import {
   MessageSquare,
 } from "lucide-react";
 
-// 3 Background Image Styles shared across products
+// Aesthetic Black & White Architectural & Minimalist Images
+export const BW_IMAGES = [
+  "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1920&q=85", // Monochromatic skyscraper geometry
+  "/card-bg-left.jpg", // Local aesthetic B&W architecture
+  "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1920&q=85", // Minimalist concrete lines
+  "/card-bg-right.jpg", // Local dark B&W facade
+  "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1920&q=85", // Geometric shadows & glass
+  "/hero-bg.jpg", // Local dark structural background
+  "https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=1920&q=85", // Black & white building perspective
+  "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1920&q=85", // Minimalist dark bridge & steel
+  "/card-bg-left.jpg",
+  "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1920&q=85", // High-contrast architectural angles
+  "/card-bg-right.jpg",
+  "/hero-bg.jpg",
+];
+
+// Background Image Styles shared across products
 export const QUOTE_BG_IMAGES = {
-  // Style 1: Gold & Grey Fluid Marble Swirl
-  goldSwirl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1920&q=85",
-  // Style 2: Turquoise & Coral Liquid Ink in Water
-  liquidInk: "https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&w=1920&q=85",
-  // Style 3: Royal Blue to Mint Cyan Gradient
-  blueGradient: "https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&w=1920&q=85",
+  goldSwirl: BW_IMAGES[0],
+  liquidInk: BW_IMAGES[1],
+  blueGradient: BW_IMAGES[2],
 };
 
 export const PRODUCTS = [
@@ -36,9 +49,8 @@ export const PRODUCTS = [
     subhead: "Complete cashback operating system with multi-tier rewards, automated affiliate link routing, payout reconciliation, and fraud prevention.",
     description:
       "CashbackOS powers enterprise coupon and cashback operations with real-time tracking, automatic commission distribution, and dynamic store management. Connect hundreds of affiliate networks through a single unified platform.",
-    image:
-      "https://images.unsplash.com/photo-1556742049-0a67568d049f?auto=format&fit=crop&w=1920&q=85",
-    quoteBg: QUOTE_BG_IMAGES.liquidInk,
+    image: BW_IMAGES[0],
+    quoteBg: BW_IMAGES[1],
     icon: Wallet,
     techStack: ["Node.js", "React 19", "Redis Cache", "PostgreSQL", "Kafka"],
     highlights: [
@@ -95,9 +107,8 @@ console.log(\`Payout processed with ID: \${payout.id}\`);`,
     subhead: "Robust, customizable cashback script built on Laravel framework for rapid deployment, store integration, and affiliate network syncing.",
     description:
       "Laraback is the gold standard for PHP-based cashback and coupon applications. Features automated network scrapers, commission ledgers, admin dashboards, and SEO-optimized storefronts.",
-    image:
-      "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=1920&q=85",
-    quoteBg: QUOTE_BG_IMAGES.goldSwirl,
+    image: BW_IMAGES[1],
+    quoteBg: BW_IMAGES[0],
     icon: Layers,
     techStack: ["Laravel 11", "Vue 3", "MySQL", "Redis", "TailwindCSS"],
     highlights: [
@@ -136,9 +147,8 @@ const deals = await client.getTrendingDeals({ limit: 20 });`,
     subhead: "Innovative fundraising solution allowing non-profits, schools, and charities to collect affiliate cashback from everyday online purchases.",
     description:
       "FundBack connects online shoppers with cause-based fundraising. Every purchase made at partner stores automatically generates cashback that is directed toward the user's chosen charity or community project.",
-    image:
-      "https://images.unsplash.com/photo-1532629345422-7515f3d16bb0?auto=format&fit=crop&w=1920&q=85",
-    quoteBg: QUOTE_BG_IMAGES.blueGradient,
+    image: BW_IMAGES[2],
+    quoteBg: BW_IMAGES[3],
     icon: Heart,
     techStack: ["React", "Node.js", "PostgreSQL", "Stripe Connect", "GraphQL"],
     highlights: [
@@ -179,9 +189,8 @@ const causeStats = await fb.getCauseImpact("cause_clean_ocean");`,
     subhead: "Next-gen Web3 cashback infrastructure converting fiat affiliate commissions into instant cryptocurrency rewards directly into self-custody wallets.",
     description:
       "CryptoCashback bridges traditional e-commerce affiliate rewards with decentralized finance. Shoppers earn instant crypto rewards in BTC, ETH, USDT, or native tokens for shopping at 5,000+ online retailers.",
-    image:
-      "https://images.unsplash.com/photo-1621416894569-0f39ed31d247?auto=format&fit=crop&w=1920&q=85",
-    quoteBg: QUOTE_BG_IMAGES.liquidInk,
+    image: BW_IMAGES[3],
+    quoteBg: BW_IMAGES[2],
     icon: Coins,
     techStack: ["Solidity", "Ethers.js", "Go", "Redis", "FastAPI"],
     highlights: [
@@ -223,9 +232,8 @@ const txHash = await cc.claimRewards({ wallet: "0x71C...9B", token: "BTC" });`,
     subhead: "Enterprise cashback software featuring dynamic rate boosters, flash deal alerts, and multi-network affiliate rate optimization.",
     description:
       "SuperBack maximizes user cashback retention by dynamically matching store rates across multiple affiliate networks. Always offer your users the highest cashback percentage in the market automatically.",
-    image:
-      "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&w=1920&q=85",
-    quoteBg: QUOTE_BG_IMAGES.goldSwirl,
+    image: BW_IMAGES[4],
+    quoteBg: BW_IMAGES[0],
     icon: Zap,
     techStack: ["React 19", "Python", "ClickHouse", "PostgreSQL", "Docker"],
     highlights: [
@@ -263,9 +271,8 @@ const rate = await sb.getBestRate("walmart");`,
     subhead: "Next-gen coupon and deal portal featuring automated voucher testing, expiry verification, and AI-curated deal rankings.",
     description:
       "CouponOrb automates coupon management for online deal portals. Uses headless browser validation to automatically test coupon codes, drop expired vouchers, and highlight verified savings for shoppers.",
-    image:
-      "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=1920&q=85",
-    quoteBg: QUOTE_BG_IMAGES.blueGradient,
+    image: BW_IMAGES[5],
+    quoteBg: BW_IMAGES[3],
     icon: Tag,
     techStack: ["Puppeteer", "Node.js", "Typesense", "React", "MongoDB"],
     highlights: [
@@ -303,9 +310,8 @@ const coupons = await orb.getVerifiedCoupons("nike");`,
     subhead: "Ultra-fast cashback processing API that validates purchase receipts and bank webhooks for instant user balance credit.",
     description:
       "InstaB removes the traditional 30-90 day affiliate payout waiting period. By integrating bank open API feeds and card-linked offers, InstaB credits cashback to user wallets within seconds of purchase.",
-    image:
-      "https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=1920&q=85",
-    quoteBg: QUOTE_BG_IMAGES.liquidInk,
+    image: BW_IMAGES[6],
+    quoteBg: BW_IMAGES[2],
     icon: Sparkles,
     techStack: ["Go", "Redis", "PostgreSQL", "Plaid API", "AWS Lambda"],
     highlights: [
@@ -347,9 +353,8 @@ await instab.creditInstantCashback({ transactionId: "tx_88192" });`,
     subhead: "Feature-rich mobile application with in-app browser, push notification triggers, biometric login, and receipt scanner AI.",
     description:
       "CashbackApp is a complete cross-platform mobile solution for shopping networks. Includes an embedded affiliate browser that auto-injects sub-IDs, receipt uploading OCR, and location-based nearby store alerts.",
-    image:
-      "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1920&q=85",
-    quoteBg: QUOTE_BG_IMAGES.goldSwirl,
+    image: BW_IMAGES[7],
+    quoteBg: BW_IMAGES[1],
     icon: Smartphone,
     techStack: ["React Native", "Flutter", "Firebase", "Node.js", "GraphQL"],
     highlights: [
@@ -390,9 +395,8 @@ sdk.initializeInAppBrowser({ storeUrl: "https://nike.com", subId: "mob_99" });`,
     subhead: "Comprehensive partner management platform for tracking publisher performance, commission tiers, creative assets, and automated billing.",
     description:
       "AffPort empowers brands and cashback operators to manage their publisher relationships. Features custom affiliate onboarding, commission structure management, link generation, and automated payout invoices.",
-    image:
-      "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1920&q=85",
-    quoteBg: QUOTE_BG_IMAGES.blueGradient,
+    image: BW_IMAGES[8],
+    quoteBg: BW_IMAGES[3],
     icon: BarChart3,
     techStack: ["React 19", "Next.js", "PostgreSQL", "TailwindCSS", "Express"],
     highlights: [
@@ -431,9 +435,8 @@ const summary = await affport.getPublisherReport("pub_4410");`,
     subhead: "Enterprise tracking engine delivering sub-5ms redirect latency, Server-to-Server (S2S) postbacks, first-party cookie attribution, and click fraud prevention.",
     description:
       "AffiliateTrack provides accurate sales attribution in an era of strict privacy controls and cookie blocking. Supports server-side postbacks, parallel tracking, and real-time click stream analytics.",
-    image:
-      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1920&q=85",
-    quoteBg: QUOTE_BG_IMAGES.liquidInk,
+    image: BW_IMAGES[9],
+    quoteBg: BW_IMAGES[2],
     icon: Activity,
     techStack: ["Go", "Redis Edge", "ClickHouse", "Kafka", "AWS CloudFront"],
     highlights: [
@@ -476,9 +479,8 @@ await at.logClick({ subId: "sub_100", storeId: "store_55" });`,
     subhead: "All-in-one performance marketing hub with automated ROAS optimization, smart link rotators, and campaign analytics.",
     description:
       "Perfosphere analyzes campaign data in real time to automatically re-route traffic to highest converting offers. Maximize Return on Ad Spend (ROAS) across affiliate ad channels.",
-    image:
-      "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=1920&q=85",
-    quoteBg: QUOTE_BG_IMAGES.goldSwirl,
+    image: BW_IMAGES[10],
+    quoteBg: BW_IMAGES[1],
     icon: Cpu,
     techStack: ["Python", "PyTorch", "React 19", "FastAPI", "PostgreSQL"],
     highlights: [
@@ -519,9 +521,8 @@ const stats = await perfo.getCampaignROAS("cmp_7701");`,
     subhead: "High-speed Telegram bot that converts product URLs into affiliate cashback links, manages user balances, and broadcasts deal alerts.",
     description:
       "Telegram Cashback Bot enables shoppers to earn cashback directly inside Telegram. Users paste any online store link, and the bot instantly returns a tracked cashback link. Features automated group channel deal broadcasting.",
-    image:
-      "https://images.unsplash.com/photo-1611746872915-64382b5c76da?auto=format&fit=crop&w=1920&q=85",
-    quoteBg: QUOTE_BG_IMAGES.blueGradient,
+    image: BW_IMAGES[11],
+    quoteBg: BW_IMAGES[3],
     icon: MessageSquare,
     techStack: ["Python", "python-telegram-bot", "Redis", "PostgreSQL", "FastAPI"],
     highlights: [

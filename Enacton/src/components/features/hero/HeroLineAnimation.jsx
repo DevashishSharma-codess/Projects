@@ -1,19 +1,23 @@
 import { motion } from "framer-motion";
 import { LogoMark } from "../../common/LogoMark";
 
-// Converging SVG Line Paths & Dash Array Config
+// Converging SVG Line Paths & Dash Array Config (Simultaneous Start & Arrival)
 const PATHS = [
-  { d: "M 0 0 L 0 408", transform: "translate(370 0)", dim: 20 },
+  { d: "M 0 0 L 0 408", transform: "translate(370 0)", startX: 0, startY: 0 },
   {
     d: "M 145 0 L 98.814 0 L -15 83.557 L -15 298",
     transform: "translate(400 110)",
+    startX: 145,
+    startY: 0,
   },
   {
-    d: "M 0 0 L 56.317 0 C 93.572 34.834 114.632 53.417 173.848 84.826 L 173.848 298",
-    transform: "translate(181.152 110)",
+    d: "M -145 0 L -98.814 0 L 15 83.557 L 15 298",
+    transform: "translate(340 110)",
+    startX: -145,
+    startY: 0,
   },
-  { d: "M 0 0 L 340 0 L 340 187", transform: "translate(0 221)" },
-  { d: "M 0 0 L -340 0 L -340 187", transform: "translate(740 221)" },
+  { d: "M 0 0 L 340 0 L 340 187", transform: "translate(0 221)", startX: 0, startY: 0 },
+  { d: "M 0 0 L -340 0 L -340 187", transform: "translate(740 221)", startX: 0, startY: 0 },
 ];
 
 /* ---------------------------------------------------------
@@ -78,19 +82,21 @@ export function HeroLineAnimation() {
           shapeRendering="geometricPrecision"
           fill="none"
         >
-          {PATHS.map((path) => (
-            <g key={path.d} transform={path.transform}>
+          {PATHS.map((path, idx) => (
+            <g key={idx} transform={path.transform}>
+              {/* Background Guide Line */}
               <path
                 d={path.d}
                 stroke="rgba(23, 19, 15, 0.15)"
                 strokeWidth={3}
               />
+              {/* Sleek Moving Line Dash with Square Ends */}
               <path
                 d={path.d}
                 pathLength={1}
                 stroke="#17130f"
                 strokeWidth={2.5}
-                strokeLinecap="butt"
+                strokeLinecap="square"
                 className="animate-hero-dash"
               />
             </g>
