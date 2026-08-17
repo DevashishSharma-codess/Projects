@@ -9,42 +9,57 @@ const musicRoutes = require("./routes/music.routes");
 
 const app = express();
 
-// Allow ALL origins to access the Spotify API seamlessly
+// 1. Bulletproof CORS Header & Preflight Interceptor for Vercel Serverless
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+
+  if (origin) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  } else {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+  }
+
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, Accept, Authorization, Cookie");
+  res.setHeader("Access-Control-Expose-Headers", "Set-Cookie");
+
+  // Instantly resolve browser preflight OPTIONS requests before DB connection
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+
+  next();
+});
+
+// 2. Cors package fallback
 app.use(
   cors({
-    origin: function (origin, callback) {
-      // Allow any requesting origin (localhost on any port, staging, production, or server-to-server)
-      return callback(null, true);
-    },
+    origin: true,
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept"],
   })
 );
 
-// Explicit pre-flight OPTIONS handling
-app.options("*", cors());
+app.use(express.json());
+app.use(cookieParser());
 
-// DB Connection Middleware for Serverless & Standalone deployments
+// 3. DB Connection Middleware (Runs AFTER CORS setup so DB errors never block CORS headers)
 app.use(async (req, res, next) => {
   try {
     await connectDB();
     next();
   } catch (error) {
-    console.error('[DB MIDDLEWARE ERROR]', error.message);
+    console.error("[DB MIDDLEWARE ERROR]", error.message);
     res.status(500).json({ message: "Database connection error", error: error.message });
   }
 });
 
-// Log all incoming requests
+// Log incoming requests
 app.use((req, res, next) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
-  console.log('[REQUEST] Origin:', req.get('origin'));
+  console.log("[REQUEST] Origin:", req.get("origin"));
   next();
 });
-
-app.use(express.json());
-app.use(cookieParser());
 
 // Routes
 app.use("/api/auth", authRoutes);
