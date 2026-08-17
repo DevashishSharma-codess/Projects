@@ -1,0 +1,15 @@
+Welcome to enact-On CLI Tool!
+======================================
+This is a sample text file created for testing all the core features:
+1. File Compression & Decompression (zlib Gzip)
+2. String Manipulation (Uppercase, Lowercase, Word Count, Palindrome)
+3. Public API Integrations (Weather, Jokes, Advice)
+
+Try testing compression:
+  enact-on compress sample.txt
+
+Try testing word count:
+  enact-on wordcount "A man a plan a canal Panama"
+
+Try testing palindrome:
+  enact-on palindrome "racecar"

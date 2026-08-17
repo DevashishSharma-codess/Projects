@@ -1,21 +1,54 @@
 {
-  "name": "cli",
+  "name": "enact-on",
   "version": "1.0.0",
-  "description": "",
-   "bin": {
-    "tool": "./src/index.js"
+  "description": "Modular CLI tool for file compression, string manipulation, and API integrations",
+  "bin": {
+    "enact-on": "index.js"
   },
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "test": "node --test",
+    "prepublishOnly": "npm test"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
- "type": "module",
+  "files": [
+    "index.js",
+    "commands/",
+    "ui/",
+    "LICENSE",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "cli",
+    "enact-on",
+    "compression",
+    "zlib",
+    "string-manipulation",
+    "api-integration",
+    "interactive-cli",
+    "developer-tools"
+  ],
+  "author": "Devashish <devashish@enacton.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Devashish-Repo/enact-on.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Devashish-Repo/enact-on/issues"
+  },
+  "homepage": "https://github.com/Devashish-Repo/enact-on#readme",
   "dependencies": {
+    "@inquirer/prompts": "^7.8.8",
     "axios": "^1.19.0",
-    "chalk": "^6.0.0",
+    "chalk": "^5.4.1",
     "commander": "^15.0.0",
     "dotenv": "^17.4.2"
   }
