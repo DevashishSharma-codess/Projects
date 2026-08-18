@@ -2,6 +2,8 @@
 
 > A modern, responsive, and feature-rich single-page web application for **Maple & Bean Coffee Co.** Built with pure **HTML5**, **Vanilla CSS3**, and **ES6 JavaScript Modules**, featuring a vintage aesthetic, interactive ordering system, video background hero, inspectable photo carousel, lightbox gallery, and robust client-side interactivity.
 
+🌐 **Live Demo:** [https://maple-virid.vercel.app/](https://maple-virid.vercel.app/)
+
 ---
 
 ## 📋 Table of Contents
@@ -203,6 +205,9 @@ The styling is built entirely on custom CSS Custom Properties (Variables) define
 ---
 
 ## 🚀 How to Run & Deploy
+
+### 🌐 Live Link
+- **Live Site**: [https://maple-virid.vercel.app/](https://maple-virid.vercel.app/)
 
 ### Running Locally
 
