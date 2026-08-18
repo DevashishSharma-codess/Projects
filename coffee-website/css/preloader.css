@@ -1,7 +1,10 @@
 /* ============================================================
    PRELOADER ELEMENT
+   Styles initial page loading overlay screen, Lottie animation wrapper,
+   pulsing text animation, and smooth fade-out transition.
 ============================================================ */
 
+/* 1. Full-Screen Fixed Loading Overlay Container */
 .page-loader {
     position: fixed;
     inset: 0;
@@ -13,12 +16,14 @@
     transition: opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.6s ease;
 }
 
+/* Hidden Dismissed State (Triggered via JavaScript on page load completion) */
 .page-loader.hidden {
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
 }
 
+/* 2. Inner Loader Content Box (Lottie Player & Status Text) */
 .loader-content {
     display: flex;
     flex-direction: column;
@@ -26,6 +31,7 @@
     gap: 12px;
 }
 
+/* 3. Loading Status Text Style ("Brewing your experience...") */
 .loader-text {
     font-family: 'Marck Script', 'Kalam', cursive;
     font-size: 1.4rem;
@@ -34,6 +40,7 @@
     animation: loaderPulse 1.8s infinite ease-in-out;
 }
 
+/* 4. Pulse Animation Keyframes for Status Text */
 @keyframes loaderPulse {
     0%, 100% {
         opacity: 0.6;

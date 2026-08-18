@@ -1,11 +1,15 @@
 /* ============================================================
    FAQ ACCORDION ELEMENTS
+   Styles expandable question and answer rows in the FAQ section,
+   including icon rotations and smooth max-height collapse animations.
 ============================================================ */
 
+/* 1. Accordion Item Row Border */
 .faq-item {
     border-bottom: 1px solid rgba(226, 188, 132, 0.15);
 }
 
+/* 2. Question Button Trigger */
 .faq-q {
     width: 100%;
     text-align: left;
@@ -22,16 +26,19 @@
     font-family: inherit;
 }
 
+/* Plus Icon ('+') inside Question Button */
 .faq-q .icon {
     transition: transform .25s;
     color: #E2BC84;
     font-size: 1.3rem;
 }
 
+/* Rotate Plus Icon to 'X' when Accordion Item is Expanded */
 .faq-item.open .icon {
     transform: rotate(45deg);
 }
 
+/* 3. Collapsible Answer Content Box */
 .faq-a {
     max-height: 0;
     overflow: hidden;

@@ -1,7 +1,10 @@
 /**
- * Module 8: Contact Form Validation & Honeypot Anti-Spam
+ * Contact Form Module
+ * Handles client-side form validation for Name, Email, and Message fields,
+ * and includes a hidden honeypot field check to block automated spam bots.
  */
 export const initContactForm = () => {
+    // 1. SELECT FORM AND INPUT DOM ELEMENTS
     const contactForm = document.getElementById('contactForm');
     if (!contactForm) return;
 
@@ -18,22 +21,27 @@ export const initContactForm = () => {
 
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    const setError = (el, message) => {
-        if (el) el.textContent = message;
-    };
+    // Helper to display error message text
+    function setError(element, message) {
+        if (element) {
+            element.textContent = message;
+        }
+    }
 
-    const validateName = () => {
+    // 2. FIELD VALIDATION FUNCTIONS
+    function validateName() {
         if (!nameInput || !nameInput.value.trim()) {
             setError(nameError, 'Please enter your name.');
             return false;
         }
         setError(nameError, '');
         return true;
-    };
+    }
 
-    const validateEmail = () => {
+    function validateEmail() {
         if (!emailInput) return false;
         const value = emailInput.value.trim();
+
         if (!value) {
             setError(emailError, 'Please enter your email.');
             return false;
@@ -44,37 +52,51 @@ export const initContactForm = () => {
         }
         setError(emailError, '');
         return true;
-    };
+    }
 
-    const validateMessage = () => {
+    function validateMessage() {
         if (!messageInput || !messageInput.value.trim()) {
             setError(messageError, 'Please enter a message.');
             return false;
         }
         setError(messageError, '');
         return true;
-    };
+    }
 
+    // 3. ATTACH BLUR AND INPUT EVENT LISTENERS FOR INSTANT VALIDATION
     if (nameInput) {
         nameInput.addEventListener('blur', validateName);
-        nameInput.addEventListener('input', () => { if (nameError && nameError.textContent) validateName(); });
-    }
-    if (emailInput) {
-        emailInput.addEventListener('blur', validateEmail);
-        emailInput.addEventListener('input', () => { if (emailError && emailError.textContent) validateEmail(); });
-    }
-    if (messageInput) {
-        messageInput.addEventListener('blur', validateMessage);
-        messageInput.addEventListener('input', () => { if (messageError && messageError.textContent) validateMessage(); });
+        nameInput.addEventListener('input', () => {
+            if (nameError && nameError.textContent) validateName();
+        });
     }
 
-    contactForm.addEventListener('submit', (e) => {
-        e.preventDefault();
+    if (emailInput) {
+        emailInput.addEventListener('blur', validateEmail);
+        emailInput.addEventListener('input', () => {
+            if (emailError && emailError.textContent) validateEmail();
+        });
+    }
+
+    if (messageInput) {
+        messageInput.addEventListener('blur', validateMessage);
+        messageInput.addEventListener('input', () => {
+            if (messageError && messageError.textContent) validateMessage();
+        });
+    }
+
+    // 4. HANDLE FORM SUBMISSION & HONEYPOT SPAM CHECK
+    contactForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+
         if (formStatus) {
             formStatus.style.color = '';
             formStatus.textContent = '';
         }
 
+        // HONEYPOT CHECK FOR BOTS:
+        // If hidden 'website' input has text, it was filled by a spam bot.
+        // Fake success message and exit immediately without sending real data.
         if (honeypotInput && honeypotInput.value.trim() !== '') {
             if (formStatus) {
                 formStatus.style.color = '#5ec45e';
@@ -84,6 +106,7 @@ export const initContactForm = () => {
             return;
         }
 
+        // Validate human user input fields
         const isNameValid = validateName();
         const isEmailValid = validateEmail();
         const isMessageValid = validateMessage();
@@ -94,10 +117,11 @@ export const initContactForm = () => {
                 submitBtn.textContent = 'Sending...';
             }
 
+            // Simulate network send delay
             setTimeout(() => {
                 if (formStatus) {
                     formStatus.style.color = '#5ec45e';
-                    formStatus.textContent = `Thanks, ${nameInput.value.trim()}! Your message has been sent.`;
+                    formStatus.textContent = 'Thanks, ' + nameInput.value.trim() + '! Your message has been sent.';
                 }
                 contactForm.reset();
                 if (submitBtn) {

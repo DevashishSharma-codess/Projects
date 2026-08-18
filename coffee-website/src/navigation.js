@@ -1,13 +1,19 @@
 /**
- * Module 2: Sticky Header, Mobile Nav & Active Scroll Spy
+ * Navigation Module
+ * Controls the sticky header bar on scroll, the responsive mobile menu drawer,
+ * and active navbar link highlighting using basic scroll position math.
  */
 export const initNavigation = () => {
+    // 1. SELECT DOM ELEMENTS
     const header = document.querySelector('header');
     const menuToggle = document.getElementById('menuToggle');
     const navList = document.getElementById('navList');
-    const navLinks = document.querySelectorAll('nav ul li a[href^="#"]');
+    const navLinks = document.querySelectorAll('header nav ul li a[href^="#"]');
+    const sections = document.querySelectorAll('section[id]');
 
-    const handleHeaderScroll = () => {
+    // 2. STICKY HEADER ON SCROLL
+    // Adds dark background styling to top header when scrolling down past 40px
+    window.addEventListener('scroll', () => {
         if (header) {
             if (window.scrollY > 40) {
                 header.classList.add('scrolled');
@@ -15,84 +21,78 @@ export const initNavigation = () => {
                 header.classList.remove('scrolled');
             }
         }
-    };
-    window.addEventListener('scroll', handleHeaderScroll, { passive: true });
-    handleHeaderScroll();
+    }, { passive: true });
 
+    // 3. MOBILE MENU TOGGLE AND AUTO-DISMISS LOGIC
     if (menuToggle && navList) {
-        const toggleMenu = () => {
-            const isOpen = navList.classList.contains('mobile-open') || navList.style.display === 'flex';
-            if (isOpen) {
-                navList.style.display = 'none';
-                navList.classList.remove('mobile-open');
-            } else {
-                navList.style.display = 'flex';
-                navList.classList.add('mobile-open');
-            }
-        };
-
-        menuToggle.addEventListener('click', (e) => {
-            e.stopPropagation();
-            toggleMenu();
-        });
-
-        navLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                if (window.innerWidth <= 700) {
-                    navList.style.display = 'none';
-                    navList.classList.remove('mobile-open');
-                }
-            });
-        });
-
-        document.addEventListener('click', (e) => {
-            if (window.innerWidth <= 700 && navList.style.display === 'flex') {
-                if (!navList.contains(e.target) && !menuToggle.contains(e.target)) {
-                    navList.style.display = 'none';
-                    navList.classList.remove('mobile-open');
-                }
-            }
-        });
-
-        window.addEventListener('resize', () => {
-            if (window.innerWidth > 700) {
-                navList.style.display = '';
-                navList.classList.remove('mobile-open');
-            }
-        });
-    }
-
-    const sections = document.querySelectorAll('section[id]');
-    if (sections.length > 0 && navLinks.length > 0) {
-        const observerOptions = {
-            root: null,
-            rootMargin: '-20% 0px -50% 0px',
-            threshold: 0
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const currentId = entry.target.getAttribute('id');
-                    navLinks.forEach(link => {
-                        const targetHref = link.getAttribute('href').substring(1);
-                        if (targetHref === currentId) {
-                            link.classList.add('active');
-                        } else {
-                            link.classList.remove('active');
-                        }
-                    });
-                }
-            });
-        }, observerOptions);
-
-        sections.forEach(section => observer.observe(section));
-    }
-
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && navList && navList.style.display === 'flex') {
-            navList.style.display = 'none';
+        // Helper function to close the mobile drawer menu
+        function closeMenu() {
             navList.classList.remove('mobile-open');
+            menuToggle.setAttribute('aria-expanded', 'false');
         }
-    });
+
+        // Toggle mobile drawer open or closed when clicking the hamburger button
+        menuToggle.addEventListener('click', (event) => {
+            event.stopPropagation();
+            if (navList.classList.contains('mobile-open')) {
+                navList.classList.remove('mobile-open');
+                menuToggle.setAttribute('aria-expanded', 'false');
+            } else {
+                navList.classList.add('mobile-open');
+                menuToggle.setAttribute('aria-expanded', 'true');
+            }
+        });
+
+        // Close mobile drawer when clicking any navigation link
+        navLinks.forEach((link) => {
+            link.addEventListener('click', () => {
+                closeMenu();
+            });
+        });
+
+        // Close mobile drawer when clicking anywhere outside the navbar
+        document.addEventListener('click', (event) => {
+            const isClickInsideMenu = navList.contains(event.target);
+            const isClickOnToggle = menuToggle.contains(event.target);
+
+            if (!isClickInsideMenu && !isClickOnToggle) {
+                closeMenu();
+            }
+        });
+
+        // Close mobile drawer when pressing the Escape key
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                closeMenu();
+            }
+        });
+    }
+
+    // 4. ACTIVE SCROLL SPY (SECTION HIGHLIGHTING)
+    // Checks window scroll position to highlight whichever section is currently visible on screen
+    function updateActiveNavLinks() {
+        const scrollPosition = window.scrollY;
+
+        sections.forEach((section) => {
+            const sectionTop = section.offsetTop - 120; // Offset for sticky header height
+            const sectionHeight = section.offsetHeight;
+            const sectionId = section.getAttribute('id');
+
+            // Check if current scroll position lies within this section's vertical area
+            if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                navLinks.forEach((link) => {
+                    const href = link.getAttribute('href');
+                    if (href === '#' + sectionId) {
+                        link.classList.add('active');
+                    } else {
+                        link.classList.remove('active');
+                    }
+                });
+            }
+        });
+    }
+
+    // Run active link check on page scroll
+    window.addEventListener('scroll', updateActiveNavLinks, { passive: true });
+    updateActiveNavLinks(); // Run once on initial page load
 };

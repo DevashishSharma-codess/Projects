@@ -1,7 +1,10 @@
 /* ============================================================
    PHOTO CAROUSEL ELEMENTS
+   Styles the sliding photo carousel, items per slide CSS variables,
+   sliding track transforms, navigation arrows, and pagination dots.
 ============================================================ */
 
+/* 1. Main Carousel Outer Container */
 .carousel {
     position: relative;
     border-radius: var(--radius);
@@ -12,6 +15,7 @@
     padding: 8px 0;
 }
 
+/* 2. Sliding Track Container */
 .carousel-track {
     display: flex;
     height: 100%;
@@ -19,6 +23,7 @@
     gap: 14px;
 }
 
+/* Individual Carousel Slide Image Cards */
 .carousel-track img {
     flex: 0 0 calc((100% - (var(--items-per-slide, 3) - 1) * 14px) / var(--items-per-slide, 3));
     width: calc((100% - (var(--items-per-slide, 3) - 1) * 14px) / var(--items-per-slide, 3));
@@ -35,6 +40,7 @@
     filter: brightness(1.08);
 }
 
+/* 3. Left and Right Arrow Navigation Buttons */
 .carousel-btn {
     position: absolute;
     top: 50%;
@@ -73,6 +79,7 @@
     right: 14px;
 }
 
+/* 4. Bottom Pagination Dot Indicators Container */
 .carousel-dots {
     position: absolute;
     bottom: 14px;
@@ -83,6 +90,7 @@
     gap: 8px;
 }
 
+/* Individual Dot Indicator Style */
 .dot {
     width: 8px;
     height: 8px;
@@ -96,6 +104,7 @@
     background: var(--coffee);
 }
 
+/* 5. Mobile Screen Aspect Ratio Adjustment (< 700px) */
 @media (max-width: 700px) {
     .carousel {
         aspect-ratio: 4/5;

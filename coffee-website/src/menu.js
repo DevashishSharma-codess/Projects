@@ -1,12 +1,16 @@
 /**
- * Module 4: Menu Filtering, Card Selection & Checkout Order Bar
+ * Menu & Order System Module
+ * Manages category tab filtering (Coffee, Pastries, Extras), guest check item selection,
+ * quantity selectors (+/-), floating order summary bar, checkout modal, and toast alerts.
  */
 export const initMenuTabs = () => {
+    // 1. SELECT DOM ELEMENTS FOR TABS
     const tabButtons = document.querySelectorAll('.tab-btn');
     const menuItems = document.querySelectorAll('.menu-item');
 
-    const filterCategory = (category) => {
-        menuItems.forEach(item => {
+    // 2. FILTER MENU ITEMS BY CATEGORY
+    function filterCategory(category) {
+        menuItems.forEach((item) => {
             const itemCategory = item.dataset.cat;
             const matches = !itemCategory || itemCategory === category;
             if (matches) {
@@ -17,27 +21,34 @@ export const initMenuTabs = () => {
                 item.style.opacity = '0';
             }
         });
-    };
+    }
 
-    if (tabButtons.length > 0) {
-        tabButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                tabButtons.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                filterCategory(btn.dataset.cat);
+    // 3. ATTACH CLICK LISTENERS TO TAB BUTTONS
+    tabButtons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+            tabButtons.forEach((b) => {
+                b.classList.remove('active');
+                b.setAttribute('aria-selected', 'false');
             });
+            btn.classList.add('active');
+            btn.setAttribute('aria-selected', 'true');
+            filterCategory(btn.dataset.cat);
         });
+    });
 
-        const activeTab = document.querySelector('.tab-btn.active');
-        if (activeTab) {
-            filterCategory(activeTab.dataset.cat);
-        }
+    // 4. FILTER BY DEFAULT ACTIVE TAB ON INITIAL LOAD
+    const activeTab = document.querySelector('.tab-btn.active');
+    if (activeTab) {
+        filterCategory(activeTab.dataset.cat);
     }
 };
 
 export const initMenuOrdering = () => {
+    // 1. SELECT ORDERING DOM ELEMENTS
     const menuItems = document.querySelectorAll('.menu-item.guest-check');
 
+    // 2. CREATE FLOATING DOM UI COMPONENTS IF MISSING
+    // Toast Notification Element
     let toast = document.getElementById('toastNotification');
     if (!toast) {
         toast = document.createElement('div');
@@ -51,6 +62,7 @@ export const initMenuOrdering = () => {
         document.body.appendChild(toast);
     }
 
+    // Floating Order Summary Bar Element
     let orderBar = document.getElementById('floatingOrderBar');
     if (!orderBar) {
         orderBar = document.createElement('div');
@@ -67,6 +79,7 @@ export const initMenuOrdering = () => {
         document.body.appendChild(orderBar);
     }
 
+    // Checkout Modal Popup Element
     let checkoutModal = document.getElementById('orderModal');
     if (!checkoutModal) {
         checkoutModal = document.createElement('div');
@@ -91,6 +104,7 @@ export const initMenuOrdering = () => {
         document.body.appendChild(checkoutModal);
     }
 
+    // 3. GET REFERENCES TO CREATED UI ELEMENTS
     const toastMessage = document.getElementById('toastMessage');
     const toastClose = document.getElementById('toastClose');
     const orderBarCount = document.getElementById('orderBarCount');
@@ -100,17 +114,18 @@ export const initMenuOrdering = () => {
     const orderModalList = document.getElementById('orderModalList');
     const orderModalTotal = document.getElementById('orderModalTotal');
     const btnConfirmCheckout = document.getElementById('btnConfirmCheckout');
-    let toastTimeout;
+    let toastTimeout = null;
 
-    const showToast = (msg) => {
+    // Helper to show alert toast message
+    function showToast(message) {
         if (!toast) return;
-        toastMessage.textContent = msg;
+        toastMessage.textContent = message;
         toast.classList.add('show');
         clearTimeout(toastTimeout);
         toastTimeout = setTimeout(() => {
             toast.classList.remove('show');
         }, 3500);
-    };
+    }
 
     if (toastClose) {
         toastClose.addEventListener('click', () => {
@@ -118,11 +133,13 @@ export const initMenuOrdering = () => {
         });
     }
 
-    const getSelectedItems = () => {
+    // 4. CALCULATE SELECTED ITEMS & SUMMARY TOTALS
+    function getSelectedItems() {
         const selectedList = [];
-        menuItems.forEach(item => {
+        menuItems.forEach((item) => {
             if (item.classList.contains('selected')) {
-                const title = item.querySelector('h3')?.textContent.trim() || 'Menu Item';
+                const titleEl = item.querySelector('h3');
+                const title = titleEl ? titleEl.textContent.trim() : 'Menu Item';
                 const qtyEl = item.querySelector('.qty-count');
                 const priceEl = item.querySelector('.price');
                 const qty = qtyEl ? parseInt(qtyEl.textContent, 10) || 1 : 1;
@@ -131,28 +148,35 @@ export const initMenuOrdering = () => {
             }
         });
         return selectedList;
-    };
+    }
 
-    const updateOverallSummary = () => {
+    function updateOverallSummary() {
         const selectedItems = getSelectedItems();
         let totalCount = 0;
         let totalPrice = 0;
 
-        selectedItems.forEach(i => {
-            totalCount += i.qty;
-            totalPrice += i.subtotal;
+        selectedItems.forEach((item) => {
+            totalCount += item.qty;
+            totalPrice += item.subtotal;
         });
 
         if (totalCount > 0) {
-            if (orderBarCount) orderBarCount.textContent = `${totalCount} item${totalCount > 1 ? 's' : ''}`;
-            if (orderBarTotal) orderBarTotal.textContent = `$${totalPrice.toFixed(2)}`;
-            if (orderBar) orderBar.classList.add('show');
-        } else {
-            if (orderBar) orderBar.classList.remove('show');
+            if (orderBarCount) {
+                orderBarCount.textContent = totalCount + (totalCount > 1 ? ' items' : ' item');
+            }
+            if (orderBarTotal) {
+                orderBarTotal.textContent = '$' + totalPrice.toFixed(2);
+            }
+            if (orderBar) {
+                orderBar.classList.add('show');
+            }
+        } else if (orderBar) {
+            orderBar.classList.remove('show');
         }
-    };
+    }
 
-    menuItems.forEach(item => {
+    // 5. ATTACH CARD SELECTION & QUANTITY SELECTOR LISTENERS (+/-)
+    menuItems.forEach((item) => {
         const checkBox = item.querySelector('.check-box');
         let controls = item.querySelector('.item-order-controls');
 
@@ -174,8 +198,9 @@ export const initMenuOrdering = () => {
         const btnPlus = controls.querySelector('.qty-plus');
         let qty = 1;
 
-        item.addEventListener('click', (e) => {
-            if (e.target.closest('.qty-btn')) return;
+        // Toggle card selection state on click
+        item.addEventListener('click', (event) => {
+            if (event.target.closest('.qty-btn')) return;
 
             const isSelected = item.classList.toggle('selected');
             if (checkBox) {
@@ -183,38 +208,41 @@ export const initMenuOrdering = () => {
             }
             if (!isSelected) {
                 qty = 1;
-                if (qtyCountEl) qtyCountEl.textContent = qty;
+                if (qtyCountEl) qtyCountEl.textContent = '1';
             }
             updateOverallSummary();
         });
 
+        // Decrease quantity listener
         if (btnMinus) {
-            btnMinus.addEventListener('click', (e) => {
-                e.stopPropagation();
+            btnMinus.addEventListener('click', (event) => {
+                event.stopPropagation();
                 if (qty > 1) {
                     qty--;
-                    if (qtyCountEl) qtyCountEl.textContent = qty;
+                    if (qtyCountEl) qtyCountEl.textContent = String(qty);
                     updateOverallSummary();
                 }
             });
         }
 
+        // Increase quantity listener
         if (btnPlus) {
-            btnPlus.addEventListener('click', (e) => {
-                e.stopPropagation();
+            btnPlus.addEventListener('click', (event) => {
+                event.stopPropagation();
                 if (!item.classList.contains('selected')) {
                     item.classList.add('selected');
                     if (checkBox) checkBox.classList.add('checked');
                 }
                 if (qty < 20) {
                     qty++;
-                    if (qtyCountEl) qtyCountEl.textContent = qty;
+                    if (qtyCountEl) qtyCountEl.textContent = String(qty);
                     updateOverallSummary();
                 }
             });
         }
     });
 
+    // 6. CHECKOUT MODAL OPEN AND CONFIRM LISTENERS
     if (btnOrderNowOverall && checkoutModal) {
         btnOrderNowOverall.addEventListener('click', () => {
             const selectedItems = getSelectedItems();
@@ -223,33 +251,36 @@ export const initMenuOrdering = () => {
             orderModalList.innerHTML = '';
             let total = 0;
 
-            selectedItems.forEach(i => {
-                total += i.subtotal;
+            selectedItems.forEach((item) => {
+                total += item.subtotal;
                 const row = document.createElement('div');
                 row.className = 'order-modal-item';
-                row.innerHTML = `
-                    <span>${i.title} &times; ${i.qty}</span>
-                    <span>$${i.subtotal.toFixed(2)}</span>
-                `;
+                row.innerHTML = '<span>' + item.title + ' &times; ' + item.qty + '</span><span>$' + item.subtotal.toFixed(2) + '</span>';
                 orderModalList.appendChild(row);
             });
 
-            if (orderModalTotal) orderModalTotal.textContent = `$${total.toFixed(2)}`;
+            if (orderModalTotal) {
+                orderModalTotal.textContent = '$' + total.toFixed(2);
+            }
             checkoutModal.classList.add('open');
         });
     }
 
-    const closeCheckoutModal = () => {
-        if (checkoutModal) checkoutModal.classList.remove('open');
-    };
+    function closeCheckoutModal() {
+        if (checkoutModal) {
+            checkoutModal.classList.remove('open');
+        }
+    }
 
     if (orderModalClose) {
         orderModalClose.addEventListener('click', closeCheckoutModal);
     }
 
     if (checkoutModal) {
-        checkoutModal.addEventListener('click', (e) => {
-            if (e.target === checkoutModal) closeCheckoutModal();
+        checkoutModal.addEventListener('click', (event) => {
+            if (event.target === checkoutModal) {
+                closeCheckoutModal();
+            }
         });
     }
 
@@ -259,19 +290,19 @@ export const initMenuOrdering = () => {
             let totalCount = 0;
             let totalPrice = 0;
 
-            selectedItems.forEach(i => {
-                totalCount += i.qty;
-                totalPrice += i.subtotal;
-                i.item.classList.remove('selected');
-                const cb = i.item.querySelector('.check-box');
+            selectedItems.forEach((item) => {
+                totalCount += item.qty;
+                totalPrice += item.subtotal;
+                item.item.classList.remove('selected');
+                const cb = item.item.querySelector('.check-box');
                 if (cb) cb.classList.remove('checked');
-                const qtyEl = i.item.querySelector('.qty-count');
+                const qtyEl = item.item.querySelector('.qty-count');
                 if (qtyEl) qtyEl.textContent = '1';
             });
 
             closeCheckoutModal();
             if (orderBar) orderBar.classList.remove('show');
-            showToast(`Order Placed! ${totalCount} item${totalCount > 1 ? 's' : ''} ($${totalPrice.toFixed(2)})`);
+            showToast('Order Placed! ' + totalCount + (totalCount > 1 ? ' items' : ' item') + ' ($' + totalPrice.toFixed(2) + ')');
         });
     }
 };

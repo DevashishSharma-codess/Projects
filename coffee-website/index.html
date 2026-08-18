@@ -34,7 +34,7 @@
             <div class="logo">
                 Maple &amp; Bean
             </div>
-            <nav>
+            <nav aria-label="Main Navigation">
                 <ul id="navList">
                     <li><a href="#home">Home</a></li>
                     <li><a href="#menu">Menu</a></li>
@@ -44,13 +44,14 @@
                     <li><a href="#contact">Contact</a></li>
                 </ul>
             </nav>
-            <button class="menu-toggle" id="menuToggle">&#9776;</button>
+            <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="navList">&#9776;</button>
         </div>
     </header>
 
-    <!-- HERO -->
-
-    <section class="hero hero-video-bg" id="home">
+    <!-- MAIN CONTENT -->
+    <main id="mainContent">
+        <!-- HERO -->
+        <section class="hero hero-video-bg" id="home">
         <div class="hero-bg-video">
             <video autoplay loop muted playsinline>
                 <source src="assets/bg.mp4" type="video/mp4">
@@ -90,11 +91,11 @@
             <h2>Our Menu</h2>
         </div>
 
-        <div class="tabs" id="tabs">
-            <button class="tab-btn active" data-cat="coffee">Coffee</button>
-            <button class="tab-btn" data-cat="pastries">Pastries</button>
-            <button class="tab-btn" data-cat="extras">Extras</button>
-        </div>
+        <nav class="tabs" id="tabs" aria-label="Menu Categories" role="tablist">
+            <button class="tab-btn active" data-cat="coffee" role="tab" aria-selected="true">Coffee</button>
+            <button class="tab-btn" data-cat="pastries" role="tab" aria-selected="false">Pastries</button>
+            <button class="tab-btn" data-cat="extras" role="tab" aria-selected="false">Extras</button>
+        </nav>
 
         <div class="menu-grid" id="menuGrid">
             <!-- COFFEE (6 ITEMS) -->
@@ -718,7 +719,7 @@
             </div>
         </div>
     </section>
-
+    </main>
 
     <!-- FOOTER -->
     <footer class="site-footer">
@@ -727,24 +728,26 @@
             <div class="footer-col brand-col">
                 <h3 class="footer-logo">Maple &amp; Bean</h3>
                 <p class="footer-tagline">Crafted coffee &amp; warm pastries roasted fresh in-house.</p>
-                <div class="footer-address">
+                <address class="footer-address">
                     <span class="company-name">EnactOn Technologies Private Limited</span>
                     <p>605, Luxuria Business Hub, Nr. V R Mall,<br>Surat - Dumas Rd, Vesu, Surat, Rundh, Gujarat 395007
                     </p>
-                </div>
+                </address>
             </div>
 
             <!-- Column 2: Quick Links -->
             <div class="footer-col links-col">
                 <h4>Quick Links</h4>
-                <ul class="footer-links">
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#menu">Our Menu</a></li>
-                    <li><a href="#gallery">Gallery</a></li>
-                    <li><a href="#testimonials">Words &amp; Reviews</a></li>
-                    <li><a href="#faq">FAQ</a></li>
-                    <li><a href="#contact">Contact Us</a></li>
-                </ul>
+                <nav aria-label="Footer Navigation">
+                    <ul class="footer-links">
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#menu">Our Menu</a></li>
+                        <li><a href="#gallery">Gallery</a></li>
+                        <li><a href="#testimonials">Words &amp; Reviews</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                        <li><a href="#contact">Contact Us</a></li>
+                    </ul>
+                </nav>
             </div>
 
             <!-- Column 3: Hours & Socials -->

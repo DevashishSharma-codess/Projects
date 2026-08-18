@@ -1,7 +1,10 @@
 /* ============================================================
    HEADER & NAVIGATION ELEMENTS
+   Styles the top sticky navigation bar, brand logo, active link indicators,
+   and mobile hamburger drawer navigation menu.
 ============================================================ */
 
+/* 1. Top Sticky Header Bar Container */
 header {
     position: sticky;
     top: 0;
@@ -13,12 +16,14 @@ header {
     transition: background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
+/* Scrolled State (Triggered via JavaScript on page scroll down > 40px) */
 header.scrolled {
     background: rgba(18, 11, 7, 0.95);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
     border-bottom-color: rgba(226, 188, 132, 0.25);
 }
 
+/* 2. Inner Flex Wrapper for Logo and Navigation Links */
 .nav-wrap {
     max-width: 1100px;
     margin: 0 auto;
@@ -29,6 +34,7 @@ header.scrolled {
     position: relative;
 }
 
+/* 3. Brand Logo Text Style */
 .logo {
     font-family: 'Instrument Serif', serif;
     font-size: 1.45rem;
@@ -36,29 +42,32 @@ header.scrolled {
     color: #FDFBF8;
 }
 
-nav ul {
+/* 4. Desktop Navigation List & Links */
+header nav ul {
     display: flex;
     gap: 28px;
 }
 
-nav a {
+header nav a {
     font-size: 0.95rem;
     font-weight: 500;
     color: rgba(253, 251, 248, 0.88);
     transition: color .2s ease;
 }
 
-nav a:hover {
+header nav a:hover {
     color: #E2BC84;
 }
 
-nav a.active {
+/* 5. Active Link Highlight (Managed via Scroll Spy JS) */
+header nav a.active {
     color: #E2BC84;
     font-weight: 700;
     position: relative;
 }
 
-nav a.active::after {
+/* Animated Golden Underline Bar for Active Link */
+header nav a.active::after {
     content: '';
     position: absolute;
     bottom: -4px;
@@ -69,6 +78,7 @@ nav a.active::after {
     border-radius: 2px;
 }
 
+/* 6. Mobile Hamburger Toggle Button (Hidden on Desktop) */
 .menu-toggle {
     display: none;
     background: none;
@@ -78,13 +88,16 @@ nav a.active::after {
     color: #FDFBF8;
 }
 
+/* 7. Responsive Breakpoint (< 700px) Mobile Menu Rules */
 @media (max-width: 700px) {
+    /* Show Hamburger Button on Mobile Screens */
     .menu-toggle {
         display: block;
         margin-left: auto;
     }
 
-    nav ul {
+    /* Convert Desktop Nav List into Absolute Mobile Dropdown Drawer */
+    header nav ul {
         position: absolute;
         top: 100%;
         left: 0;
@@ -97,6 +110,11 @@ nav a.active::after {
         gap: 16px;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-        display: none;
+        display: none; /* Hidden by default */
+    }
+
+    /* Display Mobile Drawer when .mobile-open Class is Active */
+    header nav ul.mobile-open {
+        display: flex;
     }
 }

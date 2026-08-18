@@ -1,7 +1,10 @@
 /* ============================================================
    INTERACTIVE LIGHTBOX MODAL ELEMENTS
+   Styles full-screen popup modal for inspecting enlarged photo gallery
+   and photo carousel images with navigation arrows and close button.
 ============================================================ */
 
+/* 1. Full-Screen Backdrop Overlay Container */
 .lightbox {
     display: none;
     position: fixed;
@@ -16,10 +19,12 @@
     user-select: none;
 }
 
+/* Open State for Lightbox Modal */
 .lightbox.open {
     display: flex;
 }
 
+/* 2. Inner Image Box Wrapper */
 .lightbox-img-wrap {
     display: flex;
     align-items: center;
@@ -45,6 +50,7 @@
     transition: opacity 0.25s ease;
 }
 
+/* 3. Top-Right Close Button ('X') */
 .lightbox-close {
     position: absolute;
     top: 20px;
@@ -64,6 +70,7 @@
     transform: scale(1.15);
 }
 
+/* 4. Previous and Next Arrow Navigation Buttons */
 .lightbox-nav {
     background: rgba(24, 16, 12, 0.85);
     backdrop-filter: blur(8px);
@@ -92,6 +99,7 @@
     box-shadow: 0 8px 24px rgba(196, 90, 71, 0.5);
 }
 
+/* 5. Mobile Responsive Lightbox Sizing Rules (< 700px) */
 @media (max-width: 700px) {
     .lightbox {
         padding: 16px 10px;

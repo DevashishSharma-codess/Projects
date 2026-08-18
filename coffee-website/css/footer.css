@@ -1,7 +1,10 @@
 /* ============================================================
    SITE FOOTER ELEMENTS
+   Styles the multi-column site footer, company address block,
+   quick navigation links, opening hours, social icons, and copyright bottom bar.
 ============================================================ */
 
+/* 1. Main Footer Wrapper Container */
 .site-footer {
     background: #120B07;
     border-top: 1px solid rgba(226, 188, 132, 0.15);
@@ -10,6 +13,7 @@
     font-size: 0.92rem;
 }
 
+/* 2. Three-Column Footer Grid Layout */
 .footer-container {
     max-width: 1100px;
     margin: 0 auto;
@@ -20,6 +24,7 @@
     border-bottom: 1px solid rgba(226, 188, 132, 0.1);
 }
 
+/* 3. Column 1: Brand Logo, Tagline & Company Address */
 .footer-col h3.footer-logo {
     font-family: 'Instrument Serif', serif;
     font-size: 1.8rem;
@@ -33,6 +38,7 @@
     margin-bottom: 18px;
 }
 
+/* Semantic Company Address Card Box */
 .footer-address {
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(226, 188, 132, 0.15);
@@ -55,6 +61,7 @@
     margin: 0;
 }
 
+/* 4. Column 2: Quick Links Header & Navigation Links */
 .footer-col h4 {
     font-family: 'Instrument Serif', serif;
     font-size: 1.25rem;
@@ -93,6 +100,7 @@
     transform: translateX(4px);
 }
 
+/* 5. Column 3: Opening Hours & Social Links */
 .hours-text {
     font-size: 0.88rem;
     color: rgba(245, 235, 224, 0.75);
@@ -122,6 +130,7 @@
     cursor: default;
 }
 
+/* 6. Footer Bottom Copyright Bar */
 .footer-bottom {
     max-width: 1100px;
     margin: 0 auto;
@@ -131,6 +140,7 @@
     color: rgba(245, 235, 224, 0.5);
 }
 
+/* 7. Responsive Mobile Breakpoint (< 800px) */
 @media (max-width: 800px) {
     .footer-container {
         grid-template-columns: 1fr;

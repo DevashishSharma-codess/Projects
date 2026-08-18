@@ -1,30 +1,36 @@
 /* ============================================================
    DESIGN TOKENS, RESET & BASE TYPOGRAPHY
+   Defines global CSS custom properties (colors, borders, radii),
+   box-sizing reset, default typography, and shared UI button styles.
 ============================================================ */
 
+/* 1. Global CSS Custom Properties (Theme Colors & Design Variables) */
 :root {
-    --cream: #18100C;
-    --coffee: #F5EBE0;
-    --tan: #E2BC84;
-    --white: #241912;
-    --line: rgba(226, 188, 132, 0.15);
-    --radius: 14px;
-    --accent: #C45A47;
-    --accent-dark: #A83E2D;
-    --bg-dark: #120B07;
-    --card-bg: #231811;
+    --cream: #18100C;        /* Main dark coffee background color */
+    --coffee: #F5EBE0;       /* Warm light text color */
+    --tan: #E2BC84;          /* Warm golden accent color */
+    --white: #241912;        /* Dark container background color */
+    --line: rgba(226, 188, 132, 0.15); /* Subtle border line color */
+    --radius: 14px;          /* Default border radius for cards */
+    --accent: #C45A47;       /* Primary terracotta red accent color */
+    --accent-dark: #A83E2D;  /* Darker terracotta accent color for hovers */
+    --bg-dark: #120B07;      /* Extra dark background color */
+    --card-bg: #231811;      /* Card background color */
 }
 
+/* 2. Global Universal Box-Sizing & Margin Reset */
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
+/* 3. Smooth Scrolling Behavior */
 html {
     scroll-behavior: smooth;
 }
 
+/* 4. Base Page Typography & Background Body Rules */
 body {
     font-family: 'Plus Jakarta Sans', sans-serif;
     background: var(--cream);
@@ -33,6 +39,7 @@ body {
     overflow-x: hidden;
 }
 
+/* 5. Headings Font (Instrument Serif Vintage Style) */
 h1, h2, h3 {
     font-family: 'Instrument Serif', serif;
     font-weight: 400;
@@ -41,6 +48,7 @@ h1, h2, h3 {
     letter-spacing: -0.01em;
 }
 
+/* 6. Link & List Resets */
 a {
     text-decoration: none;
     color: inherit;
@@ -55,12 +63,14 @@ img {
     display: block;
 }
 
+/* 7. Shared Section Container Layout */
 section {
     padding: 70px 20px;
     max-width: 1100px;
     margin: 0 auto;
 }
 
+/* 8. Shared Section Header Titles & Eyebrows */
 .section-head {
     text-align: center;
     margin-bottom: 32px;
@@ -71,6 +81,7 @@ section h2 {
     margin-bottom: 6px;
 }
 
+/* Uppercase Eyebrow Subtitles above Section Titles */
 .eyebrow {
     text-transform: uppercase;
     letter-spacing: 2px;
@@ -79,6 +90,7 @@ section h2 {
     font-weight: 600;
 }
 
+/* 9. Global Reusable Button Styles */
 .btn {
     display: inline-block;
     background: var(--coffee);

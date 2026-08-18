@@ -1,7 +1,10 @@
 /* ============================================================
    HERO SECTION ELEMENTS
+   Styles the hero section, full-bleed video background overlay,
+   typography, action buttons, and animated bounce scroll indicator.
 ============================================================ */
 
+/* 1. Main Hero Container Section */
 .hero {
     position: relative;
     min-height: 85vh;
@@ -15,6 +18,7 @@
     max-width: 100%;
 }
 
+/* 2. Full-Bleed Video Background Container */
 .hero-bg-video {
     position: absolute;
     inset: 0;
@@ -29,6 +33,7 @@
     object-fit: cover;
 }
 
+/* 3. Dark Gradient Overlay for High Contrast Text Legibility */
 .hero-overlay {
     position: absolute;
     inset: 0;
@@ -36,6 +41,7 @@
     z-index: 2;
 }
 
+/* 4. Hero Center Content Box (Headings, Paragraph, Buttons) */
 .hero-content {
     position: relative;
     z-index: 3;
@@ -53,6 +59,7 @@
     margin-bottom: 32px;
 }
 
+/* 5. Call-To-Action Button Wrapper */
 .hero-buttons {
     display: flex;
     gap: 16px;
@@ -60,6 +67,7 @@
     flex-wrap: wrap;
 }
 
+/* Primary Terracotta Action Button */
 .btn-hero-primary {
     background: #C45A47;
     color: #FFFFFF;
@@ -72,6 +80,7 @@
     background: #da5139;
 }
 
+/* Secondary Outlined Action Button */
 .btn-hero-secondary {
     background: transparent;
     border: 1.5px solid rgba(245, 235, 224, 0.4);
@@ -83,6 +92,7 @@
     border-color: #F5EBE0;
 }
 
+/* 6. Floating Animated Scroll Down Prompt Button */
 .hero-scroll-down {
     position: absolute;
     bottom: 24px;
@@ -126,6 +136,7 @@
     display: block;
 }
 
+/* 7. Keyframe Animation for Gentle Bounce Effect */
 @keyframes bounce {
     0%, 20%, 50%, 80%, 100% {
         transform: translateX(-50%) translateY(0);

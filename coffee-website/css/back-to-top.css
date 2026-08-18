@@ -1,7 +1,9 @@
 /* ============================================================
    BACK-TO-TOP BUTTON ELEMENT
+   Styles the floating scroll-to-top action button in the bottom-left corner.
 ============================================================ */
 
+/* 1. Floating Circular Button Container */
 .back-to-top {
     position: fixed;
     bottom: 24px;
@@ -25,12 +27,14 @@
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
 }
 
+/* Active Visible State (Triggered via JS when page is scrolled down > 400px) */
 .back-to-top.show {
     opacity: 1;
     transform: scale(1);
     pointer-events: auto;
 }
 
+/* Hover Highlight State */
 .back-to-top:hover {
     background: #C45A47;
     color: #fff;

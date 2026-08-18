@@ -1,7 +1,11 @@
 /* ============================================================
    MENU & GUEST CHECK ELEMENTS
+   Styles category filtering tabs (Coffee, Pastries, Extras),
+   vintage receipt-style "Guest Check" menu cards, selection checkboxes,
+   and quantity selector controls (+/-).
 ============================================================ */
 
+/* 1. Category Tab Filter Buttons Wrapper */
 .tabs {
     display: flex;
     gap: 10px;
@@ -10,6 +14,7 @@
     flex-wrap: wrap;
 }
 
+/* Individual Category Tab Button Style */
 .tab-btn {
     padding: 9px 20px;
     border-radius: 100px;
@@ -27,6 +32,7 @@
     color: #FFFFFF;
 }
 
+/* Active Category Tab Highlight State */
 .tab-btn.active {
     background: linear-gradient(135deg, #C45A47 0%, #A83E2D 100%);
     color: #FFFFFF;
@@ -34,12 +40,14 @@
     box-shadow: 0 4px 14px rgba(196, 90, 71, 0.4);
 }
 
+/* 2. Responsive Menu Items Grid Layout */
 .menu-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 22px;
 }
 
+/* 3. Vintage Receipt Card Container ("Guest Check") */
 .menu-item.guest-check {
     background: #231811;
     background-image: repeating-linear-gradient(transparent,
@@ -62,6 +70,7 @@
     border-color: rgba(226, 188, 132, 0.4);
 }
 
+/* Selected State when Item is Added to Order */
 .menu-item.guest-check.selected {
     border-color: #E2BC84;
     border-top-color: #E2BC84;
@@ -69,6 +78,7 @@
     background: #2c1d15;
 }
 
+/* 4. Guest Check Header Line ("GUEST CHECK № 101") */
 .check-header {
     display: flex;
     justify-content: space-between;
@@ -93,6 +103,7 @@
     font-size: 0.75rem;
 }
 
+/* 5. Item Title, Checkbox & Price Row */
 .menu-item-top {
     display: flex;
     align-items: center;
@@ -119,6 +130,7 @@
     text-overflow: ellipsis;
 }
 
+/* Checkbox Square Indicator */
 .check-box {
     width: 18px;
     height: 18px;
@@ -137,6 +149,7 @@
     border-color: #E2BC84;
 }
 
+/* Checked State Indicator Checkmark */
 .menu-item.selected .check-box,
 .check-box.checked {
     background-color: #C45A47;
@@ -153,6 +166,7 @@
     display: block;
 }
 
+/* Dotted Filler Line between Item Title and Price */
 .dots-filler {
     flex: 1;
     border-bottom: 1.5px dotted rgba(226, 188, 132, 0.3);
@@ -160,6 +174,7 @@
     min-width: 12px;
 }
 
+/* Price Label Style */
 .price {
     font-family: 'Instrument Serif', serif;
     font-size: 1.25rem;
@@ -168,6 +183,7 @@
     white-space: nowrap;
 }
 
+/* 6. Item Description Text */
 .menu-desc {
     font-size: 0.88rem;
     color: rgba(245, 235, 224, 0.78);
@@ -176,6 +192,7 @@
     line-height: 1.4;
 }
 
+/* 7. Receipt Card Footer Stamp */
 .check-footer {
     margin-top: 14px;
     padding-top: 10px;
@@ -193,6 +210,7 @@
     text-transform: uppercase;
 }
 
+/* 8. Quantity Selector Controls (+/-) for Selected Items */
 .item-order-controls {
     display: none;
     align-items: center;
