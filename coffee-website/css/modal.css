@@ -29,8 +29,8 @@
 
 /* 2. Inner Modal Dialog Card Container */
 .order-modal-card {
-    background: #231811;
-    border: 1.5px solid #E2BC84;
+    background: var(--card-bg);
+    border: 1.5px solid var(--tan);
     border-radius: 16px;
     width: 100%;
     max-width: 460px;
@@ -56,13 +56,13 @@
 
 .order-modal-header h3 {
     font-size: 1.4rem;
-    color: #FDFBF8;
+    color: var(--text-bright);
 }
 
 .order-modal-close {
     background: none;
     border: none;
-    color: #E2BC84;
+    color: var(--tan);
     font-size: 1.5rem;
     cursor: pointer;
 }
@@ -101,13 +101,13 @@
     justify-content: space-between;
     font-size: 1.1rem;
     font-weight: 700;
-    color: #E2BC84;
+    color: var(--tan);
 }
 
 /* Confirm & Place Order Action Button */
 .btn-confirm-checkout {
-    background: linear-gradient(135deg, #C45A47 0%, #A83E2D 100%);
-    color: white;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+    color: var(--pure-white);
     border: none;
     padding: 12px;
     border-radius: 100px;

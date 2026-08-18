@@ -125,8 +125,8 @@
 .cup-lid {
     width: 100%;
     height: 18px;
-    background: #FDFBF8;
-    border: 1.5px solid #E3D6C4;
+    background: var(--text-bright);
+    border: 1.5px solid var(--cup-lid-border);
     border-bottom: none;
     border-radius: 50% 50% 4px 4px / 70% 70% 4px 4px;
     position: relative;
@@ -140,7 +140,7 @@
     right: 4%;
     bottom: 3px;
     height: 2px;
-    background: #E3D6C4;
+    background: var(--cup-lid-border);
     border-radius: 2px;
 }
 
@@ -154,14 +154,14 @@
     height: 5px;
     border-radius: 50%;
     background: var(--cream);
-    border: 1.5px solid #E3D6C4;
+    border: 1.5px solid var(--cup-lid-border);
 }
 
 /* Coffee Cup Body & Cardboard Heat Sleeve */
 .cup-body {
     width: 92%;
     aspect-ratio: 3 / 3.4;
-    background: linear-gradient(180deg, #FDFBF8 0%, #FDFBF8 34%, #E7D4B8 34%, #D9BE96 100%);
+    background: linear-gradient(180deg, var(--text-bright) 0%, var(--text-bright) 34%, var(--cup-sleeve-top) 34%, var(--cup-sleeve-bottom) 100%);
     clip-path: polygon(6% 0%, 94% 0%, 86% 100%, 14% 100%);
     display: flex;
     flex-direction: column;
@@ -210,7 +210,7 @@
     font-family: 'Marck Script', cursive;
     font-size: 1.45rem;
     font-weight: 700;
-    color: #3C2A21;
+    color: var(--paper-text);
     line-height: 1;
     margin-top: 10px;
     transform: rotate(-3deg);
@@ -231,7 +231,7 @@
 .cup-base {
     width: 78%;
     height: 6px;
-    background: #C9A876;
+    background: var(--cup-base);
     border-radius: 0 0 4px 4px;
     margin-top: -2px;
 }
@@ -241,7 +241,7 @@
     font-family: 'Instrument Serif', serif;
     font-style: italic;
     font-size: 0.82rem;
-    color: #EAE0D5;
+    color: var(--cup-quote-text);
     text-align: center;
     margin-top: 12px;
     line-height: 1.35;

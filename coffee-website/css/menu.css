@@ -20,7 +20,7 @@
     border-radius: 100px;
     border: 1.5px solid rgba(226, 188, 132, 0.2);
     background: rgba(255, 255, 255, 0.05);
-    color: #F5EBE0;
+    color: var(--coffee);
     cursor: pointer;
     font-weight: 500;
     font-size: 0.9rem;
@@ -28,15 +28,15 @@
 }
 
 .tab-btn:hover {
-    border-color: #E2BC84;
-    color: #FFFFFF;
+    border-color: var(--tan);
+    color: var(--pure-white);
 }
 
 /* Active Category Tab Highlight State */
 .tab-btn.active {
-    background: linear-gradient(135deg, #C45A47 0%, #A83E2D 100%);
-    color: #FFFFFF;
-    border-color: #C45A47;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+    color: var(--pure-white);
+    border-color: var(--accent);
     box-shadow: 0 4px 14px rgba(196, 90, 71, 0.4);
 }
 
@@ -49,12 +49,12 @@
 
 /* 3. Vintage Receipt Card Container ("Guest Check") */
 .menu-item.guest-check {
-    background: #231811;
+    background: var(--card-bg);
     background-image: repeating-linear-gradient(transparent,
             transparent 25px,
             rgba(226, 188, 132, 0.04) 26px);
     border: 1px solid rgba(226, 188, 132, 0.18);
-    border-top: 4px solid #C45A47;
+    border-top: 4px solid var(--accent);
     border-radius: 6px;
     padding: 18px 20px;
     position: relative;
@@ -72,10 +72,10 @@
 
 /* Selected State when Item is Added to Order */
 .menu-item.guest-check.selected {
-    border-color: #E2BC84;
-    border-top-color: #E2BC84;
+    border-color: var(--tan);
+    border-top-color: var(--tan);
     box-shadow: 0 8px 28px rgba(226, 188, 132, 0.25);
-    background: #2c1d15;
+    background: var(--card-selected-bg);
 }
 
 /* 4. Guest Check Header Line ("GUEST CHECK № 101") */
@@ -93,12 +93,12 @@
 }
 
 .check-label {
-    color: #E06B58;
+    color: var(--accent-pink);
     text-transform: uppercase;
 }
 
 .check-no {
-    color: #E2BC84;
+    color: var(--tan);
     font-family: monospace;
     font-size: 0.75rem;
 }
@@ -122,7 +122,7 @@
 
 .item-title-wrap h3 {
     font-size: 1.1rem;
-    color: #FDFBF8;
+    color: var(--text-bright);
     margin: 0;
     font-family: 'Instrument Serif', serif;
     white-space: nowrap;
@@ -146,20 +146,20 @@
 }
 
 .menu-item.guest-check:hover .check-box {
-    border-color: #E2BC84;
+    border-color: var(--tan);
 }
 
 /* Checked State Indicator Checkmark */
 .menu-item.selected .check-box,
 .check-box.checked {
-    background-color: #C45A47;
-    border-color: #C45A47;
+    background-color: var(--accent);
+    border-color: var(--accent);
 }
 
 .menu-item.selected .check-box::after,
 .check-box.checked::after {
     content: "✓";
-    color: #ffffff;
+    color: var(--pure-white);
     font-size: 11px;
     font-weight: bold;
     line-height: 1;
@@ -178,7 +178,7 @@
 .price {
     font-family: 'Instrument Serif', serif;
     font-size: 1.25rem;
-    color: #E2BC84;
+    color: var(--tan);
     font-weight: 600;
     white-space: nowrap;
 }
@@ -236,7 +236,7 @@
 .qty-btn {
     background: none;
     border: none;
-    color: #E2BC84;
+    color: var(--tan);
     font-size: 1rem;
     font-weight: 700;
     cursor: pointer;
@@ -256,7 +256,7 @@
 .qty-count {
     font-size: 0.9rem;
     font-weight: 600;
-    color: #FDFBF8;
+    color: var(--text-bright);
     min-width: 16px;
     text-align: center;
 }

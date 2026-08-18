@@ -13,7 +13,7 @@
     background: rgba(26, 18, 13, 0.94);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
-    border: 1.5px solid #E2BC84;
+    border: 1.5px solid var(--tan);
     border-radius: 100px;
     padding: 8px 12px 8px 24px;
     display: flex;
@@ -42,12 +42,12 @@
     gap: 10px;
     font-size: 0.95rem;
     font-weight: 600;
-    color: #FDFBF8;
+    color: var(--text-bright);
     white-space: nowrap;
 }
 
 .order-bar-count {
-    color: #E2BC84;
+    color: var(--tan);
     font-weight: 700;
 }
 
@@ -56,7 +56,7 @@
 }
 
 .order-bar-total {
-    color: #FFFFFF;
+    color: var(--pure-white);
     font-family: 'Instrument Serif', serif;
     font-size: 1.25rem;
     font-weight: 600;
@@ -64,8 +64,8 @@
 
 /* 3. Main Order Now Button inside Floating Bar */
 .btn-order-now-main {
-    background: linear-gradient(135deg, #C45A47 0%, #A83E2D 100%);
-    color: #FFFFFF;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+    color: var(--pure-white);
     border: none;
     padding: 10px 24px;
     border-radius: 100px;
@@ -88,9 +88,9 @@
     position: fixed;
     top: 24px;
     right: 24px;
-    background: #231811;
-    border: 1.5px solid #E2BC84;
-    color: #FDFBF8;
+    background: var(--card-bg);
+    border: 1.5px solid var(--tan);
+    color: var(--text-bright);
     padding: 14px 20px;
     border-radius: 12px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
@@ -116,8 +116,8 @@
 .toast-icon {
     width: 24px;
     height: 24px;
-    background: #3a6b3a;
-    color: #ffffff;
+    background: var(--status-success-bg);
+    color: var(--pure-white);
     border-radius: 50%;
     display: flex;
     align-items: center;

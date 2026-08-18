@@ -73,8 +73,8 @@
 }
 
 .polaroid {
-    background: #FAF5EE;
-    border: 1px solid #E7DCCB;
+    background: var(--paper-bg);
+    border: 1px solid var(--paper-border);
     width: 90%;
     padding: 14px 14px 40px;
     border-radius: 4px;
@@ -126,7 +126,7 @@
     text-align: center;
     font-family: 'Marck Script', 'Kalam', 'Permanent Marker', cursive;
     font-size: 1.15rem;
-    color: #3C2A21;
+    color: var(--paper-text);
     font-weight: 600;
     opacity: 0.95;
 }

@@ -10,7 +10,7 @@
     border-radius: var(--radius);
     overflow: hidden;
     aspect-ratio: 16/7;
-    background: #18100C;
+    background: var(--cream);
     --items-per-slide: 3;
     padding: 8px 0;
 }
@@ -54,7 +54,7 @@
     border-radius: 50%;
     cursor: pointer;
     font-size: 1.2rem;
-    color: #FDFBF8;
+    color: var(--text-bright);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -64,9 +64,9 @@
 }
 
 .carousel-btn:hover {
-    background: #da5139;
-    border-color: #C45A47;
-    color: #ffffff;
+    background: var(--accent-hover);
+    border-color: var(--accent);
+    color: var(--pure-white);
     transform: translateY(-50%) scale(1.1);
     box-shadow: 0 8px 20px rgba(196, 90, 71, 0.5);
 }

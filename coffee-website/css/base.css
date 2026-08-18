@@ -6,16 +6,44 @@
 
 /* 1. Global CSS Custom Properties (Theme Colors & Design Variables) */
 :root {
-    --cream: #18100C;        /* Main dark coffee background color */
-    --coffee: #F5EBE0;       /* Warm light text color */
-    --tan: #E2BC84;          /* Warm golden accent color */
-    --white: #241912;        /* Dark container background color */
-    --line: rgba(226, 188, 132, 0.15); /* Subtle border line color */
-    --radius: 14px;          /* Default border radius for cards */
-    --accent: #C45A47;       /* Primary terracotta red accent color */
-    --accent-dark: #A83E2D;  /* Darker terracotta accent color for hovers */
-    --bg-dark: #120B07;      /* Extra dark background color */
-    --card-bg: #231811;      /* Card background color */
+    /* Brand Core Palette */
+    --cream: #18100C;                    /* Main dark coffee background color */
+    --coffee: #F5EBE0;                   /* Warm light text color */
+    --tan: #E2BC84;                      /* Warm golden accent color */
+    --white: #241912;                    /* Dark container background color */
+    --pure-white: #FFFFFF;               /* Pure white color */
+    --text-bright: #FDFBF8;              /* Bright off-white heading/title text color */
+    --line: rgba(226, 188, 132, 0.15);   /* Subtle golden border line color */
+    --line-bright: rgba(226, 188, 132, 0.3); /* Brighter golden border line color */
+    --radius: 14px;                      /* Default border radius for cards */
+
+    /* Accent & Action Colors */
+    --accent: #C45A47;                   /* Primary terracotta red accent color */
+    --accent-hover: #da5139;             /* Lighter terracotta red for button hovers */
+    --accent-dark: #A83E2D;              /* Darker terracotta accent color for hovers */
+    --accent-pink: #E06B58;              /* Warm terracotta pink for label text */
+
+    /* Dark Background & Surface Colors */
+    --bg-dark: #120B07;                  /* Extra dark background color */
+    --card-bg: #231811;                  /* Card background color */
+    --card-selected-bg: #2c1d15;         /* Selected check card background color */
+    --header-bg: rgba(24, 16, 12, 0.82); /* Header semi-transparent backdrop color */
+    --header-scrolled-bg: rgba(18, 11, 7, 0.95); /* Header scrolled state background */
+
+    /* Status & Feedback Colors */
+    --status-success: #5ec45e;           /* Form success green text color */
+    --status-success-bg: #3a6b3a;        /* Toast success green icon background */
+    --status-error: #e66a5e;             /* Form error red text color */
+
+    /* Vintage Paper & Polaroid Card Colors */
+    --paper-bg: #FAF5EE;                 /* Light polaroid paper background */
+    --paper-border: #E7DCCB;             /* Polaroid paper border color */
+    --paper-text: #3C2A21;               /* Dark brown polaroid/cup text color */
+    --cup-lid-border: #E3D6C4;           /* Coffee cup lid border color */
+    --cup-sleeve-top: #E7D4B8;           /* Cardboard sleeve gradient top */
+    --cup-sleeve-bottom: #D9BE96;        /* Cardboard sleeve gradient bottom */
+    --cup-base: #C9A876;                 /* Coffee cup base rim color */
+    --cup-quote-text: #EAE0D5;           /* Testimonial quote text color */
 }
 
 /* 2. Global Universal Box-Sizing & Margin Reset */
@@ -43,7 +71,7 @@ body {
 h1, h2, h3 {
     font-family: 'Instrument Serif', serif;
     font-weight: 400;
-    color: #FDFBF8;
+    color: var(--text-bright);
     line-height: 1.1;
     letter-spacing: -0.01em;
 }

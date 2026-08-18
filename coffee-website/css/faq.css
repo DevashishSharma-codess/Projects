@@ -22,14 +22,14 @@
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
-    color: #FDFBF8;
+    color: var(--text-bright);
     font-family: inherit;
 }
 
 /* Plus Icon ('+') inside Question Button */
 .faq-q .icon {
     transition: transform .25s;
-    color: #E2BC84;
+    color: var(--tan);
     font-size: 1.3rem;
 }
 

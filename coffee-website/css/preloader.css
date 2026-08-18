@@ -8,7 +8,7 @@
 .page-loader {
     position: fixed;
     inset: 0;
-    background: #18100C;
+    background: var(--cream);
     z-index: 99999;
     display: flex;
     align-items: center;
@@ -35,7 +35,7 @@
 .loader-text {
     font-family: 'Marck Script', 'Kalam', cursive;
     font-size: 1.4rem;
-    color: #E2BC84;
+    color: var(--tan);
     letter-spacing: 0.5px;
     animation: loaderPulse 1.8s infinite ease-in-out;
 }

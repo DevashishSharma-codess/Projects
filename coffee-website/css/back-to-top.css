@@ -13,7 +13,7 @@
     border-radius: 50%;
     background: rgba(35, 24, 17, 0.9);
     border: 1.5px solid rgba(226, 188, 132, 0.3);
-    color: #E2BC84;
+    color: var(--tan);
     font-size: 1.2rem;
     display: flex;
     align-items: center;
@@ -36,8 +36,8 @@
 
 /* Hover Highlight State */
 .back-to-top:hover {
-    background: #C45A47;
-    color: #fff;
-    border-color: #C45A47;
+    background: var(--accent);
+    color: var(--pure-white);
+    border-color: var(--accent);
     transform: translateY(-3px);
 }

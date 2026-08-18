@@ -69,27 +69,27 @@
 
 /* Primary Terracotta Action Button */
 .btn-hero-primary {
-    background: #C45A47;
-    color: #FFFFFF;
+    background: var(--accent);
+    color: var(--pure-white);
     display: inline-flex;
     align-items: center;
     gap: 8px;
 }
 
 .btn-hero-primary:hover {
-    background: #da5139;
+    background: var(--accent-hover);
 }
 
 /* Secondary Outlined Action Button */
 .btn-hero-secondary {
     background: transparent;
     border: 1.5px solid rgba(245, 235, 224, 0.4);
-    color: #F5EBE0;
+    color: var(--coffee);
 }
 
 .btn-hero-secondary:hover {
     background: rgba(255, 255, 255, 0.1);
-    border-color: #F5EBE0;
+    border-color: var(--coffee);
 }
 
 /* 6. Floating Animated Scroll Down Prompt Button */
@@ -108,15 +108,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #ffffff;
+    color: var(--pure-white);
     transition: all 0.3s ease;
     animation: bounce 2s infinite;
 }
 
 .hero-scroll-down:hover {
     background: rgba(255, 255, 255, 0.25);
-    border-color: #ffffff;
-    color: #ffffff;
+    border-color: var(--pure-white);
+    color: var(--pure-white);
 }
 
 .hero-scroll-down svg {
@@ -129,8 +129,8 @@
 .hero-scroll-down .scroll-icon {
     width: 8px;
     height: 8px;
-    border-right: 2px solid #ffffff;
-    border-bottom: 2px solid #ffffff;
+    border-right: 2px solid var(--pure-white);
+    border-bottom: 2px solid var(--pure-white);
     transform: rotate(45deg);
     margin-top: -3px;
     display: block;

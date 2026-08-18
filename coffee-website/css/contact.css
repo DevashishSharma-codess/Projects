@@ -35,7 +35,7 @@ label {
     font-weight: 600;
     margin-bottom: 6px;
     display: block;
-    color: #F5EBE0;
+    color: var(--coffee);
 }
 
 input, textarea {
@@ -45,13 +45,13 @@ input, textarea {
     border-radius: 8px;
     font-family: inherit;
     font-size: 0.95rem;
-    background: #231811;
-    color: #FDFBF8;
+    background: var(--card-bg);
+    color: var(--text-bright);
 }
 
 input:focus, textarea:focus {
     outline: none;
-    border-color: #E2BC84;
+    border-color: var(--tan);
     box-shadow: 0 0 12px rgba(226, 188, 132, 0.2);
 }
 
@@ -62,14 +62,14 @@ textarea {
 
 /* 4. Form Validation Error & Status Feedback Messages */
 .error {
-    color: #e66a5e;
+    color: var(--status-error);
     font-size: 0.8rem;
     min-height: 1.1em;
 }
 
 .form-status {
     font-size: 0.9rem;
-    color: #5ec45e;
+    color: var(--status-success);
     font-weight: 500;
     min-height: 1.2em;
 }
