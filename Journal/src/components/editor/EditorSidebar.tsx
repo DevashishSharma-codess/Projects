@@ -1,11 +1,20 @@
+/**
+ * Journal Editor Past Reflections Sidebar Component
+ * Lists saved journal entries for quick review, entry selection, editing, and deletion.
+ */
+
 import React from "react";
 import { BookOpen, Calendar, Edit3, Trash2 } from "lucide-react";
 import type { JournalEntry } from "../../types/journal";
 
 interface EditorSidebarProps {
+    /** List of journal entries to render */
     entries: JournalEntry[];
+    /** Currently editing entry ID */
     editingEntryId: string | null;
+    /** Callback when user selects an entry to edit */
     handleSelectEntryForEdit: (entry: JournalEntry) => void;
+    /** Callback to delete an entry by ID */
     handleDeleteEntry: (id: string) => void;
 }
 
@@ -26,6 +35,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = ({
                 flexDirection: "column",
             }}
         >
+            {/* SIDEBAR HEADER */}
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
                 <h3
                     style={{
@@ -56,7 +66,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = ({
                 </span>
             </div>
 
-            {/* Entry Cards List */}
+            {/* PAST ENTRY CARDS SCROLL LIST */}
             <div
                 style={{
                     display: "flex",

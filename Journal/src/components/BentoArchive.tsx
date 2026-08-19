@@ -1,3 +1,8 @@
+/**
+ * Bento Box Memory Vault & Article Archive Component
+ * Modular Bento Grid layout showcasing wellness articles, photography cards, and modal reader view.
+ */
+
 import React, { useState, useRef } from "react";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { useJournal } from "../context/JournalContext";

@@ -50,3 +50,8 @@
 .faq-a p {
     padding-bottom: 16px;
 }
+
+/* When the FAQ item is open, expand the answer box */
+.faq-item.open .faq-a {
+    max-height: 200px; /* Adjust this higher if you have very long answers */
+}

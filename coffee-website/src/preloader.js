@@ -24,7 +24,6 @@ export const initPreloader = () => {
                 pageLoader.style.display = 'none';
             }, 650);
         }
-
         // Check if document page loading is already complete
         if (document.readyState === 'complete') {
             setTimeout(hideLoader, 1000);

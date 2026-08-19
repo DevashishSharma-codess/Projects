@@ -1,3 +1,8 @@
+/**
+ * Mood Analytics & Reports Widget Component
+ * Visualizes mood score trends over time using Recharts interactive charts.
+ */
+
 import React from "react";
 import { TrendingUp, Heart, Flame, Sun, Sparkles, Award, BarChart2, Calendar, Clock, Smile } from "lucide-react";
 import { MOOD_OPTIONS, getMoodOption, type MoodOption } from "./moodTrackerData";

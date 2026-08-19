@@ -1,28 +1,20 @@
 /**
- * Image Lightbox Modal Module
- * Opens photos in a full-screen popup modal when clicked, with next/previous buttons,
- * keyboard controls, and mobile swipe gestures.
+ * BASIC IMAGE LIGHTBOX MODULE
+ * Opens clicked images in a clean popup modal with simple next/prev controls.
  */
 export const initLightbox = () => {
-    // 1. SELECT LIGHTBOX DOM ELEMENTS
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightboxImg');
-    const lightboxClose = document.getElementById('lightboxClose');
-    const lightboxPrev = document.getElementById('lightboxPrev');
-    const lightboxNext = document.getElementById('lightboxNext');
+    const closeBtn = document.getElementById('lightboxClose');
+    const prevBtn = document.getElementById('lightboxPrev');
+    const nextBtn = document.getElementById('lightboxNext');
+    const images = document.querySelectorAll('#galleryGrid img, #carouselTrack img');
 
-    // Get all gallery and carousel images
-    const images = Array.from(document.querySelectorAll('#galleryGrid img, #carouselTrack img'));
-
-    if (!lightbox || !lightboxImg || !lightboxClose || images.length === 0) {
-        return;
-    }
+    if (!lightbox || !lightboxImg || images.length === 0) return;
 
     let currentIndex = 0;
 
-    // 2. HELPER FUNCTIONS TO OPEN AND CLOSE LIGHTBOX
-    function showPhoto(index) {
-        // Handle wrap-around bounds
+    const showImage = (index) => {
         if (index < 0) {
             currentIndex = images.length - 1;
         } else if (index >= images.length) {
@@ -31,93 +23,49 @@ export const initLightbox = () => {
             currentIndex = index;
         }
 
-        // Set image source and alt text
-        const targetImage = images[currentIndex];
-        lightboxImg.style.opacity = '0';
-        lightboxImg.src = targetImage.src;
-        lightboxImg.alt = targetImage.alt || 'Enlarged photo';
-
-        // Show modal and disable body page scrolling
+        lightboxImg.src = images[currentIndex].src;
         lightbox.classList.add('open');
-        document.body.style.overflow = 'hidden';
+    };
 
-        // Smooth fade-in
-        setTimeout(() => {
-            lightboxImg.style.opacity = '1';
-        }, 50);
-    }
-
-    function closeLightbox() {
-        lightbox.classList.remove('open');
-        lightboxImg.src = '';
-        document.body.style.overflow = '';
-    }
-
-    // 3. ATTACH CLICK LISTENERS TO IMAGES AND BUTTONS
+    // Loop through every single image found on the webpage
     images.forEach((img, index) => {
+        // Change the mouse cursor to a pointing hand when hovering over any image
         img.style.cursor = 'pointer';
+
+        // Listen for a mouse click on this specific image card
         img.addEventListener('click', (event) => {
             event.stopPropagation();
-            showPhoto(index);
+            showImage(index);
         });
     });
 
-    // Close on 'X' button click
-    lightboxClose.addEventListener('click', closeLightbox);
+    // Listen for a click on the close button
+    closeBtn?.addEventListener('click', () => {
+        lightbox.classList.remove('open');
+    });
 
-    // Show previous photo on left arrow click
-    if (lightboxPrev) {
-        lightboxPrev.addEventListener('click', (event) => {
-            event.stopPropagation();
-            showPhoto(currentIndex - 1);
-        });
-    }
+    // Listen for a click on the previous arrow button
+    prevBtn?.addEventListener('click', () => {
+        showImage(currentIndex - 1);
+    });
 
-    // Show next photo on right arrow click
-    if (lightboxNext) {
-        lightboxNext.addEventListener('click', (event) => {
-            event.stopPropagation();
-            showPhoto(currentIndex + 1);
-        });
-    }
+    // Listen for a click on the next arrow button
+    nextBtn?.addEventListener('click', () => {
+        showImage(currentIndex + 1);
+    });
 
-    // Close when clicking dark backdrop overlay
+    // Listen for clicks anywhere on the full-screen lightbox container
     lightbox.addEventListener('click', (event) => {
         if (event.target === lightbox || event.target.classList.contains('lightbox-img-wrap')) {
-            closeLightbox();
+            lightbox.classList.remove('open');
         }
     });
 
-    // 4. KEYBOARD NAVIGATION LISTENERS
+    // Keyboard controls
     document.addEventListener('keydown', (event) => {
         if (!lightbox.classList.contains('open')) return;
-
-        if (event.key === 'Escape') {
-            closeLightbox();
-        } else if (event.key === 'ArrowRight') {
-            showPhoto(currentIndex + 1);
-        } else if (event.key === 'ArrowLeft') {
-            showPhoto(currentIndex - 1);
-        }
+        if (event.key === 'Escape') lightbox.classList.remove('open');
+        if (event.key === 'ArrowLeft') showImage(currentIndex - 1);
+        if (event.key === 'ArrowRight') showImage(currentIndex + 1);
     });
-
-    // 5. MOBILE TOUCH SWIPE GESTURES
-    let touchStartX = 0;
-    lightbox.addEventListener('touchstart', (event) => {
-        touchStartX = event.touches[0].clientX;
-    }, { passive: true });
-
-    lightbox.addEventListener('touchend', (event) => {
-        const touchEndX = event.changedTouches[0].clientX;
-        const diff = touchStartX - touchEndX;
-
-        // Trigger navigation if swipe distance is > 40px
-        if (Math.abs(diff) > 40) {
-            if (diff > 0) {
-                showPhoto(currentIndex + 1);
-            } else {
-                showPhoto(currentIndex - 1);
-            }
-        }
-    }, { passive: true });
 };

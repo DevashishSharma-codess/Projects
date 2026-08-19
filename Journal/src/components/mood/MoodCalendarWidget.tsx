@@ -1,3 +1,7 @@
+/**
+ * Mood Calendar Grid Widget Component
+ * Displays a full monthly grid showing logged mood entries, color indicators, and date details.
+ */
 import React, { useState } from "react";
 import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, Plus, X, Edit2, Trash2 } from "lucide-react";
 import { MOOD_OPTIONS, MONTH_NAMES, dateKey, getMoodOption } from "./moodTrackerData";

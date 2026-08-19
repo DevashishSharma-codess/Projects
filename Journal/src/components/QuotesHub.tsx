@@ -1,3 +1,8 @@
+/**
+ * Inspirational Daily Quotes Hub Component
+ * Interactive folder tab card stack displaying daily wisdom quotes, API refresh capabilities, and bookmarking.
+ */
+
 import React, { useState, useCallback } from "react";
 import { useQuotes } from "../hooks/useQuotes";
 import { Copy, Check, Bookmark, Trash2, MousePointer, ChevronRight, ChevronLeft } from "lucide-react";

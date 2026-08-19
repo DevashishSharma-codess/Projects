@@ -1,3 +1,8 @@
+/**
+ * Folder Explorer Section Component
+ * Desktop file directory browser supporting folder creation, filtering, entry browsing, and modal dialogs.
+ */
+
 import React, { useState } from "react";
 import { FolderPlus, FileText, Search, Grid, List as ListIcon, Calendar, ArrowLeft, Plus, Eye, Trash2 } from "lucide-react";
 import type { JournalEntry } from "../types/journal";

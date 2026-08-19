@@ -1,3 +1,8 @@
+/**
+ * Landing Page Curved Footer Component
+ * Features rich landscape imagery, navigation columns, folder helper illustrations, and large brand branding.
+ */
+
 import React from "react";
 import { DogearWhiteLogo } from "./LandingHeader";
 
@@ -20,7 +25,7 @@ export const LandingFooter: React.FC = () => {
                 background: "#CFE4EF",
             }}
         >
-            {/* FULL LOCAL BACKGROUND IMAGE - UNZOOMED ORIGINAL ASPECT RATIO */}
+            {/* FULL LOCAL BACKGROUND IMAGE - ORIGINAL ASPECT RATIO */}
             <img
                 src="https://framerusercontent.com/images/AWpFQZVt9LgBCWegzj8BjzNbFMI.webp?scale-down-to=2048&width=3109&height=1696"
                 alt="Footer Landscape Background"
@@ -37,7 +42,7 @@ export const LandingFooter: React.FC = () => {
                 }}
             />
 
-            {/* UPPER DETAILS SECTION ("all the details upwards") */}
+            {/* UPPER NAVIGATION & BRAND DETAILS SECTION */}
             <div
                 className="footer-grid-main"
                 style={{
@@ -100,7 +105,7 @@ export const LandingFooter: React.FC = () => {
 
                 {/* RIGHT COLUMNS: PRODUCT, RESOURCES, COMPANY */}
                 <div className="footer-grid-links" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 36 }}>
-                    {/* Col 1: Product */}
+                    {/* Col 1: Product Links */}
                     <div>
                         <h4 style={{ fontSize: 16, fontWeight: 800, color: "#0F172A", margin: "0 0 16px 0", letterSpacing: "0.01em" }}>
                             Product
@@ -114,7 +119,7 @@ export const LandingFooter: React.FC = () => {
                         </ul>
                     </div>
 
-                    {/* Col 2: Resources */}
+                    {/* Col 2: Resources Links */}
                     <div>
                         <h4 style={{ fontSize: 16, fontWeight: 800, color: "#0F172A", margin: "0 0 16px 0", letterSpacing: "0.01em" }}>
                             Resources
@@ -128,7 +133,7 @@ export const LandingFooter: React.FC = () => {
                         </ul>
                     </div>
 
-                    {/* Col 3: Company */}
+                    {/* Col 3: Company Links */}
                     <div>
                         <h4 style={{ fontSize: 16, fontWeight: 800, color: "#0F172A", margin: "0 0 16px 0", letterSpacing: "0.01em" }}>
                             Company
@@ -144,7 +149,7 @@ export const LandingFooter: React.FC = () => {
                 </div>
             </div>
 
-            {/* GIANT BRAND TITLE & COPYRIGHT AT THE BOTTOM OVER GREEN GROUND */}
+            {/* BRAND TITLE & COPYRIGHT AT FOOTER BOTTOM */}
             <div
                 style={{
                     position: "relative",
@@ -158,7 +163,7 @@ export const LandingFooter: React.FC = () => {
                     marginTop: 60,
                 }}
             >
-                {/* PROCESSED FOLDER HELPERS ILLUSTRATION (NO BG, NO TEXT) */}
+                {/* FOLDER HELPERS ILLUSTRATION */}
                 <div style={{ display: "flex", justifyContent: "center", marginBottom: -24, zIndex: 12, position: "relative" }}>
                     <img
                         src="/folder_helpers_transparent.png"
@@ -173,7 +178,7 @@ export const LandingFooter: React.FC = () => {
                     />
                 </div>
 
-                {/* MASSIVE BRAND TEXT AT THE BOTTOM WITH LOGO AS 'O' */}
+                {/* BRAND TEXT DISPLAY WITH LOGO INTEGRATION */}
                 <h1
                     style={{
                         margin: 0,
@@ -202,7 +207,7 @@ export const LandingFooter: React.FC = () => {
                     GEAR
                 </h1>
 
-                {/* COPYRIGHT & LEGAL BAR AT VERY BOTTOM */}
+                {/* COPYRIGHT & LEGAL BAR */}
                 <div
                     className="footer-legal-bar"
                     style={{

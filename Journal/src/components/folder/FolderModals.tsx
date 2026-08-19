@@ -1,7 +1,13 @@
+/**
+ * Folder Explorer Modals & Utilities
+ * Provides modal dialogs for creating new folders, writing journal entries, and viewing existing entry details.
+ */
+
 import React from "react";
 import { FolderPlus, X, Check, Trash2, Edit3 } from "lucide-react";
 import type { JournalFolder, JournalEntry } from "../../types/journal";
 
+/** Available color theme options for folder creation */
 export const COLOR_OPTIONS = [
     { name: "Amber Gold", hex: "#F59E0B" },
     { name: "Rose Pink", hex: "#EC4899" },
@@ -11,6 +17,7 @@ export const COLOR_OPTIONS = [
     { name: "Dark Slate", hex: "#475569" },
 ];
 
+/** Helper utility to sanitize HTML strings into clean text */
 export function cleanHtmlText(htmlStr: string): string {
     if (!htmlStr) return "";
     return htmlStr
@@ -27,6 +34,8 @@ export function cleanHtmlText(htmlStr: string): string {
         .replace(/\n\s*\n/g, "\n\n")
         .trim();
 }
+
+// ── New Folder Creation Modal ──────────────────────────────────────────────────
 
 interface NewFolderModalProps {
     show: boolean;
@@ -139,6 +148,8 @@ export const NewFolderModal: React.FC<NewFolderModalProps> = ({
     );
 };
 
+// ── New Journal Entry Modal ────────────────────────────────────────────────────
+
 interface NewJournalModalProps {
     show: boolean;
     activeFolder: JournalFolder | undefined;
@@ -204,6 +215,8 @@ export const NewJournalModal: React.FC<NewJournalModalProps> = ({
         </div>
     );
 };
+
+// ── Read Entry Details Modal ───────────────────────────────────────────────────
 
 interface ReadEntryModalProps {
     selectedEntry: JournalEntry | null;

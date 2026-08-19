@@ -57,8 +57,10 @@ coffee-website/
 ├── index.html                  # Core HTML structure & semantic layout
 ├── README.md                   # Technical documentation
 ├── assets/                     # Media & asset repository
-│   ├── CoffeeTea.lottie        # Custom Lottie animation for preloader
-│   ├── bg.mp4                  # Hero background video asset
+│   ├── lottie/
+│   │   └── CoffeeTea.lottie    # Custom Lottie animation for preloader
+│   ├── video/
+│   │   └── bg.mp4              # Hero background video asset
 │   ├── last.mp4                # Secondary promo video asset
 │   ├── morevid.mp4             # Additional video clip
 │   ├── newvid.mp4              # Cafe clip
@@ -103,7 +105,7 @@ coffee-website/
 ### 1. Preloader (`preloader.js` & `preloader.css`)
 - **Purpose**: Displays a welcoming screen while assets and fonts load.
 - **Implementation**:
-  - Uses `@dotlottie/player-component` to render `assets/CoffeeTea.lottie`.
+  - Uses `@dotlottie/player-component` to render `assets/lottie/CoffeeTea.lottie`.
   - Automatically fades out when `document.readyState === 'complete'` or after a maximum 2.5s safety timeout.
   - Removes the DOM overlay smoothly via CSS opacity transition.
 

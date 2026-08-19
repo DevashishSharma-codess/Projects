@@ -1,3 +1,8 @@
+/**
+ * Unfolded Paper Modal Dialog Component
+ * Displays a full unfolded document paper view when inspecting saved inspirational quotes.
+ */
+
 import React from "react";
 import { FileText, X, Check, Copy, Trash2, CornerDownLeft } from "lucide-react";
 import type { FolderQuoteItem } from "./quotesData";
@@ -54,6 +59,7 @@ export const UnfoldedPaperModal: React.FC<UnfoldedPaperModalProps> = ({
                     animation: "paperUnfoldModal 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
                 }}
             >
+                {/* Dashed Paper Fold Line */}
                 <div
                     style={{
                         position: "absolute",
@@ -67,6 +73,7 @@ export const UnfoldedPaperModal: React.FC<UnfoldedPaperModalProps> = ({
                     }}
                 />
 
+                {/* Close Button */}
                 <button
                     onClick={() => setIsPaperOpened(false)}
                     style={{
@@ -90,6 +97,7 @@ export const UnfoldedPaperModal: React.FC<UnfoldedPaperModalProps> = ({
                     <X size={18} />
                 </button>
 
+                {/* Document Header */}
                 <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24, borderBottom: "2px solid #0F172A", paddingBottom: 16 }}>
                     <div style={{ width: 36, height: 36, borderRadius: 10, background: "#3B82F6", display: "flex", alignItems: "center", justifyContent: "center", color: "#FFFFFF" }}>
                         <FileText size={20} />
@@ -104,6 +112,7 @@ export const UnfoldedPaperModal: React.FC<UnfoldedPaperModalProps> = ({
                     </div>
                 </div>
 
+                {/* Quote Content */}
                 <div style={{ padding: "10px 0 24px 0" }}>
                     <p style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic", fontSize: "clamp(26px, 3.2vw, 34px)", lineHeight: 1.3, color: "#0F172A", margin: "0 0 20px 0" }}>
                         "{activeSavedQuote.quote}"
@@ -118,6 +127,7 @@ export const UnfoldedPaperModal: React.FC<UnfoldedPaperModalProps> = ({
                     </div>
                 </div>
 
+                {/* Actions Footer */}
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: 20, borderTop: "1px solid #E2E8F0" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                         <button

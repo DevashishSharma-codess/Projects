@@ -1,6 +1,12 @@
+/**
+ * Landing Page Navigation Header & Mobile Drawer
+ * Provides responsive top navigation bar with dynamic glassmorphic pill background on scroll and mobile drawer.
+ */
+
 import React from "react";
 import { Menu, X } from "lucide-react";
 
+/** Brand Diamond Logo SVG Icon */
 export function DogearWhiteLogo({ size = 30, color = "#FFFFFF" }: { size?: number | string; color?: string }) {
     return (
         <svg
@@ -11,7 +17,7 @@ export function DogearWhiteLogo({ size = 30, color = "#FFFFFF" }: { size?: numbe
             xmlns="http://www.w3.org/2000/svg"
             style={{ flexShrink: 0, display: "inline-block" }}
         >
-            {/* 8-Dot Diamond Logo */}
+            {/* 8-Dot Diamond Logo Pattern */}
             <circle cx="16" cy="3.5" r="2.8" fill={color} />
             <circle cx="22.5" cy="10" r="2.8" fill={color} />
             <circle cx="28.5" cy="16.5" r="2.8" fill={color} />
@@ -25,9 +31,13 @@ export function DogearWhiteLogo({ size = 30, color = "#FFFFFF" }: { size?: numbe
 }
 
 interface LandingHeaderProps {
+    /** True when user has scrolled down past initial hero threshold */
     scrolled: boolean;
+    /** Mobile drawer visibility state */
     mobileMenuOpen: boolean;
+    /** Toggle handler for mobile menu */
     setMobileMenuOpen: (open: boolean) => void;
+    /** Scroll navigation handler */
     scrollToSection: (id: string, tab?: any) => void;
 }
 
@@ -144,7 +154,7 @@ export const LandingHeader: React.FC<LandingHeaderProps> = ({
                     </span>
                 </div>
 
-                {/* Navigation Links */}
+                {/* Desktop Navigation Links */}
                 <nav className="nav-center" style={{ display: "flex", alignItems: "center", gap: scrolled ? 24 : 32 }}>
                     <a className="nav-link" href="#folder-explorer">Folders</a>
                     <a className="nav-link" href="#journal-studio">Daily Studio</a>
@@ -153,7 +163,7 @@ export const LandingHeader: React.FC<LandingHeaderProps> = ({
                     <a className="nav-link" href="#bento-archive">Community</a>
                 </nav>
 
-                {/* Desktop Auth Links */}
+                {/* Desktop Auth CTA Actions */}
                 <div className="nav-auth-actions" style={{ display: "flex", alignItems: "center", gap: scrolled ? 14 : 20 }}>
                     <a href="#journal-studio" style={{ color: "#FFFFFF", textDecoration: "none", fontWeight: 600, fontSize: 14, opacity: 0.95 }}>Log in</a>
                     <button

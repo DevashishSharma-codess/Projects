@@ -5,45 +5,17 @@
 
 /* 1. Global Reset, Design Tokens & Base Typography */
 @import url('base.css');
-
-/* 2. Loading Overlay Screen */
 @import url('preloader.css');
-
-/* 3. Sticky Navigation Header & Mobile Drawer */
 @import url('header.css');
-
-/* 4. Full-Bleed Video Background Hero Section */
 @import url('hero.css');
-
-/* 5. Guest Check Menu Grid & Category Tab Filter */
 @import url('menu.css');
-
-/* 6. Inspectable Touch Photo Carousel */
 @import url('carousel.css');
-
-/* 7. Polaroid Photo Gallery Grid */
 @import url('gallery.css');
-
-/* 8. Coffee Cup Testimonial Cards & SVG Wave Thread */
 @import url('testimonials.css');
-
-/* 9. Accessible FAQ Accordion */
 @import url('faq.css');
-
-/* 10. Contact Form, Embed Map & Honeypot Anti-Spam Field */
 @import url('contact.css');
-
-/* 11. Full-Screen Image Lightbox Viewer */
 @import url('lightbox.css');
-
-/* 12. Floating Order Total Bar & Toast Notifications */
 @import url('order-bar.css');
-
-/* 13. Checkout Summary Modal Popup */
 @import url('modal.css');
-
-/* 14. Floating Scroll-To-Top Button */
 @import url('back-to-top.css');
-
-/* 15. Site Footer, Opening Hours & Social Links */
 @import url('footer.css');

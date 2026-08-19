@@ -18,9 +18,15 @@ header {
 
 /* Scrolled State (Triggered via JavaScript on page scroll down > 40px) */
 header.scrolled {
-    background: var(--header-scrolled-bg);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-    border-bottom-color: var(--line);
+    background: rgba(20, 12, 8, 0.85); /* darker + slight transparency */
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6); /* stronger shadow */
+
+    border-bottom-color: rgba(255, 255, 255, 0.2);
+
+    transform: translateY(0);
 }
 
 /* 2. Inner Flex Wrapper for Logo and Navigation Links */

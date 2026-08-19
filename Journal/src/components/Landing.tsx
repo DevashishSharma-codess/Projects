@@ -1,3 +1,8 @@
+/**
+ * Main Landing Page View Component
+ * Assembles animated hero stage, header navigation, section wrappers, continuous background gradient canvas, and footer.
+ */
+
 import React, { useEffect } from "react";
 import { BookOpen, Smile, Heart, Moon, Compass, Folder } from "lucide-react";
 import FolderExplorer from "./FolderExplorer";

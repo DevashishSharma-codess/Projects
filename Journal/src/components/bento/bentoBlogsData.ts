@@ -1,22 +1,12 @@
-export interface MoodGlassBlog {
-    id: string;
-    category: string;
-    moodLabel: string;
-    title: string;
-    subtitle: string;
-    readTime: string;
-    author: string;
-    date: string;
-    imageUrl: string;
-    content: {
-        intro: string;
-        quote: string;
-        sections: { heading: string; body: string }[];
-        takeaways: string[];
-        reflectionPrompt: string;
-    };
-}
+/**
+ * Bento Grid Memory Vault Article Data
+ * Curated article collection rendered inside the BentoArchive grid and GlassBlogModal reader.
+ */
 
+import type { MoodGlassBlog } from "../../types/journal";
+export type { MoodGlassBlog };
+
+/** Seed collection of Bento Box blog articles */
 export const GLASS_BLOGS: MoodGlassBlog[] = [
     {
         id: "radiant-joy",
@@ -98,136 +88,83 @@ export const GLASS_BLOGS: MoodGlassBlog[] = [
         date: "14 March 2026",
         imageUrl: "https://i.pinimg.com/736x/f3/0b/0b/f30b0b4acd7ba76e5cce8321fcced02b.jpg",
         content: {
-            intro: "Serenity is not the absence of busyness, but the presence of internal clarity amidst life's demands. Evening reflection helps process emotions.",
-            quote: "“Peace comes from within. Do not seek it without when your own breath holds the answer.”",
+            intro: "Evening reflection transforms raw daily experiences into lasting personal wisdom. Taking ten quiet minutes to unwind releases cognitive tension.",
+            quote: "“Peace is not the absence of noise, but the presence of quiet clarity within.”",
             sections: [
                 {
-                    heading: "1. The 3-Item Gratitude Anchor",
-                    body: "Before closing your day, write down three specific moments that brought peace—a warm cup of tea or a quiet walk.",
+                    heading: "1. Create a Sensory Transition Buffer",
+                    body: "Dim overhead lighting 45 minutes before sleep and disconnect from bright screens to signal wind-down time.",
                 },
                 {
-                    heading: "2. Unpack Mental Clutter",
-                    body: "Write an uncensored brain dump on paper to signal to your brain that it no longer needs to hold onto worries overnight.",
+                    heading: "2. The 'Brain Dump' Release Technique",
+                    body: "Write down lingering tomorrow to-dos without trying to solve them tonight.",
                 },
             ],
             takeaways: [
-                "Practice 3 specific gratitude logs before sleep.",
-                "Externalize worries through evening brain-dumps.",
+                "Establish a dedicated 15-minute screen-free wind-down ritual.",
+                "Externalize lingering worries onto paper to empty working memory before sleep.",
             ],
-            reflectionPrompt: "What is one small quiet moment from today that I am truly grateful for?",
+            reflectionPrompt: "What experience today challenged me, and what gentle wisdom can I take away from it?",
         },
     },
     {
-        id: "high-drive",
-        category: "High Drive",
-        moodLabel: "Energetic & Driven",
-        title: "The Devil is in the Details: Channeling Raw Motivation",
-        subtitle: "Turning raw motivation into long-term strategic breakthroughs",
-        readTime: "4 min read",
-        author: "Kaito Tanaka",
+        id: "resilience",
+        category: "Resilience",
+        moodLabel: "Steady & Strong",
+        title: "Navigating High-Pressure Spikes Without Burnout",
+        subtitle: "Tactical mindfulness strategies for maintaining clarity under stress",
+        readTime: "6 min read",
+        author: "Siddharth Mehta",
         date: "12 March 2026",
-        imageUrl: "https://i.pinimg.com/1200x/d9/66/d7/d966d70f1103931ae53480b7379c1e94.jpg",
+        imageUrl: "https://i.pinimg.com/736x/21/2e/0f/212e0f2f354921f00885e35e3ca44199.jpg",
         content: {
-            intro: "High energy is a powerful force. Directed with precision, it powers monumental breakthroughs and rapid skill growth.",
-            quote: "“Drive gets you started; disciplined systems keep you moving when excitement wears off.”",
-            sections: [
-                {
-                    heading: "1. Harness Burst Sprinting",
-                    body: "When motivation is surging, execute high-intensity 45-minute sprints. Focus on tangible execution without second-guessing.",
-                },
-                {
-                    heading: "2. Filter New Commitments",
-                    body: "Filter new ideas through your top 3 quarterly priorities before taking on new responsibilities.",
-                },
-            ],
-            takeaways: [
-                "Execute focused 45-minute output sprints.",
-                "Filter new ideas through core priorities.",
-            ],
-            reflectionPrompt: "Which primary project will receive 100% of my high energy today?",
-        },
-    },
-    {
-        id: "self-grace",
-        category: "Self Grace",
-        moodLabel: "Rest & Recovery",
-        title: "An Indestructible Hope: Navigating Low Energy Days",
-        subtitle: "Giving yourself permission to rest is the fastest path back to strength",
-        readTime: "5 min read",
-        author: "David Chen",
-        date: "10 March 2026",
-        imageUrl: "https://i.pinimg.com/1200x/a3/7c/25/a37c25f5d0bc95dca22b09e53c235f43.jpg",
-        content: {
-            intro: "Having low energy or a down mood is not a personal failure—it is your body and mind signalling a vital need for rest.",
-            quote: "“Rest is not a reward for work completed; it is a fundamental requirement for life.”",
-            sections: [
-                {
-                    heading: "1. Drop Self-Judgment",
-                    body: "Accept today as a low-tide day. Tides naturally recede before flowing back in. Release guilt about reduced output.",
-                },
-                {
-                    heading: "2. Practice Micro-Actions of Comfort",
-                    body: "Set the bar low. Hydrate with warm water, sit in natural sunlight for 10 minutes, or take a short gentle stroll.",
-                },
-            ],
-            takeaways: [
-                "Release secondary guilt and accept low energy as a natural rest cycle.",
-                "Prioritize small physical comforts.",
-            ],
-            reflectionPrompt: "How can I give myself permission to rest today without feeling guilty?",
-        },
-    },
-    {
-        id: "calm-mind",
-        category: "Calm Mind",
-        moodLabel: "Stress Relief",
-        title: "De-escalating Stress & High-Pressure Resilience",
-        subtitle: "5 rapid grounding techniques to soothe your nervous system under demand",
-        readTime: "4 min read",
-        author: "Sarah Jenkins",
-        date: "08 March 2026",
-        imageUrl: "https://i.pinimg.com/736x/0d/68/b9/0d68b943c517e6d06a8b64846383928a.jpg",
-        content: {
-            intro: "Stress is your body's natural response to perceived demands exceeding current capacity. Effective tools soothe your nervous system.",
-            quote: "“You don't have to control your thoughts; you just have to stop letting them control you.”",
+            intro: "Stress is an inevitable physical response to demanding goals. Learning to regulate your nervous system in real-time allows you to remain calm under pressure.",
+            quote: "“Between stimulus and response there is a space. In that space is our power to choose our response.”",
             sections: [
                 {
                     heading: "1. The Physiological Sigh",
-                    body: "Take two quick sniffs through your nose, followed by a long exhale through your mouth.",
+                    body: "Take two quick inhales through the nose followed by a long, slow exhale through the mouth to immediately decrease heart rate.",
                 },
                 {
-                    heading: "2. Shrink Your Horizon",
-                    body: "Focus strictly on the absolute next 5-minute action, ignoring everything else.",
+                    heading: "2. Separate Facts from Narrative",
+                    body: "Differentiate between objective events and the catastrophizing stories your mind invents.",
                 },
             ],
             takeaways: [
-                "Use physiological sighs to calm your body in seconds.",
-                "Focus on the next 5-minute action.",
+                "Use 1-minute physiological sigh breathing to calm immediate stress spikes.",
+                "Write out objective facts versus speculative anxieties.",
             ],
-            reflectionPrompt: "What is one task I can safely delegate or drop today?",
+            reflectionPrompt: "What is one aspect of this challenging situation that remains completely under my direct control?",
         },
     },
     {
-        id: "inner-stillness",
-        category: "Inner Stillness",
-        moodLabel: "Daily Reflection",
-        title: "Daily Journaling Canvas & Mental Clarity",
-        subtitle: "How daily written reflection reduces cognitive load and sharpens focus",
+        id: "vitality",
+        category: "Vitality",
+        moodLabel: "Energized & Motivated",
+        title: "The Art of High-Energy Morning Routines",
+        subtitle: "Kickstart your day with purpose, physical movement, and clear intentions",
         readTime: "4 min read",
-        author: "Aria Sterling",
-        date: "06 March 2026",
-        imageUrl: "https://i.pinimg.com/1200x/27/19/75/2719756e4f518acf5f3ad1c27e605c6b.jpg",
+        author: "Nora Chen",
+        date: "10 March 2026",
+        imageUrl: "https://i.pinimg.com/736x/8a/aa/d2/8aaad2a8a462eb118e7adcfd04c10c30.jpg",
         content: {
-            intro: "Journaling is a cognitive mirror. Externalizing thoughts clarifies emotion and creates room for inspired action.",
-            quote: "“The unexamined life leaves wisdom on the table; writing brings it to light.”",
+            intro: "Morning routines set the emotional and energetic trajectory for the entire day. Designing an intentional morning workflow builds momentum before noise enters.",
+            quote: "“The morning hour has gold in its mouth.”",
             sections: [
                 {
-                    heading: "1. Morning Stream of Consciousness",
-                    body: "Write 3 unedited pages to dump morning mental static before checking email or notifications.",
+                    heading: "1. Hydrate Before Caffeine",
+                    body: "Drink 500ml of water immediately upon waking to rehydrate cellular systems before consuming coffee.",
+                },
+                {
+                    heading: "2. Early Natural Sunlight Exposure",
+                    body: "Get 10 minutes of direct morning sunlight to anchor your circadian rhythm and boost daytime alertness.",
                 },
             ],
-            takeaways: ["Dump morning mental static to lock in focus."],
-            reflectionPrompt: "What emotion is asking for my attention right now?",
+            takeaways: [
+                "Prioritize hydration and early sunlight before opening digital devices.",
+                "Write down your single highest-priority task before checking messages.",
+            ],
+            reflectionPrompt: "What morning habit brings me the greatest sense of calm and daily momentum?",
         },
     },
 ];

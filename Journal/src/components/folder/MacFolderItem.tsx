@@ -1,16 +1,26 @@
+/**
+ * macOS Style Desktop Folder Component
+ * Renders an interactive 3D folder item complete with custom SVG tab shapes, fanned paper preview sheets, and hover animations.
+ */
+
 import React, { useState } from "react";
 import { FileText, Trash2, MoreHorizontal } from "lucide-react";
 import type { JournalFolder } from "../../types/journal";
+
+interface MacFolderItemProps {
+    /** Target folder data */
+    folder: JournalFolder;
+    /** Select/open folder callback */
+    onClick: () => void;
+    /** Delete folder callback */
+    onDelete: (e: React.MouseEvent) => void;
+}
 
 export function MacFolderItem({
     folder,
     onClick,
     onDelete,
-}: {
-    folder: JournalFolder;
-    onClick: () => void;
-    onDelete: (e: React.MouseEvent) => void;
-}) {
+}: MacFolderItemProps) {
     const [hovered, setHovered] = useState(false);
 
     return (
@@ -60,7 +70,7 @@ export function MacFolderItem({
                     }}
                 />
 
-                {/* 3 Fanned White Paper Sheets Sticking out of Pocket */}
+                {/* Fanned White Paper Sheets */}
                 <div
                     style={{
                         position: "relative",
@@ -134,7 +144,7 @@ export function MacFolderItem({
                 </div>
             </div>
 
-            {/* BOTTOM LIGHTER BLUE GRADIENT FOLDER FLAP BODY WITH SVG TAB CUTOUT */}
+            {/* BOTTOM GRADIENT FOLDER FLAP BODY WITH SVG TAB CUTOUT */}
             <div
                 style={{
                     position: "relative",
@@ -144,7 +154,7 @@ export function MacFolderItem({
                     zIndex: 3,
                 }}
             >
-                {/* SVG Folder Front Flap */}
+                {/* SVG Folder Front Flap Path */}
                 <svg
                     width="100%"
                     height="100%"
@@ -164,7 +174,7 @@ export function MacFolderItem({
                     />
                 </svg>
 
-                {/* TITLE & SUBTITLE POSITIONED INSIDE THE RAISED TAB CUTOUT */}
+                {/* TITLE & DESCRIPTION */}
                 <div style={{ position: "absolute", top: 10, left: 16, width: "48%", zIndex: 5 }}>
                     <h3 style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif', fontSize: 14, fontWeight: 700, color: "#FFFFFF", margin: 0, lineHeight: 1.25, letterSpacing: "-0.01em", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
                         {folder.name}
@@ -174,7 +184,7 @@ export function MacFolderItem({
                     </p>
                 </div>
 
-                {/* OPTIONS / DELETE BUTTON ON RIGHT SHOULDER */}
+                {/* DELETE FOLDER BUTTON */}
                 <button
                     onClick={onDelete}
                     style={{
@@ -198,7 +208,7 @@ export function MacFolderItem({
                     {hovered ? <Trash2 size={13} color="#EF4444" /> : <MoreHorizontal size={16} color="rgba(255, 255, 255, 0.9)" />}
                 </button>
 
-                {/* BOTTOM FILE COUNT */}
+                {/* FILE COUNT INDICATOR */}
                 <div style={{ position: "absolute", bottom: 12, left: 16, zIndex: 5, display: "flex", alignItems: "center", gap: 5, fontSize: 11.5, fontWeight: 600, color: "rgba(255, 255, 255, 0.9)" }}>
                     <FileText size={12} color="rgba(255, 255, 255, 0.9)" />
                     <span>{folder.entries.length} Files</span>

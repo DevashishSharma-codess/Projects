@@ -21,14 +21,14 @@ export const initNavigation = () => {
                 header.classList.remove('scrolled');
             }
         }
-    }, { passive: true });
+    });
 
     // 3. MOBILE MENU TOGGLE AND AUTO-DISMISS LOGIC
     if (menuToggle && navList) {
         // Helper function to close the mobile drawer menu
         function closeMenu() {
             navList.classList.remove('mobile-open');
-            menuToggle.setAttribute('aria-expanded', 'false');
+          
         }
 
         // Toggle mobile drawer open or closed when clicking the hamburger button
@@ -36,7 +36,7 @@ export const initNavigation = () => {
             event.stopPropagation();
             if (navList.classList.contains('mobile-open')) {
                 navList.classList.remove('mobile-open');
-                menuToggle.setAttribute('aria-expanded', 'false');
+               
             } else {
                 navList.classList.add('mobile-open');
                 menuToggle.setAttribute('aria-expanded', 'true');
@@ -70,27 +70,32 @@ export const initNavigation = () => {
 
     // 4. ACTIVE SCROLL SPY (SECTION HIGHLIGHTING)
     // Checks window scroll position to highlight whichever section is currently visible on screen
-    function updateActiveNavLinks() {
-        const scrollPosition = window.scrollY;
+function updateActiveNavLinks() {
+    let currentSection = ''; // Create a blank label to hold where we are
 
-        sections.forEach((section) => {
-            const sectionTop = section.offsetTop - 120; // Offset for sticky header height
-            const sectionHeight = section.offsetHeight;
-            const sectionId = section.getAttribute('id');
+    // STEP 1: Find out which section we are looking at
+    sections.forEach((section) => {
+        const sectionTop = section.offsetTop - 120;
+        
+        // If we have scrolled past the top of this section, update the label
+        if (window.scrollY >= sectionTop) {
+            currentSection = section.getAttribute('id');
+        }
+    });
 
-            // Check if current scroll position lies within this section's vertical area
-            if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
-                navLinks.forEach((link) => {
-                    const href = link.getAttribute('href');
-                    if (href === '#' + sectionId) {
-                        link.classList.add('active');
-                    } else {
-                        link.classList.remove('active');
-                    }
-                });
-            }
-        });
-    }
+    // STEP 2: Highlight the correct link in the menu
+    navLinks.forEach((link) => {
+        const href = link.getAttribute('href');
+        
+        // If the link matches our current section label, make it active
+        if (href === '#' + currentSection) {
+            link.classList.add('active');
+        } else {
+            link.classList.remove('active'); // Otherwise, remove the highlight
+        }
+    });
+}
+
 
     // Run active link check on page scroll
     window.addEventListener('scroll', updateActiveNavLinks, { passive: true });

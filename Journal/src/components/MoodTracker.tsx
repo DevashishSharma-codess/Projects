@@ -1,3 +1,8 @@
+/**
+ * Mood Analytics & Trend Dashboard Component
+ * Interactive mood logging suite complete with trend graphs, calendar view, score analytics, and breathing exercises.
+ */
+
 import React, { useState, useMemo } from "react";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 import {

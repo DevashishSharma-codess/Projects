@@ -1,7 +1,11 @@
+/**
+ * Journal Editor Canvas Component
+ * Renders entry title input, rich text ReactQuill editor workspace, word counters, tag selectors, and save actions.
+ */
+
 import React from "react";
 import ReactQuill from "react-quill-new";
 import { Edit3, BookOpen, X, Tag, CheckCircle2, Save } from "lucide-react";
-import type { JournalFolder } from "../../types/journal";
 
 interface EditorCanvasProps {
     title: string;
@@ -44,7 +48,7 @@ export const EditorCanvas: React.FC<EditorCanvasProps> = ({
 
     return (
         <>
-            {/* PROPER SECTION 1: ENTRY TITLE SECTION */}
+            {/* ENTRY TITLE SECTION */}
             <div
                 style={{
                     background: "rgba(255, 255, 255, 0.75)",
@@ -95,7 +99,7 @@ export const EditorCanvas: React.FC<EditorCanvasProps> = ({
                 />
             </div>
 
-            {/* PROPER SECTION 2: JOURNAL REFLECTION CANVAS SECTION WITH QUILL RICH TEXT EDITOR */}
+            {/* JOURNAL REFLECTION CANVAS WITH QUILL RICH TEXT EDITOR */}
             <div
                 style={{
                     background: "rgba(255, 255, 255, 0.85)",
@@ -123,7 +127,7 @@ export const EditorCanvas: React.FC<EditorCanvasProps> = ({
                     }}
                 >
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                        {/* macOS Window Controls */}
+                        {/* Window Indicator */}
                         <div style={{ display: "flex", gap: 6, marginRight: 4 }}>
                             <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#EF4444" }} />
                             <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#F59E0B" }} />
@@ -209,7 +213,7 @@ export const EditorCanvas: React.FC<EditorCanvasProps> = ({
                 </div>
             </div>
 
-            {/* Categorization Tags Section */}
+            {/* CATEGORIZATION TAGS */}
             <div style={{ marginTop: 24, paddingTop: 18, borderTop: "1px solid rgba(255, 255, 255, 0.4)" }}>
                 <label
                     style={{
@@ -254,7 +258,7 @@ export const EditorCanvas: React.FC<EditorCanvasProps> = ({
                 </div>
             </div>
 
-            {/* Save Action Footer */}
+            {/* SAVE ACTION FOOTER */}
             <div
                 style={{
                     display: "flex",

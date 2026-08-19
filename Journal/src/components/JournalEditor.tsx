@@ -1,3 +1,8 @@
+/**
+ * Journal Editor Studio Component
+ * Provides a rich text editing workspace with font styles, tag selectors, prompt generators, and past reflection history.
+ */
+
 import React, { useState, useEffect } from "react";
 import "react-quill-new/dist/quill.snow.css";
 import { Folder, Sparkles } from "lucide-react";

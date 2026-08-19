@@ -1,5 +1,14 @@
+/**
+ * Folder & Journal Entry LocalStorage Manager
+ * Handles local persistence, default seed data, and custom window sync events for journal folders.
+ */
+
 import type { JournalFolder, JournalEntry } from "../types/journal";
 
+/** LocalStorage key for persisting journal folders */
+const STORAGE_KEY = "dogear_journal_folders";
+
+/** Default seed folders initialized on first load */
 export const DEFAULT_FOLDERS: JournalFolder[] = [
     {
         id: "folder-morning",
@@ -102,10 +111,14 @@ export const DEFAULT_FOLDERS: JournalFolder[] = [
     },
 ];
 
+/**
+ * Retrieves saved folders from LocalStorage.
+ * Initializes LocalStorage with DEFAULT_FOLDERS if empty or invalid.
+ */
 export function getSavedFolders(): JournalFolder[] {
-    const raw = localStorage.getItem("dogear_journal_folders");
+    const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) {
-        localStorage.setItem("dogear_journal_folders", JSON.stringify(DEFAULT_FOLDERS));
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_FOLDERS));
         return DEFAULT_FOLDERS;
     }
     try {
@@ -115,13 +128,19 @@ export function getSavedFolders(): JournalFolder[] {
     }
 }
 
-export function saveFolders(folders: JournalFolder[]) {
-    localStorage.setItem("dogear_journal_folders", JSON.stringify(folders));
+/**
+ * Persists an array of journal folders to LocalStorage and triggers a custom window event for sync.
+ */
+export function saveFolders(folders: JournalFolder[]): void {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(folders));
     if (typeof window !== "undefined") {
         window.dispatchEvent(new CustomEvent("dogear_folders_updated"));
     }
 }
 
+/**
+ * Creates a new folder with custom color styling and appends it to storage.
+ */
 export function createNewFolder(name: string, description: string, color: string): JournalFolder {
     const folders = getSavedFolders();
     const newFolder: JournalFolder = {
@@ -139,22 +158,26 @@ export function createNewFolder(name: string, description: string, color: string
     return newFolder;
 }
 
+/**
+ * Adds or updates a journal entry within a specific target folder.
+ * Removes duplicate entry instances across all folders to support moving entries cleanly.
+ */
 export function addEntryToFolder(folderId: string, entry: JournalEntry): JournalFolder[] {
     const folders = getSavedFolders();
     const targetFolderId = folderId || (folders.length > 0 ? folders[0].id : "folder-morning");
 
-    const updated = folders.map((f) => {
-        const filteredEntries = f.entries.filter((e) => e.id !== entry.id);
+    const updated = folders.map((folder) => {
+        const filteredEntries = folder.entries.filter((e) => e.id !== entry.id);
 
-        if (f.id === targetFolderId) {
+        if (folder.id === targetFolderId) {
             const entryWithFolderId = { ...entry, folderId: targetFolderId };
             return {
-                ...f,
+                ...folder,
                 entries: [entryWithFolderId, ...filteredEntries],
             };
         }
         return {
-            ...f,
+            ...folder,
             entries: filteredEntries,
         };
     });
@@ -162,23 +185,29 @@ export function addEntryToFolder(folderId: string, entry: JournalEntry): Journal
     return updated;
 }
 
+/**
+ * Deletes a folder and all its associated journal entries by ID.
+ */
 export function deleteFolder(folderId: string): JournalFolder[] {
     const folders = getSavedFolders();
-    const updated = folders.filter((f) => f.id !== folderId);
+    const updated = folders.filter((folder) => folder.id !== folderId);
     saveFolders(updated);
     return updated;
 }
 
+/**
+ * Deletes a specific journal entry from a target folder.
+ */
 export function deleteEntryFromFolder(folderId: string, entryId: string): JournalFolder[] {
     const folders = getSavedFolders();
-    const updated = folders.map((f) => {
-        if (f.id === folderId) {
+    const updated = folders.map((folder) => {
+        if (folder.id === folderId) {
             return {
-                ...f,
-                entries: f.entries.filter((e) => e.id !== entryId),
+                ...folder,
+                entries: folder.entries.filter((e) => e.id !== entryId),
             };
         }
-        return f;
+        return folder;
     });
     saveFolders(updated);
     return updated;

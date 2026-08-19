@@ -1,3 +1,8 @@
+/**
+ * Central State Management for Journal Application
+ * Provides global state for Navigation, Folder Directory, Editor Studio, Mood Tracker, Quotes Hub, and Bento Archive.
+ */
+
 import React, { createContext, useContext, useState, useEffect } from "react";
 import type { JournalFolder, JournalEntry, MoodLog, FolderQuoteItem, MoodGlassBlog } from "../types/journal";
 import {
@@ -8,7 +13,12 @@ import {
     deleteEntryFromFolder as storageDeleteEntry,
 } from "../utils/folderStorage";
 
-// Seed mood logs for initial load if none saved
+// ── Time & Date Helpers ────────────────────────────────────────────────────────
+
+/**
+ * Calculates hour slot identifier and timestamp from day string and time input.
+ * Used to group mood logs uniquely per hour slot (YYYY-MM-DD-HH).
+ */
 export const getHourSlotInfo = (day: string, timeStr: string) => {
     let hour = 12;
     let minute = 0;
@@ -45,7 +55,9 @@ export const getHourSlotInfo = (day: string, timeStr: string) => {
     return { hourSlot, time, timestamp };
 };
 
-// Seed mood logs for initial load if none saved
+// ── Initial Seed Data ──────────────────────────────────────────────────────────
+
+/** Default seed mood logs used on initial render when no custom logs exist */
 const SEED_MOOD_LOGS: Record<string, MoodLog> = {
     "2026-07-01-09": { id: "s1", day: "2026-07-01", time: "09:00", hourSlot: "2026-07-01-09", timestamp: new Date("2026-07-01T09:00:00").getTime(), moodKey: "peaceful", moodLabel: "Peaceful", icon: "Heart", score: 4.5, color: "#3B82F6", note: "Great morning coffee." },
     "2026-07-05-14": { id: "s2", day: "2026-07-05", time: "14:00", hourSlot: "2026-07-05-14", timestamp: new Date("2026-07-05T14:00:00").getTime(), moodKey: "energetic", moodLabel: "Energetic", icon: "Zap", score: 4.2, color: "#10B981", note: "Completed sprint goal!" },
@@ -67,10 +79,12 @@ const SEED_MOOD_LOGS: Record<string, MoodLog> = {
     [`${new Date().toISOString().slice(0, 10)}-10`]: { id: "s-today-2", day: new Date().toISOString().slice(0, 10), time: "10:45", hourSlot: `${new Date().toISOString().slice(0, 10)}-10`, timestamp: new Date(`${new Date().toISOString().slice(0, 10)}T10:45:00`).getTime(), moodKey: "energetic", moodLabel: "Energetic", icon: "Zap", score: 4.2, color: "#10B981", note: "Mid-morning boost!" },
 };
 
+// ── Context Types ──────────────────────────────────────────────────────────────
+
 export type ActiveTabType = "hero" | "folders" | "editor" | "mood" | "quotes" | "bento";
 
 export interface JournalContextType {
-    // --- Navigation & Header ---
+    // Navigation & Header
     activeTab: ActiveTabType;
     setActiveTab: (tab: ActiveTabType) => void;
     mobileMenuOpen: boolean;
@@ -81,7 +95,7 @@ export interface JournalContextType {
     setScrolled: (scrolled: boolean) => void;
     scrollToSection: (id: string, tab: ActiveTabType) => void;
 
-    // --- Folder & Entries State ---
+    // Folder & Journal Entry Management
     folders: JournalFolder[];
     activeFolderId: string | null;
     setActiveFolderId: (id: string | null) => void;
@@ -98,14 +112,14 @@ export interface JournalContextType {
     showNewJournalModal: boolean;
     setShowNewJournalModal: (show: boolean) => void;
 
-    // Actions
+    // Folder Actions
     createFolder: (name: string, description: string, color: string) => JournalFolder;
     deleteFolder: (folderId: string) => void;
     addEntryToFolder: (folderId: string, entry: JournalEntry) => void;
     deleteEntryFromFolder: (folderId: string, entryId: string) => void;
     saveJournalEntry: (folderId: string, entryData: Partial<JournalEntry> & { title: string; content: string }) => JournalEntry;
 
-    // --- Mood Tracker State ---
+    // Mood Tracker State
     moodLogs: Record<string, MoodLog>;
     calYear: number;
     setCalYear: React.Dispatch<React.SetStateAction<number>>;
@@ -138,7 +152,7 @@ export interface JournalContextType {
     isBreathing: boolean;
     setIsBreathing: (breathing: boolean) => void;
 
-    // Actions
+    // Mood Log Actions
     addMoodLog: (
         day: string,
         moodKey: string,
@@ -151,8 +165,7 @@ export interface JournalContextType {
     ) => void;
     deleteMoodLog: (key: string) => void;
 
-
-    // --- Quotes Hub State ---
+    // Quotes Hub State
     quoteSetIndex: number;
     setQuoteSetIndex: React.Dispatch<React.SetStateAction<number>>;
     activeQuoteIndex: number;
@@ -160,7 +173,6 @@ export interface JournalContextType {
     savedQuotes: FolderQuoteItem[];
     savedIndex: number;
     setSavedIndex: React.Dispatch<React.SetStateAction<number>>;
-
     isPaperOpened: boolean;
     setIsPaperOpened: (opened: boolean) => void;
     copiedQuoteId: string | null;
@@ -172,7 +184,7 @@ export interface JournalContextType {
     toggleSaveQuote: (quote: FolderQuoteItem) => void;
     removeSavedQuote: (id: string) => void;
 
-    // --- Bento Archive State ---
+    // Bento Archive State
     bentoActiveIndex: number;
     setBentoActiveIndex: React.Dispatch<React.SetStateAction<number>>;
     selectedBlog: MoodGlassBlog | null;
@@ -181,13 +193,16 @@ export interface JournalContextType {
 
 const JournalContext = createContext<JournalContextType | undefined>(undefined);
 
+// ── Context Provider Implementation ──────────────────────────────────────────
+
 export const JournalProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    // --- Navigation ---
+    // 1. Navigation State
     const [activeTab, setActiveTab] = useState<ActiveTabType>("hero");
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [activeModeIndex, setActiveModeIndex] = useState(0);
     const [scrolled, setScrolled] = useState(false);
 
+    /** Smooth scroll helper for navigating page sections */
     const scrollToSection = (id: string, tab: ActiveTabType) => {
         setActiveTab(tab);
         setMobileMenuOpen(false);
@@ -197,7 +212,7 @@ export const JournalProvider: React.FC<{ children: React.ReactNode }> = ({ child
         }
     };
 
-    // --- Folders & Entries ---
+    // 2. Folder & Journal Entries State
     const [folders, setFolders] = useState<JournalFolder[]>([]);
     const [activeFolderId, setActiveFolderId] = useState<string | null>(null);
     const [selectedEntry, setSelectedEntry] = useState<JournalEntry | null>(null);
@@ -274,7 +289,7 @@ export const JournalProvider: React.FC<{ children: React.ReactNode }> = ({ child
         return entry;
     };
 
-    // --- Mood Tracker ---
+    // 3. Mood Tracker State & LocalStorage Persistence
     const today = new Date();
     const [calYear, setCalYear] = useState(today.getFullYear());
     const [calMonth, setCalMonth] = useState(today.getMonth());
@@ -283,7 +298,6 @@ export const JournalProvider: React.FC<{ children: React.ReactNode }> = ({ child
         if (raw) {
             try {
                 const parsed: Record<string, any> = JSON.parse(raw);
-                // Migrate any legacy YYYY-MM-DD keys to YYYY-MM-DD-HH hourSlot keys
                 const migrated: Record<string, MoodLog> = {};
                 for (const [key, item] of Object.entries(parsed)) {
                     if (key.match(/^\d{4}-\d{2}-\d{2}$/)) {
@@ -300,7 +314,7 @@ export const JournalProvider: React.FC<{ children: React.ReactNode }> = ({ child
                     }
                 }
                 return { ...SEED_MOOD_LOGS, ...migrated };
-            } catch { /* ignore */ }
+            } catch { /* ignore parsing errors */ }
         }
         return SEED_MOOD_LOGS;
     });
@@ -351,11 +365,9 @@ export const JournalProvider: React.FC<{ children: React.ReactNode }> = ({ child
             note: note || "",
         };
 
-        // Key by hourSlot to guarantee 1 mood per hour slot!
         const updated = { ...moodLogs, [hourSlot]: newLog };
         saveMoodLogsToStorage(updated);
     };
-
 
     const deleteMoodLog = (key: string) => {
         const updated = { ...moodLogs };
@@ -363,8 +375,7 @@ export const JournalProvider: React.FC<{ children: React.ReactNode }> = ({ child
         saveMoodLogsToStorage(updated);
     };
 
-
-    // --- Quotes Hub ---
+    // 4. Quotes Hub State
     const [quoteSetIndex, setQuoteSetIndex] = useState(0);
     const [activeQuoteIndex, setActiveQuoteIndex] = useState(4);
     const [savedQuotes, setSavedQuotes] = useState<FolderQuoteItem[]>(() => {
@@ -382,12 +393,7 @@ export const JournalProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const toggleSaveQuote = (quote: FolderQuoteItem) => {
         setSavedQuotes((prev) => {
             const exists = prev.some((q) => q.id === quote.id);
-            let updated: FolderQuoteItem[];
-            if (exists) {
-                updated = prev.filter((q) => q.id !== quote.id);
-            } else {
-                updated = [...prev, quote];
-            }
+            const updated = exists ? prev.filter((q) => q.id !== quote.id) : [...prev, quote];
             localStorage.setItem("dogear_saved_quotes", JSON.stringify(updated));
             return updated;
         });
@@ -401,7 +407,7 @@ export const JournalProvider: React.FC<{ children: React.ReactNode }> = ({ child
         });
     };
 
-    // --- Bento Archive ---
+    // 5. Bento Archive State
     const [bentoActiveIndex, setBentoActiveIndex] = useState(2);
     const [selectedBlog, setSelectedBlog] = useState<MoodGlassBlog | null>(null);
 
@@ -498,6 +504,10 @@ export const JournalProvider: React.FC<{ children: React.ReactNode }> = ({ child
     return <JournalContext.Provider value={value}>{children}</JournalContext.Provider>;
 };
 
+/**
+ * Custom Hook to consume Journal Context state safely throughout the application.
+ * Throws an error if invoked outside of a JournalProvider.
+ */
 export const useJournal = (): JournalContextType => {
     const context = useContext(JournalContext);
     if (!context) {

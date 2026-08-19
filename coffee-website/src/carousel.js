@@ -1,9 +1,4 @@
-/**
- * Dynamic Inspectable Photo Carousel Module
- * Controls image carousel sliding, pagination dot updates, autoplay, and swipe gestures.
- */
 export const initCarousel = () => {
-    // 1. SELECT CAROUSEL DOM ELEMENTS
     const carousel = document.getElementById('carousel');
     const track = document.getElementById('carouselTrack');
     const prevBtn = document.getElementById('prevBtn');
@@ -12,137 +7,93 @@ export const initCarousel = () => {
 
     if (!carousel || !track || !prevBtn || !nextBtn || !dotsWrap) return;
 
-    // Get array of all image slides inside track
-    const slides = Array.from(track.querySelectorAll('img'));
-    if (slides.length === 0) return;
+    const slides = track.querySelectorAll('img');
+    let currentIndex = 0;
+    let timer = null;
 
-    let currentStep = 0;
-    let autoPlayTimer = null;
-    let itemsPerSlide = 3;
+    // 1. Is it mobile? Return 1 image per slide, otherwise 3 for desktop.
+    const getItems = () => (window.innerWidth <= 768 ? 1 : 3);
 
-    // Helper to calculate items per slide based on screen width or attributes
-    function getItemsPerSlide() {
-        const attrVal = parseInt(carousel.getAttribute('data-items-per-slide'), 10);
-        if (!isNaN(attrVal)) {
-            return Math.max(1, Math.min(slides.length, attrVal));
-        }
-        const cssVar = parseInt(getComputedStyle(carousel).getPropertyValue('--items-per-slide').trim(), 10);
-        if (!isNaN(cssVar)) {
-            return Math.max(1, Math.min(slides.length, cssVar));
-        }
-        return 3;
-    }
+    // 2. Main Movement Function
+    const goToPage = (index) => {
+        const items = getItems();
+        const totalPages = Math.ceil(slides.length / items);
 
-    // Moves the track horizontally and updates active pagination dot
-    function renderSlide() {
+        // Loop around if we hit the boundaries
+        if (index < 0) currentIndex = totalPages - 1;
+        else if (index >= totalPages) currentIndex = 0;
+        else currentIndex = index;
+
+        // Calculate pixel shift and slide the track
         const gap = 14;
-        const containerWidth = carousel.clientWidth;
-        const itemWidth = (containerWidth - (itemsPerSlide - 1) * gap) / itemsPerSlide;
-        const shiftAmount = (itemWidth + gap) * itemsPerSlide * currentStep;
+        const width = carousel.clientWidth;
+        const itemWidth = (width - (items - 1) * gap) / items;
+        track.style.transform = `translateX(-${(itemWidth + gap) * items * currentIndex}px)`;
 
-        // Apply horizontal CSS slide transform
-        track.style.transform = 'translateX(-' + shiftAmount + 'px)';
-
-        // Update dot highlights
-        const dots = Array.from(dotsWrap.children);
-        dots.forEach((dot, index) => {
-            if (index === currentStep) {
-                dot.classList.add('active');
-            } else {
-                dot.classList.remove('active');
-            }
+        // Highlight the correct dot
+        dotsWrap.querySelectorAll('.dot').forEach((dot, i) => {
+            dot.classList.toggle('active', i === currentIndex);
         });
+
+        resetTimer();
+    };
+
+    // 3. Setup Layout & Build Dots
+    const setupCarousel = () => {
+        const items = getItems();
+        carousel.style.setProperty('--items-per-slide', items);
+        const totalPages = Math.ceil(slides.length / items);
+
+     
+
+        // Clear and rebuild dots container
+      // 1. Clear out any old dots from the screen
+dotsWrap.innerHTML = '';
+
+// 2. Loop through the total number of pages
+for (let i = 0; i < totalPages; i++) {
+    
+    // Create a new dot element
+    const dot = document.createElement('div');
+    
+    // Set its style: if it's the current page, make it 'dot active', otherwise just 'dot'
+    if (i === currentIndex) {
+        dot.className = 'dot active';
+    } else {
+        dot.className = 'dot';
     }
-
-    // Re-calculates layout dimensions and rebuilds pagination dots
-    function updateLayout() {
-        itemsPerSlide = getItemsPerSlide();
-        carousel.style.setProperty('--items-per-slide', itemsPerSlide);
-
-        const totalPages = Math.ceil(slides.length / itemsPerSlide);
-        if (currentStep >= totalPages) {
-            currentStep = totalPages - 1;
-        }
-        if (currentStep < 0) {
-            currentStep = 0;
-        }
-
-        // Generate pagination dot elements
-        dotsWrap.innerHTML = '';
-        for (let i = 0; i < totalPages; i++) {
-            const dot = document.createElement('div');
-            dot.className = i === currentStep ? 'dot active' : 'dot';
-            dot.addEventListener('click', () => goToStep(i));
-            dotsWrap.appendChild(dot);
-        }
-
-        renderSlide();
-    }
-
-    // Jumps to a specific page step index
-    function goToStep(index) {
-        const totalPages = Math.ceil(slides.length / itemsPerSlide);
-        if (index < 0) {
-            currentStep = totalPages - 1;
-        } else if (index >= totalPages) {
-            currentStep = 0;
-        } else {
-            currentStep = index;
-        }
-        renderSlide();
-        resetAutoPlay();
-    }
-
-    // Move to next slide page
-    function nextSlide() {
-        goToStep(currentStep + 1);
-    }
-
-    // Move to previous slide page
-    function prevSlide() {
-        goToStep(currentStep - 1);
-    }
-
-    // Reset and restart 5-second automatic slide transition timer
-    function resetAutoPlay() {
-        clearInterval(autoPlayTimer);
-        autoPlayTimer = setInterval(nextSlide, 5000);
-    }
-
-    // Next and Previous arrow button click listeners
-    nextBtn.addEventListener('click', nextSlide);
-    prevBtn.addEventListener('click', prevSlide);
-
-    // Pause autoplay on mouse hover, resume on mouse leave
-    carousel.addEventListener('mouseenter', () => {
-        clearInterval(autoPlayTimer);
+    
+    // When the user clicks this specific dot, jump to that page and reset the timer
+    dot.addEventListener('click', () => {
+        goToPage(i);
+        resetTimer();
     });
-    carousel.addEventListener('mouseleave', resetAutoPlay);
+    
+    // Finally, place the dot onto the webpage inside the dots container
+    dotsWrap.appendChild(dot);
+}
 
-    // Touch swipe gesture support for mobile screens
-    let touchStartX = 0;
-    track.addEventListener('touchstart', (event) => {
-        touchStartX = event.touches[0].clientX;
-    }, { passive: true });
+    };
 
-    track.addEventListener('touchend', (event) => {
-        const touchEndX = event.changedTouches[0].clientX;
-        const diff = touchStartX - touchEndX;
+    // 4. Autoplay Timer
+    const startTimer = () => {
+        clearInterval(timer);
+        timer = setInterval(() => goToPage(currentIndex + 1), 4000);
+    };
 
-        // If swipe distance is > 40px, change slide page
-        if (Math.abs(diff) > 40) {
-            if (diff > 0) {
-                nextSlide();
-            } else {
-                prevSlide();
-            }
-        }
-    }, { passive: true });
+    const resetTimer = () => {
+        startTimer();
+    };
 
-    // Update carousel layout on window resize
-    window.addEventListener('resize', updateLayout);
+    // 5. Event Listeners
+    nextBtn.addEventListener('click', () => { goToPage(currentIndex + 1); resetTimer(); });
+    prevBtn.addEventListener('click', () => { goToPage(currentIndex - 1); resetTimer(); });
+    window.addEventListener('resize', setupCarousel);
 
-    // Initialize layout and start autoplay timer
-    updateLayout();
-    resetAutoPlay();
+    carousel.addEventListener('mouseenter', () => clearInterval(timer));
+    carousel.addEventListener('mouseleave', startTimer);
+
+    // Initial Run
+    setupCarousel();
+    startTimer();
 };

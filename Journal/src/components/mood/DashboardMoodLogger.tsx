@@ -1,3 +1,8 @@
+/**
+ * Dashboard Mood Logger Component
+ * Interactive widget allowing users to select current mood, add notes, pick time slots, and log mood ratings.
+ */
+
 import React, { useState } from "react";
 import { Sparkles, Heart, Compass, Zap, Activity, Moon, CheckCircle2, Clock, Calendar as CalendarIcon, Plus } from "lucide-react";
 import { MOOD_OPTIONS, getMoodOption, todayStr, type MoodOption } from "./moodTrackerData";

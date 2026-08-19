@@ -1,7 +1,12 @@
-/*  */import React from "react";
+/**
+ * Doodle Vector Illustrations Library
+ * Renders custom SVG vector doodles, characters, and decorative background graphics.
+ */
+
+import React from "react";
 
 /* -------------------------------------------------------------------------- */
-/* 1. COLORFUL WAVING DOODLE CROWD (Single image with wide middle gap)        */
+/* 1. COLORFUL WAVING DOODLE CROWD                                            */
 /* -------------------------------------------------------------------------- */
 export function DoodleCrowd({ height = 150, className = "" }: { height?: number; className?: string }) {
     return (

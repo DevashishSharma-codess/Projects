@@ -1,3 +1,8 @@
+/**
+ * Mood Music Recommendation Widget Component
+ * Suggests curated playlists and tracks tailored to the user's current mood.
+ */
+
 import React from "react";
 import { Headphones, Volume2, SkipBack, Play, Pause, SkipForward, Music, Radio, ExternalLink, Mic2, PlusCircle } from "lucide-react";
 import { MOOD_OPTIONS, MOOD_SONGS, getSpotifyAppUrl } from "./moodTrackerData";

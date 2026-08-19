@@ -1,3 +1,8 @@
+/**
+ * Static Fallback Quotes Seed Data
+ * Provides default quote card sets arranged as interactive folder tabs.
+ */
+
 export interface FolderQuoteItem {
     id: string;
     tabLabel: string;
@@ -11,6 +16,7 @@ export interface FolderQuoteItem {
     tabLeftOffset: number;
 }
 
+/** Predefined seed sets of inspirational quotes */
 export const ALL_QUOTE_SETS: FolderQuoteItem[][] = [
     [
         {

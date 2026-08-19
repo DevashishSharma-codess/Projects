@@ -1,12 +1,18 @@
+/**
+ * Quotes API Data Fetcher & Mapping Service
+ * Integrates with DummyJSON Quotes API and maps raw quote payloads into visual FolderQuoteItem tabs.
+ */
+
 import type { FolderQuoteItem } from "../types/journal";
 
-// ── API response types from DummyJSON ──
+/** Raw quote object structure returned by DummyJSON API */
 export interface DummyJsonQuote {
     id: number;
     quote: string;
     author: string;
 }
 
+/** Paginated API response wrapper from DummyJSON */
 export interface DummyJsonQuotesResponse {
     quotes: DummyJsonQuote[];
     total: number;
@@ -14,7 +20,7 @@ export interface DummyJsonQuotesResponse {
     limit: number;
 }
 
-// ── Visual config for mapping API quotes into the folder-tab UI ──
+/** Visual theme config for rendering quote cards as interactive folder tabs */
 const TAB_CONFIG = [
     { tabLabel: "Claude", bgColor: "#F472B6", textColor: "#111827", tabLeftOffset: 0 },
     { tabLabel: "Aiko", bgColor: "#818CF8", textColor: "#FFFFFF", tabLeftOffset: 70 },
@@ -24,8 +30,9 @@ const TAB_CONFIG = [
 ];
 
 /**
- * Helper: maps a raw DummyJSON quote into the FolderQuoteItem shape
- * used by the QuotesHub UI.
+ * Maps a raw API quote object into a styled FolderQuoteItem for component consumption.
+ * @param q - Raw quote item from API
+ * @param index - Index offset used to assign visual tab theme
  */
 function mapToFolderQuote(q: DummyJsonQuote, index: number): FolderQuoteItem {
     const config = TAB_CONFIG[index % TAB_CONFIG.length];
@@ -48,8 +55,8 @@ function mapToFolderQuote(q: DummyJsonQuote, index: number): FolderQuoteItem {
 }
 
 /**
- * Fetch a paginated batch of 5 quotes from the DummyJSON API.
- * @param page - Zero-based page index (page 0 = first 5 quotes, page 1 = next 5, etc.)
+ * Fetches a page of 5 quotes from the DummyJSON API.
+ * @param page - Zero-based page offset (0 = first 5 quotes, 1 = next 5, etc.)
  */
 export async function fetchQuotes(page: number = 0): Promise<FolderQuoteItem[]> {
     const limit = 5;
@@ -69,7 +76,7 @@ export async function fetchQuotes(page: number = 0): Promise<FolderQuoteItem[]> 
 }
 
 /**
- * Fetch a single random quote from the DummyJSON API.
+ * Fetches a single random quote from the DummyJSON API.
  */
 export async function fetchRandomQuote(): Promise<FolderQuoteItem> {
     const response = await fetch("https://dummyjson.com/quotes/random");
