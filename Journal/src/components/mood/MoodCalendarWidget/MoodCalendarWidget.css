@@ -1,0 +1,322 @@
+/* MoodCalendarWidget Subcomponent Styles */
+
+.mood-calendar-container {
+    position: relative;
+    background: rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(24px);
+    border-radius: 26px;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    padding: 28px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05), inset 0 1px 1px rgba(255, 255, 255, 0.6);
+}
+
+.mood-calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+
+.mood-calendar-title-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.mood-calendar-icon-box {
+    width: 34px;
+    height: 34px;
+    border-radius: 12px;
+    background: rgba(15, 23, 42, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mood-calendar-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: #0F172A;
+    margin: 0;
+}
+
+.mood-calendar-subhead {
+    font-size: 11.5px;
+    color: #475569;
+    font-weight: 600;
+}
+
+.mood-calendar-nav-buttons {
+    display: flex;
+    gap: 6px;
+}
+
+.mood-calendar-nav-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    color: #0F172A;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+}
+
+.mood-calendar-days-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    text-align: center;
+    margin-bottom: 12px;
+}
+
+.mood-calendar-day-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #475569;
+    padding: 8px 0;
+}
+
+.mood-calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+}
+
+.mood-calendar-empty-cell {
+    height: 72px;
+}
+
+.mood-calendar-cell {
+    height: 72px;
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    padding: 4px;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mood-calendar-day-num {
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.mood-calendar-single-time {
+    font-size: 9.5px;
+    font-weight: 600;
+}
+
+.mood-calendar-multi-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.mood-calendar-multi-icons {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+}
+
+.mood-calendar-multi-badge {
+    font-size: 9px;
+    font-weight: 800;
+    color: #FFFFFF;
+    padding: 1px 6px;
+    border-radius: 999px;
+}
+
+.mood-drawer-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.5);
+    backdrop-filter: blur(12px);
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.mood-drawer-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 24px;
+    max-width: 480px;
+    width: 100%;
+    padding: 24px 28px;
+    box-shadow: 0 30px 80px rgba(15, 23, 42, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+}
+
+.mood-drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+    border-bottom: 1px solid rgba(15, 23, 42, 0.1);
+    padding-bottom: 12px;
+}
+
+.mood-drawer-title {
+    font-size: 17px;
+    font-weight: 800;
+    color: #0F172A;
+    margin: 0;
+}
+
+.mood-drawer-subhead {
+    font-size: 12px;
+    color: #475569;
+    font-weight: 600;
+}
+
+.mood-drawer-close-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(15, 23, 42, 0.08);
+    color: #0F172A;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mood-drawer-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 280px;
+    overflow-y: auto;
+    margin-bottom: 18px;
+}
+
+.mood-drawer-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.8);
+}
+
+.mood-drawer-item-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.mood-drawer-item-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mood-drawer-item-label {
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.mood-drawer-item-time {
+    font-size: 11px;
+    font-weight: 700;
+    color: #475569;
+    background: rgba(15,23,42,0.06);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.mood-drawer-item-note {
+    font-size: 11.5px;
+    color: #334155;
+    font-weight: 500;
+}
+
+.mood-drawer-item-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.mood-drawer-edit-btn {
+    border: none;
+    background: #3B82F6;
+    color: #FFFFFF;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.mood-drawer-delete-btn {
+    border: none;
+    background: #FEE2E2;
+    color: #DC2626;
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.mood-drawer-add-btn {
+    width: 100%;
+    border: none;
+    background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+    color: #FFFFFF;
+    padding: 12px;
+    border-radius: 14px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+}
+
+.mood-calendar-legend {
+    display: flex;
+    gap: 16px;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.5);
+    flex-wrap: wrap;
+}
+
+.mood-calendar-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.mood-calendar-legend-dot {
+    width: 100px;
+    height: 10px;
+    border-radius: 3px;
+}
+.mood-calendar-legend-dot { width: 10px; height: 10px; border-radius: 3px; }
+
+.mood-calendar-legend-text {
+    font-size: 11.5px;
+    color: #334155;
+    font-weight: 600;
+}

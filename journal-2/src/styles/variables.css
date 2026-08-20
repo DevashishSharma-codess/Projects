@@ -1,0 +1,106 @@
+/* 
+  Calming Minimalist Design System & CSS Variable Tokens
+  Inspired by the Serene Cobalt Sky & Lush Meadow Landscape
+*/
+
+:root {
+  /* Ultra-Glassmorphism Dark-Translucent Design System */
+  --bg-primary: #0b0f14;
+  --bg-secondary: rgba(18, 24, 34, 0.5);
+  --bg-card: rgba(15, 20, 28, 0.45);
+  --bg-glass: rgba(15, 20, 28, 0.45);
+
+  --text-main: #ffffff;        /* Pure crisp white */
+  --text-muted: rgba(255, 255, 255, 0.8); /* Soft white */
+  --text-light: rgba(255, 255, 255, 0.6); /* Muted white */
+
+  --accent-primary: #2563eb;
+  --accent-hover: #3b82f6;
+  --accent-soft: rgba(255, 255, 255, 0.12);
+  --accent-sky: #38bdf8;
+  --accent-meadow: #4ade80;
+
+  --border-color: rgba(255, 255, 255, 0.18);
+  --border-muted: rgba(255, 255, 255, 0.1);
+
+  /* Smooth Radius & Specular Glass Shadows */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+
+  --shadow-subtle: 0 4px 14px rgba(0, 0, 0, 0.2);
+  --shadow-card: 0 16px 40px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  --shadow-elevated: 0 24px 56px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+
+  --font-main: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Consolas, monospace;
+  --transition-speed: 0.2s;
+
+  /* Emotion & Mood Tag Badges */
+  --color-grateful: rgba(34, 197, 94, 0.2);
+  --text-grateful: #86efac;
+  --border-grateful: rgba(74, 222, 128, 0.4);
+
+  --color-calm: rgba(59, 130, 246, 0.2);
+  --text-calm: #93c5fd;
+  --border-calm: rgba(96, 165, 250, 0.4);
+
+  --color-anxious: rgba(245, 158, 11, 0.2);
+  --text-anxious: #fde68a;
+  --border-anxious: rgba(251, 191, 36, 0.4);
+
+  --color-stressful: rgba(239, 68, 68, 0.2);
+  --text-stressful: #fca5a5;
+  --border-stressful: rgba(248, 113, 113, 0.4);
+}
+
+/* Dark Theme - Calming Deep Nocturnal Forest Slate (Zero Glare, Eye Comfort) */
+[data-theme='dark'] {
+  --bg-primary: #0c1310;
+  /* Deep peaceful nocturnal forest slate */
+  --bg-secondary: #121c17;
+  /* Soft dark mist */
+  --bg-card: #16221d;
+  /* Soothing dark slate card */
+  --bg-glass: rgba(22, 34, 29, 0.88);
+
+  --text-main: #f0f6f2;
+  /* Soft ivory (gentle on dark backgrounds) */
+  --text-muted: #95a99e;
+  /* Soft sage silver */
+  --text-light: #687e72;
+  /* Dim slate */
+
+  --accent-primary: #60a5fa;
+  /* Soothing sky blue */
+  --accent-hover: #93c5fd;
+  --accent-soft: #1e2e26;
+  /* Deep meadow wash */
+  --accent-sky: #38bdf8;
+  --accent-meadow: #4ade80;
+
+  --border-color: #24362d;
+  /* Soft dark border */
+  --border-muted: #192620;
+
+  --shadow-subtle: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+  --shadow-card: 0 2px 8px -2px rgba(0, 0, 0, 0.4), 0 1px 3px 0 rgba(0, 0, 0, 0.25);
+  --shadow-elevated: 0 8px 24px -4px rgba(0, 0, 0, 0.5), 0 2px 6px -1px rgba(0, 0, 0, 0.3);
+
+  --color-grateful: #072e18;
+  --text-grateful: #4ade80;
+  --border-grateful: #14532d;
+
+  --color-calm: #0f274a;
+  --text-calm: #60a5fa;
+  --border-calm: #1e3a8a;
+
+  --color-anxious: #3d1c06;
+  --text-anxious: #fbbf24;
+  --border-anxious: #78350f;
+
+  --color-stressful: #3d0c0c;
+  --text-stressful: #f87171;
+  --border-stressful: #7f1d1d;
+}

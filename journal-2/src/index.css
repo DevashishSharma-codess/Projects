@@ -1,0 +1,16 @@
+/* Reset and forwarding to Shadcn Zinc Design System */
+@import './styles/globals.css';
+
+:root {
+  --sans: 'Geist', system-ui, 'Segoe UI', Roboto, sans-serif;
+  --heading: 'Geist', system-ui, 'Segoe UI', Roboto, sans-serif;
+  --mono: 'Geist Mono', ui-monospace, Consolas, monospace;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  font-family: var(--font-main);
+}

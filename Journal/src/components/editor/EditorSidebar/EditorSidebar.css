@@ -1,0 +1,159 @@
+/* EditorSidebar Subcomponent Styles */
+
+.journal-sidebar-right-container {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    display: flex;
+    flex-direction: column;
+}
+
+.editor-sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.editor-sidebar-title {
+    font-family: -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: #0F172A;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.editor-sidebar-count-badge {
+    font-size: 12px;
+    font-weight: 700;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 3px 10px;
+    border-radius: 9999px;
+    color: #334155;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+.editor-sidebar-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    max-height: 520px;
+    overflow-y: auto;
+    padding-right: 4px;
+    flex-grow: 1;
+}
+
+.editor-sidebar-empty {
+    text-align: center;
+    padding: 30px;
+    color: #64748B;
+    font-size: 14px;
+}
+
+.editor-sidebar-card {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 16px;
+    padding: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.editor-sidebar-card.is-editing {
+    background: #EFF6FF;
+    border: 2px solid #2563EB;
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.2);
+}
+
+.editor-sidebar-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+
+.editor-sidebar-card-date {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #64748B;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.editor-sidebar-card-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.editor-sidebar-edit-btn {
+    border: none;
+    background: rgba(37, 99, 235, 0.1);
+    color: #2563EB;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.editor-sidebar-delete-btn {
+    border: none;
+    background: transparent;
+    color: #94A3B8;
+    cursor: pointer;
+    padding: 2px;
+}
+
+.editor-sidebar-card-title {
+    font-family: -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: #0F172A;
+    margin: 0 0 6px 0;
+}
+
+.editor-sidebar-card-body {
+    color: #475569;
+    line-height: 1.45;
+    margin: 0 0 10px 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.editor-sidebar-card-body.font-handwriting {
+    font-family: 'Caveat', cursive;
+    font-size: 17px;
+}
+.editor-sidebar-card-body.font-sans {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 13.5px;
+}
+
+.editor-sidebar-card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.editor-sidebar-tag {
+    font-size: 10.5px;
+    font-weight: 700;
+    background: rgba(255, 255, 255, 0.8);
+    color: #334155;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+}

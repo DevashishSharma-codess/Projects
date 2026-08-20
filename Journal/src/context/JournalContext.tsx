@@ -1,10 +1,12 @@
 /**
  * Central State Management for Journal Application
- * Provides global state for Navigation, Folder Directory, Editor Studio, Mood Tracker, Quotes Hub, and Bento Archive.
+ * Simple, beginner-friendly React Context for sharing global app state.
  */
 
 import React, { createContext, useContext, useState, useEffect } from "react";
+import type { ActiveTabType, JournalContextType } from "./JournalContextTypes";
 import type { JournalFolder, JournalEntry, MoodLog, FolderQuoteItem, MoodGlassBlog } from "../types/journal";
+import { getHourSlotInfo, SEED_MOOD_LOGS } from "./journalHelpers";
 import {
     getSavedFolders,
     createNewFolder as storageCreateFolder,
@@ -12,189 +14,18 @@ import {
     deleteFolder as storageDeleteFolder,
     deleteEntryFromFolder as storageDeleteEntry,
 } from "../utils/folderStorage";
+import "./JournalContext.css";
 
-// ── Time & Date Helpers ────────────────────────────────────────────────────────
+export type { ActiveTabType, JournalContextType };
+export { getHourSlotInfo };
 
-/**
- * Calculates hour slot identifier and timestamp from day string and time input.
- * Used to group mood logs uniquely per hour slot (YYYY-MM-DD-HH).
- */
-export const getHourSlotInfo = (day: string, timeStr: string) => {
-    let hour = 12;
-    let minute = 0;
-
-    if (!timeStr) {
-        const now = new Date();
-        hour = now.getHours();
-        minute = now.getMinutes();
-    } else {
-        const match24 = timeStr.match(/^(\d{1,2}):(\d{2})/);
-        if (match24) {
-            hour = parseInt(match24[1], 10);
-            minute = parseInt(match24[2], 10);
-        } else {
-            const match12 = timeStr.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)?/i);
-            if (match12) {
-                hour = parseInt(match12[1], 10);
-                minute = parseInt(match12[2], 10);
-                const period = match12[3]?.toUpperCase();
-                if (period === "PM" && hour < 12) hour += 12;
-                if (period === "AM" && hour === 12) hour = 0;
-            }
-        }
-    }
-
-    const hh = String(hour).padStart(2, "0");
-    const mm = String(minute).padStart(2, "0");
-    const hourSlot = `${day}-${hh}`;
-    const time = `${hh}:${mm}`;
-
-    const dateObj = new Date(`${day}T${time}:00`);
-    const timestamp = isNaN(dateObj.getTime()) ? Date.now() : dateObj.getTime();
-
-    return { hourSlot, time, timestamp };
-};
-
-// ── Initial Seed Data ──────────────────────────────────────────────────────────
-
-/** Default seed mood logs used on initial render when no custom logs exist */
-const SEED_MOOD_LOGS: Record<string, MoodLog> = {
-    "2026-07-01-09": { id: "s1", day: "2026-07-01", time: "09:00", hourSlot: "2026-07-01-09", timestamp: new Date("2026-07-01T09:00:00").getTime(), moodKey: "peaceful", moodLabel: "Peaceful", icon: "Heart", score: 4.5, color: "#3B82F6", note: "Great morning coffee." },
-    "2026-07-05-14": { id: "s2", day: "2026-07-05", time: "14:00", hourSlot: "2026-07-05-14", timestamp: new Date("2026-07-05T14:00:00").getTime(), moodKey: "energetic", moodLabel: "Energetic", icon: "Zap", score: 4.2, color: "#10B981", note: "Completed sprint goal!" },
-    "2026-07-09-18": { id: "s3", day: "2026-07-09", time: "18:00", hourSlot: "2026-07-09-18", timestamp: new Date("2026-07-09T18:00:00").getTime(), moodKey: "radiant", moodLabel: "Radiant", icon: "Sparkles", score: 5.0, color: "#F59E0B", note: "Family weekend getaway." },
-    "2026-07-13-10": { id: "s4", day: "2026-07-13", time: "10:00", hourSlot: "2026-07-13-10", timestamp: new Date("2026-07-13T10:00:00").getTime(), moodKey: "focused", moodLabel: "Focused", icon: "Compass", score: 4.0, color: "#A855F7", note: "Deep work session." },
-    "2026-07-16-16": { id: "s5", day: "2026-07-16", time: "16:00", hourSlot: "2026-07-16-16", timestamp: new Date("2026-07-16T16:00:00").getTime(), moodKey: "stressed", moodLabel: "Stressed", icon: "Activity", score: 2.0, color: "#EF4444", note: "Tight deadline." },
-    "2026-07-20-11": { id: "s6", day: "2026-07-20", time: "11:00", hourSlot: "2026-07-20-11", timestamp: new Date("2026-07-20T11:00:00").getTime(), moodKey: "peaceful", moodLabel: "Peaceful", icon: "Heart", score: 4.5, color: "#3B82F6", note: "Relaxing Sunday walk." },
-    "2026-07-24-15": { id: "s7", day: "2026-07-24", time: "15:00", hourSlot: "2026-07-24-15", timestamp: new Date("2026-07-24T15:00:00").getTime(), moodKey: "radiant", moodLabel: "Radiant", icon: "Sparkles", score: 5.0, color: "#F59E0B", note: "Key project milestone!" },
-    "2026-07-27-09": { id: "s8", day: "2026-07-27", time: "09:00", hourSlot: "2026-07-27-09", timestamp: new Date("2026-07-27T09:00:00").getTime(), moodKey: "focused", moodLabel: "Focused", icon: "Compass", score: 4.0, color: "#A855F7", note: "Strategic roadmap planning." },
-    "2026-07-30-17": { id: "s9", day: "2026-07-30", time: "17:00", hourSlot: "2026-07-30-17", timestamp: new Date("2026-07-30T17:00:00").getTime(), moodKey: "energetic", moodLabel: "Energetic", icon: "Zap", score: 4.2, color: "#10B981", note: "High energy team workout." },
-    "2026-08-01-08": { id: "s10", day: "2026-08-01", time: "08:00", hourSlot: "2026-08-01-08", timestamp: new Date("2026-08-01T08:00:00").getTime(), moodKey: "peaceful", moodLabel: "Peaceful", icon: "Heart", score: 4.5, color: "#3B82F6", note: "New month fresh start." },
-    "2026-08-03-12": { id: "s11", day: "2026-08-03", time: "12:00", hourSlot: "2026-08-03-12", timestamp: new Date("2026-08-03T12:00:00").getTime(), moodKey: "radiant", moodLabel: "Radiant", icon: "Sparkles", score: 5.0, color: "#F59E0B", note: "Product launch success!" },
-    "2026-08-05-14": { id: "s12", day: "2026-08-05", time: "14:00", hourSlot: "2026-08-05-14", timestamp: new Date("2026-08-05T14:00:00").getTime(), moodKey: "focused", moodLabel: "Focused", icon: "Compass", score: 4.0, color: "#A855F7", note: "Dark glassmorphic dashboard." },
-    "2026-08-07-10": { id: "s13", day: "2026-08-07", time: "10:00", hourSlot: "2026-08-07-10", timestamp: new Date("2026-08-07T10:00:00").getTime(), moodKey: "energetic", moodLabel: "Energetic", icon: "Zap", score: 4.2, color: "#10B981", note: "Morning run." },
-    "2026-08-08-16": { id: "s14", day: "2026-08-08", time: "16:00", hourSlot: "2026-08-08-16", timestamp: new Date("2026-08-08T16:00:00").getTime(), moodKey: "peaceful", moodLabel: "Peaceful", icon: "Heart", score: 4.5, color: "#3B82F6", note: "Weekend reading." },
-    "2026-08-09-11": { id: "s15", day: "2026-08-09", time: "11:00", hourSlot: "2026-08-09-11", timestamp: new Date("2026-08-09T11:00:00").getTime(), moodKey: "radiant", moodLabel: "Radiant", icon: "Sparkles", score: 5.0, color: "#F59E0B", note: "Sunny afternoon." },
-    "2026-08-10-09": { id: "s16", day: "2026-08-10", time: "09:00", hourSlot: "2026-08-10-09", timestamp: new Date("2026-08-10T09:00:00").getTime(), moodKey: "focused", moodLabel: "Focused", icon: "Compass", score: 4.0, color: "#A855F7", note: "Morning planning." },
-    [`${new Date().toISOString().slice(0, 10)}-09`]: { id: "s-today-1", day: new Date().toISOString().slice(0, 10), time: "09:33", hourSlot: `${new Date().toISOString().slice(0, 10)}-09`, timestamp: new Date(`${new Date().toISOString().slice(0, 10)}T09:33:00`).getTime(), moodKey: "peaceful", moodLabel: "Peaceful", icon: "Heart", score: 4.5, color: "#3B82F6", note: "Morning peaceful reflection." },
-    [`${new Date().toISOString().slice(0, 10)}-10`]: { id: "s-today-2", day: new Date().toISOString().slice(0, 10), time: "10:45", hourSlot: `${new Date().toISOString().slice(0, 10)}-10`, timestamp: new Date(`${new Date().toISOString().slice(0, 10)}T10:45:00`).getTime(), moodKey: "energetic", moodLabel: "Energetic", icon: "Zap", score: 4.2, color: "#10B981", note: "Mid-morning boost!" },
-};
-
-// ── Context Types ──────────────────────────────────────────────────────────────
-
-export type ActiveTabType = "hero" | "folders" | "editor" | "mood" | "quotes" | "bento";
-
-export interface JournalContextType {
-    // Navigation & Header
-    activeTab: ActiveTabType;
-    setActiveTab: (tab: ActiveTabType) => void;
-    mobileMenuOpen: boolean;
-    setMobileMenuOpen: (open: boolean) => void;
-    activeModeIndex: number;
-    setActiveModeIndex: React.Dispatch<React.SetStateAction<number>>;
-    scrolled: boolean;
-    setScrolled: (scrolled: boolean) => void;
-    scrollToSection: (id: string, tab: ActiveTabType) => void;
-
-    // Folder & Journal Entry Management
-    folders: JournalFolder[];
-    activeFolderId: string | null;
-    setActiveFolderId: (id: string | null) => void;
-    selectedEntry: JournalEntry | null;
-    setSelectedEntry: (entry: JournalEntry | null) => void;
-    editingEntry: JournalEntry | null;
-    setEditingEntry: (entry: JournalEntry | null) => void;
-    searchQuery: string;
-    setSearchQuery: (query: string) => void;
-    viewMode: "grid" | "list";
-    setViewMode: (mode: "grid" | "list") => void;
-    showNewFolderModal: boolean;
-    setShowNewFolderModal: (show: boolean) => void;
-    showNewJournalModal: boolean;
-    setShowNewJournalModal: (show: boolean) => void;
-
-    // Folder Actions
-    createFolder: (name: string, description: string, color: string) => JournalFolder;
-    deleteFolder: (folderId: string) => void;
-    addEntryToFolder: (folderId: string, entry: JournalEntry) => void;
-    deleteEntryFromFolder: (folderId: string, entryId: string) => void;
-    saveJournalEntry: (folderId: string, entryData: Partial<JournalEntry> & { title: string; content: string }) => JournalEntry;
-
-    // Mood Tracker State
-    moodLogs: Record<string, MoodLog>;
-    calYear: number;
-    setCalYear: React.Dispatch<React.SetStateAction<number>>;
-    calMonth: number;
-    setCalMonth: React.Dispatch<React.SetStateAction<number>>;
-    moodActiveNavTab: string;
-    setMoodActiveNavTab: (tab: string) => void;
-    categoryFilter: string;
-    setCategoryFilter: (cat: string) => void;
-    timeframe: "weekly" | "monthly" | "3months";
-    setTimeframe: (tf: "weekly" | "monthly" | "3months") => void;
-    selectedMoodOption: any;
-    setSelectedMoodOption: (opt: any) => void;
-    noteInput: string;
-    setNoteInput: (note: string) => void;
-    selectedDate: string | null;
-    setSelectedDate: (date: string | null) => void;
-    showMoodModal: boolean;
-    setShowMoodModal: (show: boolean) => void;
-    modalMood: any;
-    setModalMood: (mood: any) => void;
-    modalNote: string;
-    setModalNote: (note: string) => void;
-    logSuccess: boolean;
-    setLogSuccess: (success: boolean) => void;
-    logStatusActive: boolean;
-    setLogStatusActive: (active: boolean) => void;
-    autoSyncActive: boolean;
-    setAutoSyncActive: (active: boolean) => void;
-    isBreathing: boolean;
-    setIsBreathing: (breathing: boolean) => void;
-
-    // Mood Log Actions
-    addMoodLog: (
-        day: string,
-        moodKey: string,
-        moodLabel: string,
-        icon: string,
-        score: number,
-        color: string,
-        note: string,
-        time?: string
-    ) => void;
-    deleteMoodLog: (key: string) => void;
-
-    // Quotes Hub State
-    quoteSetIndex: number;
-    setQuoteSetIndex: React.Dispatch<React.SetStateAction<number>>;
-    activeQuoteIndex: number;
-    setActiveQuoteIndex: React.Dispatch<React.SetStateAction<number>>;
-    savedQuotes: FolderQuoteItem[];
-    savedIndex: number;
-    setSavedIndex: React.Dispatch<React.SetStateAction<number>>;
-    isPaperOpened: boolean;
-    setIsPaperOpened: (opened: boolean) => void;
-    copiedQuoteId: string | null;
-    setCopiedQuoteId: (id: string | null) => void;
-    quoteReloading: boolean;
-    setQuoteReloading: (reloading: boolean) => void;
-
-    // Quote Actions
-    toggleSaveQuote: (quote: FolderQuoteItem) => void;
-    removeSavedQuote: (id: string) => void;
-
-    // Bento Archive State
-    bentoActiveIndex: number;
-    setBentoActiveIndex: React.Dispatch<React.SetStateAction<number>>;
-    selectedBlog: MoodGlassBlog | null;
-    setSelectedBlog: (blog: MoodGlassBlog | null) => void;
-}
-
+/** React Context object holding global Journal state */
 const JournalContext = createContext<JournalContextType | undefined>(undefined);
 
-// ── Context Provider Implementation ──────────────────────────────────────────
-
+/**
+ * JournalProvider Component
+ * Main state container providing simple state management across all sections.
+ */
 export const JournalProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     // 1. Navigation State
     const [activeTab, setActiveTab] = useState<ActiveTabType>("hero");
@@ -202,7 +33,6 @@ export const JournalProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const [activeModeIndex, setActiveModeIndex] = useState(0);
     const [scrolled, setScrolled] = useState(false);
 
-    /** Smooth scroll helper for navigating page sections */
     const scrollToSection = (id: string, tab: ActiveTabType) => {
         setActiveTab(tab);
         setMobileMenuOpen(false);
@@ -212,7 +42,7 @@ export const JournalProvider: React.FC<{ children: React.ReactNode }> = ({ child
         }
     };
 
-    // 2. Folder & Journal Entries State
+    // 2. Folder Directory & Journal Entries State
     const [folders, setFolders] = useState<JournalFolder[]>([]);
     const [activeFolderId, setActiveFolderId] = useState<string | null>(null);
     const [selectedEntry, setSelectedEntry] = useState<JournalEntry | null>(null);
@@ -255,12 +85,8 @@ export const JournalProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const deleteEntryFromFolder = (folderId: string, entryId: string) => {
         const updated = storageDeleteEntry(folderId, entryId);
         setFolders(updated);
-        if (selectedEntry?.id === entryId) {
-            setSelectedEntry(null);
-        }
-        if (editingEntry?.id === entryId) {
-            setEditingEntry(null);
-        }
+        if (selectedEntry?.id === entryId) setSelectedEntry(null);
+        if (editingEntry?.id === entryId) setEditingEntry(null);
     };
 
     const saveJournalEntry = (
@@ -289,7 +115,7 @@ export const JournalProvider: React.FC<{ children: React.ReactNode }> = ({ child
         return entry;
     };
 
-    // 3. Mood Tracker State & LocalStorage Persistence
+    // 3. Mood Tracker State
     const today = new Date();
     const [calYear, setCalYear] = useState(today.getFullYear());
     const [calMonth, setCalMonth] = useState(today.getMonth());
@@ -302,13 +128,7 @@ export const JournalProvider: React.FC<{ children: React.ReactNode }> = ({ child
                 for (const [key, item] of Object.entries(parsed)) {
                     if (key.match(/^\d{4}-\d{2}-\d{2}$/)) {
                         const { hourSlot, time, timestamp } = getHourSlotInfo(key, (item as any).time || "12:00");
-                        migrated[hourSlot] = {
-                            ...(item as MoodLog),
-                            day: key,
-                            time,
-                            hourSlot,
-                            timestamp,
-                        };
+                        migrated[hourSlot] = { ...(item as MoodLog), day: key, time, hourSlot, timestamp };
                     } else {
                         migrated[key] = item as MoodLog;
                     }
@@ -375,7 +195,7 @@ export const JournalProvider: React.FC<{ children: React.ReactNode }> = ({ child
         saveMoodLogsToStorage(updated);
     };
 
-    // 4. Quotes Hub State
+    // 4. Daily Quotes State
     const [quoteSetIndex, setQuoteSetIndex] = useState(0);
     const [activeQuoteIndex, setActiveQuoteIndex] = useState(4);
     const [savedQuotes, setSavedQuotes] = useState<FolderQuoteItem[]>(() => {
@@ -421,7 +241,6 @@ export const JournalProvider: React.FC<{ children: React.ReactNode }> = ({ child
         scrolled,
         setScrolled,
         scrollToSection,
-
         folders,
         activeFolderId,
         setActiveFolderId,
@@ -437,13 +256,11 @@ export const JournalProvider: React.FC<{ children: React.ReactNode }> = ({ child
         setShowNewFolderModal,
         showNewJournalModal,
         setShowNewJournalModal,
-
         createFolder,
         deleteFolder,
         addEntryToFolder,
         deleteEntryFromFolder,
         saveJournalEntry,
-
         moodLogs,
         calYear,
         setCalYear,
@@ -475,10 +292,8 @@ export const JournalProvider: React.FC<{ children: React.ReactNode }> = ({ child
         setAutoSyncActive,
         isBreathing,
         setIsBreathing,
-
         addMoodLog,
         deleteMoodLog,
-
         quoteSetIndex,
         setQuoteSetIndex,
         activeQuoteIndex,
@@ -494,7 +309,6 @@ export const JournalProvider: React.FC<{ children: React.ReactNode }> = ({ child
         setQuoteReloading,
         toggleSaveQuote,
         removeSavedQuote,
-
         bentoActiveIndex,
         setBentoActiveIndex,
         selectedBlog,
@@ -506,7 +320,6 @@ export const JournalProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
 /**
  * Custom Hook to consume Journal Context state safely throughout the application.
- * Throws an error if invoked outside of a JournalProvider.
  */
 export const useJournal = (): JournalContextType => {
     const context = useContext(JournalContext);

@@ -1,0 +1,105 @@
+.quote-card {
+  position: relative;
+  width: 100%;
+  padding: 2.5rem 3rem !important;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.22) 100%) !important;
+  backdrop-filter: blur(36px) saturate(200%);
+  -webkit-backdrop-filter: blur(36px) saturate(200%);
+  border: 1.5px solid rgba(255, 255, 255, 0.65) !important;
+  box-shadow: 
+    inset 0 2px 3px rgba(255, 255, 255, 0.8),
+    inset 0 -1.5px 2px rgba(255, 255, 255, 0.25),
+    0 25px 60px rgba(0, 0, 0, 0.22) !important;
+  color: #ffffff;
+  transition: all var(--transition-speed) ease;
+  animation: fadeInQuote 0.4s ease-in-out;
+}
+
+.quote-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.85) !important;
+  box-shadow: 
+    inset 0 2px 4px rgba(255, 255, 255, 0.9),
+    inset 0 -1.5px 2px rgba(255, 255, 255, 0.35),
+    0 30px 70px rgba(0, 0, 0, 0.28) !important;
+}
+
+/* Glass Top Specular Sheen Highlight */
+.quote-card-glow {
+  position: absolute;
+  inset: 0;
+  top: 0;
+  height: 42%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.32) 0%, rgba(255, 255, 255, 0.08) 60%, transparent 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.quote-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.boxy-quote-icon {
+  width: 2.25rem;
+  height: 2.25rem;
+  color: #ffffff;
+  opacity: 0.95;
+}
+
+.quote-text {
+  font-size: 1.65rem;
+  font-weight: 300;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  max-width: 95%;
+}
+
+.quote-author-row {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding-top: 0.75rem;
+}
+
+.quote-author-avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.quote-author-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.quote-author-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: 0.01em;
+}
+
+.quote-author-role {
+  font-size: 0.7rem;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 500;
+}
+
+@keyframes fadeInQuote {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}

@@ -1,36 +1,66 @@
 /**
- * Quotes Data Custom Hooks
- * Wraps DummyJSON quote fetch requests using TanStack React Query for caching, automatic garbage collection, and state handling.
+ * Simple Quotes Data Custom Hooks
+ * Uses standard React useState + useEffect to fetch quotes cleanly without complex caching layers.
  */
 
-import { useQuery } from "@tanstack/react-query";
+import { useState, useEffect } from "react";
 import type { FolderQuoteItem } from "../types/journal";
 import { fetchQuotes, fetchRandomQuote } from "../api/quotesApi";
 
 /**
- * Fetches a paginated batch of 5 quotes with React Query caching.
- * @param page - Page offset index (default: 0)
+ * Simple hook to fetch 5 quotes from API
  */
 export function useQuotes(page: number = 0) {
-    return useQuery<FolderQuoteItem[], Error>({
-        queryKey: ["quotes", page],
-        queryFn: () => fetchQuotes(page),
-        staleTime: 2 * 60 * 1000,     // Fresh for 2 minutes
-        gcTime: 5 * 60 * 1000,        // Retained in cache memory for 5 minutes
-        refetchOnWindowFocus: false,
-    });
+    const [data, setData] = useState<FolderQuoteItem[] | undefined>(undefined);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [error, setError] = useState<Error | null>(null);
+
+    const refetch = async () => {
+        setIsLoading(true);
+        try {
+            const quotes = await fetchQuotes(page);
+            setData(quotes);
+            setError(null);
+        } catch (err: any) {
+            setError(err);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        refetch();
+    }, [page]);
+
+    return { data, isLoading, error, refetch };
 }
 
 /**
- * Fetches a fresh random quote on demand without caching.
- * @param enabled - Controls whether the query executes automatically
+ * Simple hook to fetch a random quote from API
  */
 export function useRandomQuote(enabled: boolean = true) {
-    return useQuery<FolderQuoteItem, Error>({
-        queryKey: ["quote", "random", Date.now()],
-        queryFn: fetchRandomQuote,
-        enabled,
-        staleTime: 0,
-        refetchOnWindowFocus: false,
-    });
+    const [data, setData] = useState<FolderQuoteItem | undefined>(undefined);
+    const [isLoading, setIsLoading] = useState<boolean>(enabled);
+    const [error, setError] = useState<Error | null>(null);
+
+    const refetch = async () => {
+        setIsLoading(true);
+        try {
+            const quote = await fetchRandomQuote();
+            setData(quote);
+            setError(null);
+        } catch (err: any) {
+            setError(err);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        if (enabled) {
+            refetch();
+        }
+    }, [enabled]);
+
+    return { data, isLoading, error, refetch };
 }

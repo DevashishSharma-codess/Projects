@@ -1,0 +1,325 @@
+/* MoodReportsWidget Subcomponent Styles */
+
+.mood-reports-container {
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(24px);
+    border-radius: 28px;
+    border: 1px solid rgba(255, 255, 255, 0.65);
+    padding: 30px 34px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05), inset 0 1px 1px rgba(255, 255, 255, 0.6);
+}
+
+.mood-reports-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+
+.mood-reports-title-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.mood-reports-icon-box {
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.mood-reports-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: #0F172A;
+    margin: 0;
+}
+
+.mood-reports-subhead {
+    font-size: 11.5px;
+    color: #475569;
+    font-weight: 600;
+}
+
+.mood-reports-total-badge {
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #0F172A;
+}
+
+.mood-reports-hero-card {
+    border-radius: 24px;
+    padding: 24px 28px;
+    margin-bottom: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.mood-reports-hero-left {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    min-width: 260px;
+    flex: 1;
+}
+
+.mood-reports-hero-icon-box {
+    width: 64px;
+    height: 64px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.mood-reports-hero-tag-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.mood-reports-hero-tag {
+    color: #FFFFFF;
+    font-size: 10.5px;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.mood-reports-hero-score {
+    font-size: 12px;
+    font-weight: 700;
+    color: #475569;
+}
+
+.mood-reports-hero-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 28px;
+    font-weight: 900;
+    color: #0F172A;
+    margin: 0 0 4px 0;
+}
+
+.mood-reports-hero-desc {
+    font-size: 13px;
+    color: #334155;
+    font-weight: 500;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.mood-reports-hero-stats {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.mood-reports-hero-stat-box {
+    background: rgba(255,255,255,0.8);
+    padding: 12px 18px;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.9);
+    text-align: center;
+    min-width: 100px;
+}
+
+.mood-reports-stat-label {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: #64748B;
+    display: block;
+    text-transform: uppercase;
+}
+
+.mood-reports-stat-val-bold {
+    font-size: 22px;
+    font-weight: 800;
+}
+
+.mood-reports-section-title {
+    font-size: 13px;
+    font-weight: 800;
+    color: #475569;
+    margin: 0 0 14px 0;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.mood-reports-ranking-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.mood-reports-ranking-card {
+    background: rgba(255, 255, 255, 0.75);
+    border-radius: 18px;
+    padding: 16px;
+    box-shadow: 0 4px 14px rgba(15,23,42,0.03);
+    position: relative;
+    overflow: hidden;
+}
+
+.mood-reports-ranking-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.mood-reports-ranking-icon-box {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mood-reports-ranking-badge {
+    font-size: 10.5px;
+    font-weight: 800;
+    background: rgba(15,23,42,0.06);
+    padding: 2px 7px;
+    border-radius: 999px;
+}
+
+.mood-reports-ranking-label {
+    font-size: 14px;
+    font-weight: 800;
+    color: #0F172A;
+    display: block;
+}
+
+.mood-reports-ranking-count-row {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin: 4px 0 8px 0;
+}
+
+.mood-reports-ranking-count {
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.mood-reports-ranking-pct {
+    font-size: 11px;
+    color: #64748B;
+    font-weight: 600;
+}
+
+.mood-reports-progress-bg {
+    width: 100%;
+    height: 5px;
+    border-radius: 999px;
+    background: rgba(15,23,42,0.08);
+    overflow: hidden;
+}
+
+.mood-reports-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+    margin-bottom: 24px;
+}
+
+.mood-reports-metric-card {
+    background: rgba(255, 255, 255, 0.75);
+    border-radius: 18px;
+    padding: 18px 20px;
+}
+
+.mood-reports-metric-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.mood-reports-metric-icon-box {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mood-reports-metric-title {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: #64748B;
+    text-transform: uppercase;
+}
+
+.mood-reports-metric-val {
+    font-size: 18px;
+    font-weight: 800;
+    display: block;
+}
+
+.mood-reports-metric-desc {
+    font-size: 11.5px;
+    color: #475569;
+    margin: 0;
+    font-weight: 500;
+}
+
+.mood-reports-spectrum-card {
+    background: rgba(255, 255, 255, 0.75);
+    border-radius: 20px;
+    padding: 20px 24px;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+}
+
+.mood-reports-spectrum-bar-bg {
+    display: flex;
+    width: 100%;
+    height: 12px;
+    border-radius: 999px;
+    overflow: hidden;
+    background: rgba(15,23,42,0.08);
+    margin-bottom: 14px;
+}
+
+.mood-reports-spectrum-legend {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.mood-reports-spectrum-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.mood-reports-spectrum-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+}
+
+.mood-reports-spectrum-text {
+    font-size: 12px;
+    color: #334155;
+    font-weight: 700;
+}

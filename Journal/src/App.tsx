@@ -4,8 +4,9 @@
  */
 
 import React from 'react';
-import Landing from './components/Landing';
+import Landing from './components/landing';
 import { JournalProvider } from './context/JournalContext';
+import './App.css';
 
 const App: React.FC = () => {
   return (

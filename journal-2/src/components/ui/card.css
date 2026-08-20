@@ -1,0 +1,63 @@
+.shadcn-card {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.22) 100%) !important;
+  backdrop-filter: blur(36px) saturate(200%);
+  -webkit-backdrop-filter: blur(36px) saturate(200%);
+  border: 1.5px solid rgba(255, 255, 255, 0.65) !important;
+  box-shadow: 
+    inset 0 2px 3px rgba(255, 255, 255, 0.8),
+    inset 0 -1.5px 2px rgba(255, 255, 255, 0.25),
+    0 25px 60px rgba(0, 0, 0, 0.22) !important;
+  color: #ffffff;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease, border-color var(--transition-speed) ease, background var(--transition-speed) ease;
+}
+
+.shadcn-card:hover {
+  border-color: rgba(255, 255, 255, 0.85) !important;
+  transform: translateY(-2px);
+  box-shadow: 
+    inset 0 2px 4px rgba(255, 255, 255, 0.9),
+    inset 0 -1.5px 2px rgba(255, 255, 255, 0.35),
+    0 30px 70px rgba(0, 0, 0, 0.28) !important;
+}
+
+/* When the card uses dedicated CardHeader or CardContent subcomponents, let those subcomponents handle their own padding */
+.shadcn-card:has(> .shadcn-card-header),
+.shadcn-card:has(> .shadcn-card-content) {
+  padding: 0;
+}
+
+.shadcn-card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 1.5rem 1.5rem 0.75rem 1.5rem;
+}
+
+.shadcn-card-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+  color: #0f172a;
+}
+
+.shadcn-card-description {
+  font-size: 0.875rem;
+  color: #475569;
+  line-height: 1.45;
+}
+
+.shadcn-card-content {
+  padding: 1.5rem;
+}
+
+.shadcn-card-header + .shadcn-card-content {
+  padding-top: 0.75rem;
+}

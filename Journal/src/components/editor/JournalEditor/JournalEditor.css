@@ -1,0 +1,28 @@
+.journal-studio-layout {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 0;
+    min-height: 560px;
+}
+.journal-editor-left {
+    padding: 32px;
+    border-right: 1px solid rgba(255, 255, 255, 0.4);
+    display: flex;
+    flex-direction: column;
+}
+.journal-sidebar-right {
+    padding: 24px;
+}
+@media (max-width: 960px) {
+    .journal-studio-layout {
+        grid-template-columns: 1fr !important;
+    }
+    .journal-editor-left {
+        padding: 18px 14px !important;
+        border-right: none !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.4) !important;
+    }
+    .journal-sidebar-right {
+        padding: 18px 14px !important;
+    }
+}

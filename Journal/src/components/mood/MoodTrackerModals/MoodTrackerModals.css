@@ -1,0 +1,345 @@
+/* MoodTrackerModals Subcomponent Styles */
+
+.mood-log-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mood-log-modal-card {
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    color: #0F172A;
+    border-radius: 24px;
+    width: min(460px, 92vw);
+    box-shadow: 0 30px 80px rgba(15, 23, 42, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.8);
+    overflow: hidden;
+}
+
+.mood-log-modal-header {
+    padding: 18px 24px;
+    border-bottom: 1px solid rgba(15, 23, 42, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(15, 23, 42, 0.03);
+}
+
+.mood-log-modal-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #0F172A;
+    margin: 0;
+}
+
+.mood-log-modal-date-sub {
+    font-size: 12px;
+    color: #475569;
+    margin: 2px 0 0 0;
+    font-weight: 500;
+}
+
+.mood-log-modal-close-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(15, 23, 42, 0.08);
+    color: #0F172A;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mood-log-modal-body {
+    padding: 20px 24px;
+}
+
+.mood-log-modal-field-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.mood-log-modal-col {
+    flex: 1;
+}
+
+.mood-log-modal-field-label {
+    display: block;
+    font-size: 10.5px;
+    font-weight: 700;
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 4px;
+}
+
+.mood-log-modal-input {
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(15, 23, 42, 0.2);
+    background: #FFFFFF;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #0F172A;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.mood-log-modal-quick-hours {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.mood-log-modal-quick-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #64748B;
+    margin-right: 2px;
+}
+
+.mood-log-modal-quick-btn {
+    font-size: 10.5px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.mood-log-modal-quick-btn.active {
+    border: 1.5px solid #3B82F6;
+    background: #EFF6FF;
+    color: #2563EB;
+}
+.mood-log-modal-quick-btn.inactive {
+    border: 1px solid rgba(15, 23, 42, 0.15);
+    background: #FFFFFF;
+    color: #334155;
+}
+
+.mood-log-modal-banner-error {
+    font-size: 11.5px;
+    font-weight: 650;
+    color: #DC2626;
+    background: rgba(239, 68, 68, 0.12);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    padding: 8px 12px;
+    border-radius: 10px;
+    margin-bottom: 14px;
+}
+
+.mood-log-modal-banner-info {
+    font-size: 11.5px;
+    font-weight: 650;
+    color: #2563EB;
+    background: rgba(37, 99, 235, 0.1);
+    border: 1px solid rgba(37, 99, 235, 0.25);
+    padding: 8px 12px;
+    border-radius: 10px;
+    margin-bottom: 14px;
+}
+
+.mood-log-modal-banner-success {
+    font-size: 11.5px;
+    font-weight: 650;
+    color: #059669;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    padding: 8px 12px;
+    border-radius: 10px;
+    margin-bottom: 14px;
+}
+
+.mood-log-modal-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.mood-log-modal-mood-btn {
+    border-radius: 14px;
+    padding: 12px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.mood-log-modal-mood-icon-wrapper {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mood-log-modal-mood-text {
+    font-size: 12px;
+}
+
+.mood-log-modal-eval-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    background: rgba(15, 23, 42, 0.04);
+    padding: 10px 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.mood-log-modal-eval-title {
+    font-size: 10px;
+    font-weight: 700;
+    color: #64748B;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.mood-log-modal-eval-val {
+    font-size: 15px;
+    font-weight: 800;
+    display: block;
+    margin-top: 2px;
+}
+
+.mood-log-modal-slot-title {
+    font-size: 10px;
+    font-weight: 700;
+    color: #64748B;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.mood-log-modal-slot-val {
+    font-size: 13px;
+    font-weight: 700;
+    color: #0F172A;
+    display: block;
+}
+
+.mood-log-modal-note-input {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(15, 23, 42, 0.2);
+    background: #FFFFFF;
+    outline: none;
+    font-size: 13px;
+    color: #0F172A;
+    box-sizing: border-box;
+    font-weight: 500;
+}
+
+.mood-log-modal-footer {
+    padding: 16px 24px;
+    border-top: 1px solid rgba(15, 23, 42, 0.1);
+    display: flex;
+    gap: 10px;
+    background: rgba(15, 23, 42, 0.02);
+}
+
+.mood-log-modal-remove-btn {
+    padding: 10px 16px;
+    border-radius: 12px;
+    border: none;
+    background: rgba(239, 68, 68, 0.15);
+    color: #DC2626;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.mood-log-modal-save-btn {
+    flex: 1;
+    color: #FFFFFF;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.breathing-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.breathing-modal-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 28px;
+    padding: 36px 44px;
+    text-align: center;
+    max-width: 420px;
+    width: 90%;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.3);
+    border: 2px solid rgba(255,255,255,0.8);
+}
+
+.breathing-icon-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #60A5FA 0%, #3B82F6 100%);
+    margin: 0 auto 20px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+}
+
+.breathing-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 24px;
+    font-weight: 800;
+    color: #0F172A;
+    margin: 0 0 8px 0;
+}
+
+.breathing-desc {
+    font-size: 14px;
+    color: #475569;
+    line-height: 1.6;
+    margin-bottom: 24px;
+}
+
+.breathing-done-btn {
+    border: none;
+    background: #0F172A;
+    color: #FFFFFF;
+    padding: 12px 32px;
+    border-radius: 9999px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(15,23,42,0.25);
+}

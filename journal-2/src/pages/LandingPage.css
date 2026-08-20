@@ -1,0 +1,166 @@
+/* Minimalist High-Contrast Fullscreen Landing Page CSS (Geist & Geist Mono) */
+
+.fullscreen-landing {
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  font-family: var(--font-main, 'Geist', sans-serif);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+/* 1. Fullscreen Hero Section with High-Contrast Image */
+.hero-fullscreen-section {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.hero-backdrop-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 35%;
+  transform: scale(1.01);
+  transition: transform 0.8s ease;
+}
+
+/* Hero Content Overlaid directly on the image */
+.hero-overlay-content {
+  position: relative;
+  z-index: 10;
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 4rem 1.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  animation: heroFadeIn 0.4s ease-out;
+}
+
+@keyframes heroFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-header-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.5rem;
+  max-width: 900px;
+}
+
+/* Large Clean White Geist Headline */
+.hero-geist-title {
+  font-family: var(--font-main, 'Geist', sans-serif);
+  font-size: 4.2rem;
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+  color: #ffffff;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .hero-geist-title {
+    font-size: 2.6rem;
+    line-height: 1.15;
+  }
+}
+
+/* Clean High-Legibility White Geist Subtitle */
+.hero-geist-subtitle {
+  font-size: 1.2rem;
+  font-weight: 380;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+  max-width: 720px;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .hero-geist-subtitle {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+}
+
+/* Minimalist Clean Action Buttons */
+.hero-actions-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Black Primary Start Button */
+.geist-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  height: 2.85rem;
+  padding: 0 1.5rem;
+  border-radius: 9px;
+  background-color: #000000;
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.geist-btn-primary:hover {
+  transform: translateY(-2px);
+  background-color: #18181b;
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.55);
+}
+
+/* Glass Secondary Button */
+.geist-btn-glass {
+  display: inline-flex;
+  align-items: center;
+  height: 2.85rem;
+  padding: 0 1.5rem;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-decoration: none;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transition: all 0.2s ease;
+}
+
+.geist-btn-glass:hover {
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+}

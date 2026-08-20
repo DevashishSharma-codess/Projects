@@ -1,0 +1,341 @@
+/* FolderExplorer Component Styles */
+
+.folder-explorer-section {
+    position: relative;
+    background: transparent;
+    padding: 80px 24px;
+    width: 100%;
+    margin: 0;
+    border-radius: 0;
+    box-shadow: none;
+    overflow: hidden;
+}
+
+.folder-explorer-wrapper {
+    position: relative;
+    z-index: 2;
+    max-width: 1180px;
+    margin: 0 auto;
+}
+
+.folder-explorer-header {
+    text-align: center;
+    margin-bottom: 36px;
+}
+
+.folder-explorer-main-title {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: clamp(30px, 4vw, 46px);
+    color: #FFFFFF;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.folder-explorer-serif-title {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-weight: 400;
+    color: #FFFFFF;
+}
+
+.folder-explorer-subtext {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: rgba(255, 255, 255, 0.95);
+    font-size: 16px;
+    max-width: 620px;
+    margin: 10px auto 0 auto;
+}
+
+.folder-explorer-window {
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 25px 60px rgba(15, 23, 42, 0.18), inset 0 1px 2px rgba(255, 255, 255, 0.6);
+    overflow: hidden;
+}
+
+.folder-explorer-titlebar {
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    padding: 14px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.folder-explorer-window-dots {
+    display: flex;
+    gap: 6px;
+}
+
+.dot-red { width: 12px; height: 12px; border-radius: 50%; background: #EF4444; }
+.dot-yellow { width: 12px; height: 12px; border-radius: 50%; background: #F59E0B; }
+.dot-green { width: 12px; height: 12px; border-radius: 50%; background: #10B981; }
+
+.folder-explorer-path {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1E293B;
+    margin-left: 10px;
+}
+
+.folder-explorer-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.folder-explorer-new-btn {
+    border: none;
+    background: #3B82F6;
+    color: #FFFFFF;
+    padding: 6px 14px;
+    border-radius: 9999px;
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 4px 12px rgba(59,130,246,0.3);
+}
+
+.folder-explorer-search-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.folder-explorer-search-input {
+    padding: 6px 12px 6px 30px;
+    border-radius: 9999px;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.65);
+    font-size: 12.5px;
+    outline: none;
+    width: 180px;
+    color: #0F172A;
+}
+
+.folder-explorer-view-toggle {
+    display: flex;
+    gap: 4px;
+    background: rgba(255, 255, 255, 0.5);
+    padding: 3px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.folder-explorer-toggle-btn {
+    border: none;
+    padding: 5px;
+    border-radius: 6px;
+    cursor: pointer;
+    color: #334155;
+}
+.folder-explorer-toggle-btn.active { background: #FFFFFF; }
+.folder-explorer-toggle-btn.inactive { background: transparent; }
+
+.folder-explorer-body {
+    padding: 32px;
+    min-height: 380px;
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+
+.folder-explorer-breadcrumb {
+    margin-bottom: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.folder-explorer-back-btn {
+    border: 1px solid #CBD5E1;
+    background: #FFFFFF;
+    padding: 6px 14px;
+    border-radius: 9999px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #0F172A;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.folder-explorer-folder-name-tag {
+    font-family: 'Outfit', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #0F172A;
+}
+
+.folder-explorer-add-journal-btn {
+    border: none;
+    background: #0F172A;
+    color: #FFFFFF;
+    padding: 7px 16px;
+    border-radius: 9999px;
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 4px 12px rgba(15,23,42,0.2);
+}
+
+.folder-explorer-delete-folder-btn {
+    border: 1px solid #FCA5A5;
+    background: #FEF2F2;
+    color: #EF4444;
+    padding: 7px 14px;
+    border-radius: 9999px;
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.folder-explorer-folders-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.folder-explorer-empty-box {
+    text-align: center;
+    padding: 40px 20px;
+    background: #FFFFFF;
+    border-radius: 20px;
+    border: 2px dashed #CBD5E1;
+}
+
+.folder-explorer-entries-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.folder-entry-card {
+    background: #FFFFFF;
+    border-radius: 18px;
+    padding: 20px;
+    border: 1.5px solid #CBD5E1;
+    box-shadow: 0 10px 24px rgba(15,23,42,0.06);
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.2s ease;
+}
+
+.folder-entry-card:hover {
+    transform: translateY(-4px);
+}
+
+.folder-entry-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.folder-entry-date {
+    font-size: 12px;
+    font-weight: 700;
+    color: #64748B;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.folder-entry-mood-badge {
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    background: #F1F5F9;
+    color: #0F172A;
+    font-weight: 700;
+}
+
+.folder-entry-delete-btn {
+    border: none;
+    background: #FEF2F2;
+    color: #EF4444;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.folder-entry-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: #0F172A;
+    margin: 0 0 8px 0;
+}
+
+.folder-entry-snippet {
+    color: #475569;
+    line-height: 1.5;
+    margin: 0 0 12px 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.folder-entry-snippet.font-handwriting {
+    font-family: 'Caveat', cursive;
+    font-size: 18px;
+}
+.folder-entry-snippet.font-sans {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 14px;
+}
+
+.folder-entry-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 10px;
+    border-top: 1px solid #E2E8F0;
+}
+
+.folder-entry-tags {
+    display: flex;
+    gap: 4px;
+}
+
+.folder-entry-tag {
+    font-size: 11px;
+    font-weight: 700;
+    background: #E2E8F0;
+    color: #334155;
+    padding: 2px 8px;
+    border-radius: 9999px;
+}
+
+.folder-entry-open-btn {
+    font-size: 12px;
+    font-weight: 700;
+    color: #2597D0;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
