@@ -1,32 +1,40 @@
-// Rich Text Journal Editor component using ReactQuill.
+// This component lets the user write and save a journal entry.
 
-import React, { useState } from 'react';
-import ReactQuill from 'react-quill-new';
-import 'react-quill-new/dist/quill.snow.css';
-import { Card } from '../../components/ui/card';
-import { Button } from '../../components/ui/button';
-import { Input } from '../../components/ui/input';
-import { TagSelector } from './TagSelector';
-import { getTodayDateString } from '../../utils/dateUtils';
-import type { JournalEntry } from '../../types';
-import './JournalEditor.css';
+import { useState } from "react";
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
 
-interface JournalEditorProps {
-  onSaveEntry: (entry: JournalEntry) => void;
-}
+import { Card } from "../../components/ui/card";
+import { Button } from "../../components/ui/button";
+import { Input } from "../../components/ui/input";
+import { TagSelector } from "./TagSelector";
 
-export const JournalEditor: React.FC<JournalEditorProps> = ({ onSaveEntry }) => {
-  const [title, setTitle] = useState<string>('');
-  const [content, setContent] = useState<string>('');
-  const [tag, setTag] = useState<string>('Grateful');
+import { getTodayDateString } from "../../utils/dateUtils";
 
-  const handleSave = () => {
+import "./JournalEditor.css";
+
+
+export function JournalEditor({ onSaveEntry }) {
+
+  // Store what the user types
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+
+  // Store the selected tag
+  const [tag, setTag] = useState("Grateful");
+
+
+  // Runs when the user clicks Save
+  function handleSave() {
+
+    // Don't save if title or content is empty
     if (!title.trim() || !content.trim()) {
-      alert('Please fill in both the title and entry content!');
+      alert("Please fill in the title and entry!");
       return;
     }
 
-    const newEntry: JournalEntry = {
+    // Create a new journal entry
+    const entry = {
       id: Date.now().toString(),
       date: getTodayDateString(),
       title: title.trim(),
@@ -35,23 +43,30 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({ onSaveEntry }) => 
       createdAt: new Date().toISOString()
     };
 
-    onSaveEntry(newEntry);
+    // Send the new entry to the parent component
+    onSaveEntry(entry);
 
-    setTitle('');
-    setContent('');
-    setTag('Grateful');
-  };
+    // Clear the form after saving
+    setTitle("");
+    setContent("");
+    setTag("Grateful");
+  }
+
 
   return (
     <Card className="journal-editor-card">
+
+      {/* Title */}
       <Input
         type="text"
-        placeholder="Entry Title (e.g. A Peaceful Morning Walk)"
+        placeholder="Entry Title"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         className="editor-title-input"
       />
 
+
+      {/* Journal text */}
       <div className="quill-wrapper">
         <ReactQuill
           theme="snow"
@@ -61,21 +76,31 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({ onSaveEntry }) => 
         />
       </div>
 
+
+      {/* Tag */}
       <div>
-        <label style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-main)' }}>
-          Category Tag:
-        </label>
-        <TagSelector selectedTag={tag} onSelectTag={setTag} />
+        <label>Category Tag:</label>
+
+        <TagSelector
+          selectedTag={tag}
+          onSelectTag={setTag}
+        />
       </div>
 
+
+      {/* Date and Save button */}
       <div className="editor-footer">
-        <span style={{ fontSize: '0.85rem', color: 'var(--text-main)' }}>
+
+        <span>
           Date: {getTodayDateString()}
         </span>
-        <Button onClick={handleSave} variant="default">
+
+        <Button onClick={handleSave}>
           Save Entry
         </Button>
+
       </div>
+
     </Card>
   );
-};
+}

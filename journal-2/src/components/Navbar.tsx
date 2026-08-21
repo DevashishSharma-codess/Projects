@@ -1,89 +1,97 @@
-// Navigation bar component using simple React Router Links.
+import React, { useContext } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { AppContext } from "../context/AppContext";
 
-import React, { useContext } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { AppContext } from '../context/AppContext';
-import { LayoutDashboard, BookOpen, Smile, Calendar, Settings, Sun, Moon, Sparkles, Home } from 'lucide-react';
-import './Navbar.css';
+import {
+  Home,
+  LayoutDashboard,
+  BookOpen,
+  Smile,
+  Calendar,
+  Settings,
+  Sparkles,
+  Sun,
+  Moon,
+} from "lucide-react";
 
-export const Navbar: React.FC = () => {
+import "./Navbar.css";
+
+export function Navbar() {
+
+  // Get theme and toggle function from context
   const { theme, toggleTheme } = useContext(AppContext);
+
+  // Get current URL
   const location = useLocation();
-
-  // Helper to check if a route path is currently active
-  const isActive = (path: string) => {
-    return location.pathname === path;
-  };
-
-  const isLanding = location.pathname === '/';
+  const isLanding = location.pathname === "/";
 
   return (
-    <header className={`navbar ${isLanding ? 'navbar-landing' : ''}`}>
-      {/* App Logo & Title linking to Landing */}
+    <header className={`navbar ${isLanding ? "navbar-landing" : ""}`}>
+      {/* Logo */}
       <Link to="/" className="navbar-brand">
-        <Sparkles size={20} className="brand-icon" />
+        <Sparkles size={20} />
         <span>MindfulJournal</span>
       </Link>
 
-      {/* Navigation Links using React Router Link */}
       <nav className="navbar-links">
+
         <Link
           to="/"
-          className={`nav-button ${isActive('/') ? 'active' : ''}`}
+          className={location.pathname === "/" ? "nav-button active" : "nav-button"}
         >
-          <Home size={17} />
-          <span>Home</span>
+          <Home size={16} />
+          Home
         </Link>
 
         <Link
           to="/dashboard"
-          className={`nav-button ${isActive('/dashboard') ? 'active' : ''}`}
+          className={location.pathname === "/dashboard" ? "nav-button active" : "nav-button"}
         >
-          <LayoutDashboard size={17} />
-          <span>Dashboard</span>
+          <LayoutDashboard size={16} />
+          Dashboard
         </Link>
 
         <Link
           to="/journal"
-          className={`nav-button ${isActive('/journal') ? 'active' : ''}`}
+          className={location.pathname === "/journal" ? "nav-button active" : "nav-button"}
         >
-          <BookOpen size={17} />
-          <span>Journal</span>
+          <BookOpen size={16} />
+          Journal
         </Link>
 
         <Link
           to="/mood"
-          className={`nav-button ${isActive('/mood') ? 'active' : ''}`}
+          className={location.pathname === "/mood" ? "nav-button active" : "nav-button"}
         >
-          <Smile size={17} />
-          <span>Mood</span>
+          <Smile size={16} />
+          Mood
         </Link>
 
         <Link
           to="/calendar"
-          className={`nav-button ${isActive('/calendar') ? 'active' : ''}`}
+          className={location.pathname === "/calendar" ? "nav-button active" : "nav-button"}
         >
-          <Calendar size={17} />
-          <span>Calendar</span>
+          <Calendar size={16} />
+          Calendar
         </Link>
 
         <Link
           to="/settings"
-          className={`nav-button ${isActive('/settings') ? 'active' : ''}`}
+          className={location.pathname === "/settings" ? "nav-button active" : "nav-button"}
         >
-          <Settings size={17} />
-          <span>Settings</span>
+          <Settings size={16} />
+          Settings
         </Link>
 
-        {/* Theme mode toggle button */}
         <button
           className="theme-toggle-btn"
           onClick={toggleTheme}
-          title="Toggle Light/Dark Theme"
         >
-          {theme === 'light' ? <Moon size={17} /> : <Sun size={17} />}
+          {theme === "light" ? <Moon size={16} /> : <Sun size={16} />}
         </button>
+
       </nav>
+
     </header>
   );
-};
+}

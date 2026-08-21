@@ -1,15 +1,10 @@
-// Render list of past journal entries.
+// Shows all journal entries using the EntryCard component.
 
-import React from 'react';
-import { EntryCard } from './EntryCard';
-import type { JournalEntry } from '../../types';
-import './EntryList.css';
+import { EntryCard } from "./EntryCard";
+import "./EntryList.css";
+export function EntryList({ entries }) {
 
-interface EntryListProps {
-  entries: JournalEntry[];
-}
-
-export const EntryList: React.FC<EntryListProps> = ({ entries }) => {
+  // If there are no entries, show this message
   if (entries.length === 0) {
     return (
       <div className="empty-entries-message">
@@ -18,6 +13,7 @@ export const EntryList: React.FC<EntryListProps> = ({ entries }) => {
     );
   }
 
+  // Show one EntryCard for each entry
   return (
     <div className="entry-list">
       {entries.map((entry) => (
@@ -25,4 +21,4 @@ export const EntryList: React.FC<EntryListProps> = ({ entries }) => {
       ))}
     </div>
   );
-};
+}

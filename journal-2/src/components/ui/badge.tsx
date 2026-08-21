@@ -1,14 +1,16 @@
-// Shadcn UI Badge component
 
-import * as React from "react";
-import "./badge.css";
+import React from 'react';
+import './badge.css';
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
-  variant?: "default" | "secondary" | "destructive" | "outline";
+  /** Visual variant style */
+  variant?: 'default' | 'secondary' | 'destructive' | 'outline';
 }
 
-export function Badge({ className = "", variant = "default", ...props }: BadgeProps) {
+export function Badge({ className = '', variant = 'default', children, ...props }: BadgeProps) {
   return (
-    <div className={`shadcn-badge shadcn-badge-${variant} ${className}`} {...props} />
+    <div className={`shadcn-badge shadcn-badge-${variant} ${className}`.trim()} {...props}>
+      {children}
+    </div>
   );
 }

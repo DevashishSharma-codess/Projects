@@ -1,6 +1,10 @@
-// This file defines the structure for inspirational quotes.
+/**
+ * quote.types.ts - Type Definitions for Daily Inspirational Quotes
+ */
 
 export interface Quote {
-  quote: string;   // The quote text string
-  author: string;  // Author of the quote
+  /** The inspiring text or wisdom statement */
+  quote: string;
+  /** Name of the author or attribution (or 'Anonymous') */
+  author: string;
 }

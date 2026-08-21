@@ -1,6 +1,7 @@
-// DummyJSON Quotes API fetcher with simple fallback array.
+
 
 import type { Quote } from '../types/quote.types';
+
 
 const FALLBACK_QUOTES: Quote[] = [
   { quote: "Peace comes from within. Do not seek it without.", author: "Buddha" },
@@ -9,6 +10,7 @@ const FALLBACK_QUOTES: Quote[] = [
   { quote: "Every day is a fresh start. Take a deep breath and begin again.", author: "Anonymous" },
   { quote: "Nurturing yourself is not selfish, it's essential to your survival.", author: "Rene Peterson" }
 ];
+
 
 export async function fetchDailyQuote(): Promise<Quote> {
   try {
@@ -26,6 +28,7 @@ export async function fetchDailyQuote(): Promise<Quote> {
   } catch (error) {
     console.log("Using fallback quote array due to network issue", error);
   }
+
 
   const randomIndex = Math.floor(Math.random() * FALLBACK_QUOTES.length);
   return FALLBACK_QUOTES[randomIndex];

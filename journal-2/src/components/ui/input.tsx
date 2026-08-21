@@ -1,20 +1,32 @@
-// Shadcn UI Input component
+/**
+ * input.tsx - Form Input UI Component
+ * 
+ * Renders a styled HTML text input with rounded borders, focus states,
+ * and adaptive color variables for both dark and light modes.
+ */
 
-import * as React from "react";
-import "./input.css";
+import React from 'react';
+import './input.css';
 
+/**
+ * Props for Input component extending standard HTML input attributes.
+ */
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {}
 
-export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className = "", type, ...props }, ref) => {
-    return (
-      <input
-        type={type}
-        className={`shadcn-input ${className}`}
-        ref={ref}
-        {...props}
-      />
-    );
-  }
-);
-Input.displayName = "Input";
+/**
+ * Input Component
+ * 
+ * Simple, accessible text input element for titles, search, and form entries.
+ * 
+ * @param className - Optional additional CSS class names
+ * @param type - Input type (e.g. 'text', 'password', 'search'), defaults to 'text'
+ */
+export function Input({ className = '', type = 'text', ...props }: InputProps) {
+  return (
+    <input
+      type={type}
+      className={`shadcn-input ${className}`.trim()}
+      {...props}
+    />
+  );
+}

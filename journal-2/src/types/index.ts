@@ -1,4 +1,9 @@
-// Central barrel export for all types so components can import easily.
+/**
+ * index.ts - Types Barrel Export
+ * 
+ * Aggregates and re-exports all domain models (journal, mood, and quote types)
+ * to allow clean single-line imports across components.
+ */
 
 export * from './journal.types';
 export * from './mood.types';

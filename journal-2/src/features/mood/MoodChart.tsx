@@ -1,4 +1,14 @@
-// Recharts Bar Chart component rendering mood activity with grey transparent glass bars.
+/**
+ * MoodChart.tsx - Weekly Mood Activity Bar Chart Component
+ * 
+ * Renders a responsive Recharts BarChart visualizing the user's mood scores (1-5)
+ * over the last 7 calendar days.
+ * 
+ * Key Features:
+ * - Gradient glass-effect bar styling (`#greyGlassBar`).
+ * - Custom styled tooltips displaying score and mood label.
+ * - Dynamic data preparation to ensure every day in the range is displayed.
+ */
 
 import React from 'react';
 import {
@@ -14,27 +24,45 @@ import type { MoodLog } from '../../types';
 import { prepareMoodChartData } from '../../utils/moodCalculations';
 import './MoodChart.css';
 
+/**
+ * Props for MoodChart
+ */
 interface MoodChartProps {
+  /** Array of recorded MoodLog objects */
   moodLogs: MoodLog[];
 }
 
+/**
+ * MoodChart Component
+ * 
+ * @param moodLogs - Array of user mood records
+ */
 export const MoodChart: React.FC<MoodChartProps> = ({ moodLogs }) => {
-  const chartData = prepareMoodChartData(moodLogs).slice(-7); // Last 7 days
+  // Format data for the past 14 days and slice to the last 7 days for weekly overview
+  const chartData = prepareMoodChartData(moodLogs).slice(-7);
 
   return (
     <Card className="mood-chart-card">
+      {/* Subtle radial ambient glow */}
       <div className="mood-chart-glow" />
+
       <div className="mood-chart-content">
+        {/* Chart Header */}
         <div className="mood-chart-header">
           <h3 className="mood-chart-title">Weekly Mood Activity</h3>
           <span className="mood-chart-badge">Last 7 Days</span>
         </div>
 
+        {/* Recharts Container */}
         <div className="chart-wrapper">
           <ResponsiveContainer width="100%" height={270}>
-            <BarChart data={chartData} margin={{ top: 15, right: 15, left: -20, bottom: 5 }} barCategoryGap="20%">
+            <BarChart
+              data={chartData}
+              margin={{ top: 15, right: 15, left: -20, bottom: 5 }}
+              barCategoryGap="20%"
+            >
               <defs>
-                {/* Grey Transparent Glass Bar Gradient */}
+                {/* Custom Glass Gradient for Bar Fills */}
                 <linearGradient id="greyGlassBar" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%" stopColor="rgba(255, 255, 255, 0.85)" />
                   <stop offset="35%" stopColor="rgba(215, 222, 232, 0.45)" />
@@ -42,6 +70,7 @@ export const MoodChart: React.FC<MoodChartProps> = ({ moodLogs }) => {
                 </linearGradient>
               </defs>
 
+              {/* X-Axis: Short Date Strings (e.g. "Aug 21") */}
               <XAxis
                 dataKey="date"
                 stroke="rgba(255, 255, 255, 0.85)"
@@ -49,6 +78,8 @@ export const MoodChart: React.FC<MoodChartProps> = ({ moodLogs }) => {
                 tickLine={false}
                 axisLine={{ stroke: 'rgba(255, 255, 255, 0.25)' }}
               />
+
+              {/* Y-Axis: Fixed scale from 0 to 5 */}
               <YAxis
                 domain={[0, 5]}
                 ticks={[1, 2, 3, 4, 5]}
@@ -57,6 +88,8 @@ export const MoodChart: React.FC<MoodChartProps> = ({ moodLogs }) => {
                 tickLine={false}
                 axisLine={{ stroke: 'rgba(255, 255, 255, 0.25)' }}
               />
+
+              {/* Interactive Tooltip showing score & label on hover */}
               <Tooltip
                 cursor={{ fill: 'rgba(255, 255, 255, 0.08)', radius: 8 }}
                 contentStyle={{
@@ -69,6 +102,8 @@ export const MoodChart: React.FC<MoodChartProps> = ({ moodLogs }) => {
                 }}
                 formatter={(value: any) => [`Score: ${value ?? 'No Log'} / 5`, 'Mood']}
               />
+
+              {/* Rounded Glass Bar */}
               <Bar
                 dataKey="score"
                 fill="url(#greyGlassBar)"

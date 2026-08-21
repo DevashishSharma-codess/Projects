@@ -1,12 +1,27 @@
-// Seed data file for initial mood logs.
-// Score mapping: 1 = Sad, 2 = Anxious, 3 = Okay, 4 = Good, 5 = Great
+/**
+ * seedMoods.ts - Mock / Seed Data Generator for Mood Analytics
+ * 
+ * Provides a realistic set of initial mood logs spanning the past 7 days.
+ * This ensures new users immediately see visual graphs, weekly analytics,
+ * and calendar trends upon first launching the application.
+ * 
+ * Score Scale:
+ * 1 = Sad | 2 = Anxious | 3 = Okay | 4 = Good | 5 = Great
+ */
 
 import type { MoodLog } from '../types/mood.types';
 import { getLastNDaysDates } from '../utils/dateUtils';
 
+/**
+ * Generates an array of seed mood logs for the last 7 calendar days.
+ * 
+ * @returns Array of 7 MoodLog objects with varied mood scores and notes.
+ */
 export function getSeedMoodLogs(): MoodLog[] {
+  // Retrieve the YYYY-MM-DD date strings for the last 7 days
   const dates = getLastNDaysDates(7);
 
+  // Template mood patterns to distribute across the past week
   const sampleMoods = [
     { moodId: 'good', label: 'Good', score: 4, note: 'Had a productive morning' },
     { moodId: 'okay', label: 'Okay', score: 3, note: 'Routine day, felt peaceful' },
@@ -17,6 +32,7 @@ export function getSeedMoodLogs(): MoodLog[] {
     { moodId: 'good', label: 'Good', score: 4, note: 'Felt calm and balanced' }
   ];
 
+  // Map each date to a sample mood entry
   return dates.map((date, index) => {
     const sample = sampleMoods[index % sampleMoods.length];
     return {

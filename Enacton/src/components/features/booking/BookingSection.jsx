@@ -30,7 +30,7 @@ const ALL_EVENTS = [
   { day: 2, title: "Architecture Sync", type: "yellow", minStep: 3 },
   { day: 4, title: "Tech Stack Audit", type: "blue", minStep: 3 },
   { day: 11, title: "AI Agent Demo", type: "orange", minStep: 3 },
-  { day: 14, title: "Kashiv Demo", type: "orange", minStep: 3 },
+  { day: 14, title: "Ceo Demo", type: "orange", minStep: 3 },
   { day: 17, title: "Close / Outline", type: "yellow", minStep: 3 },
   { day: 19, title: "OpenAI RAG Intro", type: "blue", minStep: 3 },
   { day: 24, title: "Product Sprint", type: "yellow", minStep: 3 },
@@ -149,7 +149,7 @@ export const BookingSection = () => {
       /> */}
 
       <div className="max-w-[1480px] mx-auto px-3 sm:px-6 md:px-10 w-full flex flex-col justify-center h-full max-h-full">
-        
+
         {/* Sharp White Rectangular Header Box Tight Wrapper */}
         <div className="flex justify-center mb-2 sm:mb-3.5 shrink-0">
           <motion.div
@@ -176,10 +176,10 @@ export const BookingSection = () => {
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           className="w-full border border-black/15 bg-white shadow-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-12 flex-1 min-h-0 lg:max-h-[calc(100vh-140px)]"
         >
-          
+
           {/* Left Column (5 Cols): Dark Pitch Black Box (Valley Reference) */}
           <div className="lg:col-span-5 bg-[#09090b] text-white p-4 sm:p-6 lg:p-7 flex flex-col justify-between relative overflow-hidden space-y-4 lg:space-y-0">
-            
+
             {/* Top Content */}
             <div>
               <div className="inline-block border border-white/20 bg-white/5 px-2 py-0.5 text-[8px] sm:text-[9.5px] font-mono font-semibold uppercase tracking-widest text-white/80 mb-3 sm:mb-4">
@@ -258,7 +258,7 @@ export const BookingSection = () => {
 
           {/* Right Column (7 Cols): Crisp White Working Calendar (Valley Reference) */}
           <div className="lg:col-span-7 bg-white p-3 sm:p-5 lg:p-6 flex flex-col justify-between overflow-x-hidden">
-            
+
             <div>
               {/* Working Calendar Header with Live Month Navigation */}
               <div className="flex items-center justify-between pb-2 sm:pb-2.5 mb-2 border-b border-black/10">
@@ -319,17 +319,15 @@ export const BookingSection = () => {
                         setIsAutoPlaying(false);
                         setSelectedDay(day);
                       }}
-                      className={`p-0.5 sm:p-1 min-h-[34px] sm:min-h-[46px] lg:min-h-[50px] xl:min-h-[54px] border transition-all duration-200 cursor-pointer flex flex-col justify-start overflow-hidden relative ${
-                        isSelected
-                          ? "border-black bg-black/[0.04] shadow-xs ring-1 sm:ring-2 ring-black/10"
-                          : "border-black/10 hover:border-black/40 hover:bg-black/[0.02]"
-                      }`}
+                      className={`p-0.5 sm:p-1 min-h-[34px] sm:min-h-[46px] lg:min-h-[50px] xl:min-h-[54px] border transition-all duration-200 cursor-pointer flex flex-col justify-start overflow-hidden relative ${isSelected
+                        ? "border-black bg-black/[0.04] shadow-xs ring-1 sm:ring-2 ring-black/10"
+                        : "border-black/10 hover:border-black/40 hover:bg-black/[0.02]"
+                        }`}
                     >
                       <div className="flex items-center justify-between mb-0.5">
                         <span
-                          className={`font-mono text-[8px] sm:text-[10px] font-medium block ${
-                            isSelected ? "text-black font-bold" : "text-black/60"
-                          }`}
+                          className={`font-mono text-[8px] sm:text-[10px] font-medium block ${isSelected ? "text-black font-bold" : "text-black/60"
+                            }`}
                         >
                           {day}
                         </span>
@@ -348,15 +346,14 @@ export const BookingSection = () => {
                               animate={{ opacity: 1, scale: 1, y: 0 }}
                               exit={{ opacity: 0, scale: 0.85 }}
                               transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                              className={`px-0.5 sm:px-1 py-0.2 sm:py-0.5 rounded-xs text-[6px] sm:text-[7.5px] lg:text-[8.5px] font-semibold truncate leading-tight ${
-                                evt.type === "orange"
-                                  ? "bg-[#ffe8d6] text-[#c75200]"
-                                  : evt.type === "yellow"
+                              className={`px-0.5 sm:px-1 py-0.2 sm:py-0.5 rounded-xs text-[6px] sm:text-[7.5px] lg:text-[8.5px] font-semibold truncate leading-tight ${evt.type === "orange"
+                                ? "bg-[#ffe8d6] text-[#c75200]"
+                                : evt.type === "yellow"
                                   ? "bg-[#fff3bf] text-[#8c6d00]"
                                   : evt.type === "pink"
-                                  ? "bg-[#ffdeeb] text-[#a61e4d]"
-                                  : "bg-[#d0ebff] text-[#1864ab]"
-                              }`}
+                                    ? "bg-[#ffdeeb] text-[#a61e4d]"
+                                    : "bg-[#d0ebff] text-[#1864ab]"
+                                }`}
                             >
                               {evt.title}
                             </motion.div>
@@ -381,11 +378,10 @@ export const BookingSection = () => {
                         setSelectedTimeSlot(slot);
                         setIsGCalOpen(true);
                       }}
-                      className={`px-2 sm:px-2.5 py-0.5 sm:py-1 font-outfit text-[9.5px] sm:text-[10.5px] rounded-md border transition-all cursor-pointer ${
-                        selectedTimeSlot === slot
-                          ? "bg-black text-white border-black font-medium shadow-xs"
-                          : "bg-white text-black/80 border-black/15 hover:border-black/40"
-                      }`}
+                      className={`px-2 sm:px-2.5 py-0.5 sm:py-1 font-outfit text-[9.5px] sm:text-[10.5px] rounded-md border transition-all cursor-pointer ${selectedTimeSlot === slot
+                        ? "bg-black text-white border-black font-medium shadow-xs"
+                        : "bg-white text-black/80 border-black/15 hover:border-black/40"
+                        }`}
                     >
                       {slot}
                     </button>

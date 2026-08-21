@@ -1,18 +1,34 @@
-// Shadcn UI Button component
+/**
+ * button.tsx - Reusable Button UI Component
+ */
 
-import * as React from "react";
-import "./button.css";
+import React from 'react';
+import './button.css';
 
+/**
+ * Props for customizing the Button appearance and behavior.
+ */
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "default" | "outline" | "ghost" | "secondary" | "destructive";
-  size?: "default" | "sm" | "lg" | "icon";
+  variant?: 'default' | 'outline' | 'ghost' | 'secondary' | 'destructive';
+  size?: 'default' | 'sm' | 'lg' | 'icon';
 }
 
-export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className = "", variant = "default", size = "default", ...props }, ref) => {
-    const sizeClass = size === "default" ? "shadcn-btn-default-size" : `shadcn-btn-${size}`;
-    const classNames = `shadcn-btn shadcn-btn-${variant} ${sizeClass} ${className}`;
-    return <button className={classNames} ref={ref} {...props} />;
-  }
-);
-Button.displayName = "Button";
+export function Button({
+  className = '',
+  variant = 'default',
+  size = 'default',
+  children,
+  ...props
+}: ButtonProps) {
+  // Map size prop to corresponding CSS class
+  const sizeClass = size === 'default' ? 'shadcn-btn-default-size' : `shadcn-btn-${size}`;
+
+  return (
+    <button
+      className={`shadcn-btn shadcn-btn-${variant} ${sizeClass} ${className}`.trim()}
+      {...props}
+    >
+      {children}
+    </button>
+  );
+}
